@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Play } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Play } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 export function HeroSection() {
   return (
@@ -12,7 +12,7 @@ export function HeroSection() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/placeholder.svg?height=1080&width=1920"
+          src="/img/image1.jpg" ///placeholder.svg?height=1080&width=1920
           alt="VSM Hero Background"
           fill
           className="object-cover"
@@ -68,7 +68,8 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Nơi kết nối cộng đồng chạy bộ sinh viên Việt Nam. Cùng nhau vượt qua giới hạn, chinh phục mọi cung đường.
+            Nơi kết nối cộng đồng chạy bộ sinh viên Việt Nam. Cùng nhau vượt qua
+            giới hạn, chinh phục mọi cung đường.
           </motion.p>
 
           <motion.div
@@ -77,7 +78,11 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-8 py-3" asChild>
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-white px-8 py-3"
+              asChild
+            >
               <Link href="/events">
                 Tham gia sự kiện
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -100,12 +105,8 @@ export function HeroSection() {
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-        >
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/50 rounded-full mt-2" />
-          </div>
-        </motion.div>
+        ></motion.div>
       </div>
     </section>
-  )
+  );
 }

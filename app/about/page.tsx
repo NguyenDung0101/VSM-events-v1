@@ -1,52 +1,67 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Target, Users, Trophy, Heart, Award, Globe, Calendar, MapPin } from "lucide-react"
+import { motion } from "framer-motion";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Target,
+  Users,
+  Trophy,
+  Heart,
+  Award,
+  Globe,
+  Calendar,
+  MapPin,
+} from "lucide-react";
 
 const stats = [
   { label: "Thành viên", value: "5,000+", icon: Users },
   { label: "Sự kiện", value: "50+", icon: Calendar },
   { label: "Thành phố", value: "20+", icon: MapPin },
   { label: "Giải thưởng", value: "15+", icon: Award },
-]
+];
 
 const values = [
   {
     icon: Target,
     title: "Mục tiêu rõ ràng",
-    description: "Xây dựng cộng đồng chạy bộ sinh viên mạnh mẽ và bền vững tại Việt Nam.",
+    description:
+      "Xây dựng cộng đồng chạy bộ sinh viên mạnh mẽ và bền vững tại Việt Nam.",
   },
   {
     icon: Users,
     title: "Cộng đồng đoàn kết",
-    description: "Kết nối hàng nghìn sinh viên có cùng đam mê chạy bộ trên khắp cả nước.",
+    description:
+      "Kết nối hàng nghìn sinh viên có cùng đam mê chạy bộ trên khắp cả nước.",
   },
   {
     icon: Trophy,
     title: "Thành tựu xuất sắc",
-    description: "Tổ chức thành công nhiều giải chạy lớn với sự tham gia của hàng nghìn vận động viên.",
+    description:
+      "Tổ chức thành công nhiều giải chạy lớn với sự tham gia của hàng nghìn vận động viên.",
   },
   {
     icon: Heart,
     title: "Tinh thần thể thao",
-    description: "Lan tỏa tinh thần thể thao, sức khỏe và lối sống tích cực trong giới trẻ.",
+    description:
+      "Lan tỏa tinh thần thể thao, sức khỏe và lối sống tích cực trong giới trẻ.",
   },
-]
+];
 
 const timeline = [
   {
     year: "2020",
     title: "Thành lập VSM",
-    description: "Vietnam Student Marathon được thành lập với sứ mệnh kết nối cộng đồng chạy bộ sinh viên.",
+    description:
+      "Vietnam Student Marathon được thành lập với sứ mệnh kết nối cộng đồng chạy bộ sinh viên.",
   },
   {
     year: "2021",
     title: "Sự kiện đầu tiên",
-    description: "Tổ chức thành công VSM Fun Run đầu tiên tại Hà Nội với 500 người tham gia.",
+    description:
+      "Tổ chức thành công VSM Fun Run đầu tiên tại Hà Nội với 500 người tham gia.",
   },
   {
     year: "2022",
@@ -56,41 +71,54 @@ const timeline = [
   {
     year: "2023",
     title: "VSM Marathon",
-    description: "Tổ chức thành công VSM Marathon đầu tiên với hơn 2,000 vận động viên tham gia.",
+    description:
+      "Tổ chức thành công VSM Marathon đầu tiên với hơn 2,000 vận động viên tham gia.",
   },
   {
     year: "2024",
     title: "Tương lai",
-    description: "Tiếp tục phát triển và trở thành tổ chức chạy bộ sinh viên hàng đầu Đông Nam Á.",
+    description:
+      "Tiếp tục phát triển và trở thành tổ chức chạy bộ sinh viên hàng đầu Đông Nam Á.",
   },
-]
+];
 
 const team = [
   {
-    name: "Nguyễn Văn A",
+    name: "Phan Huỳnh Anh",
     role: "Founder & CEO",
     avatar: "/placeholder.svg?height=200&width=200",
-    description: "10 năm kinh nghiệm trong lĩnh vực thể thao và tổ chức sự kiện.",
+    description:
+      "10 năm kinh nghiệm trong lĩnh vực thể thao và tổ chức sự kiện.",
   },
   {
-    name: "Trần Thị B",
+    name: "Dương Thế Khải",
     role: "Giám đốc Huấn luyện",
     avatar: "/placeholder.svg?height=200&width=200",
-    description: "Chuyên gia dinh dưỡng thể thao và huấn luyện viên marathon chứng nhận quốc tế.",
+    description:
+      "Chuyên gia dinh dưỡng thể thao và huấn luyện viên marathon chứng nhận quốc tế.",
   },
   {
-    name: "Lê Văn C",
+    name: "Quách Thành Long",
     role: "Giám đốc Sự kiện",
     avatar: "/placeholder.svg?height=200&width=200",
-    description: "Chuyên gia tổ chức sự kiện với hơn 8 năm kinh nghiệm trong ngành.",
+    description:
+      "Chuyên gia tổ chức sự kiện với hơn 8 năm kinh nghiệm trong ngành.",
   },
   {
-    name: "Phạm Thị D",
+    name: "Lã Phương Uyên",
     role: "Giám đốc Marketing",
     avatar: "/placeholder.svg?height=200&width=200",
-    description: "Chuyên gia marketing digital và phát triển cộng đồng trực tuyến.",
+    description:
+      "Chuyên gia marketing digital và phát triển cộng đồng trực tuyến.",
   },
-]
+  {
+    name: "Nguyễn Tuấn Dũng",
+    role: "Lập trình viên chính",
+    avatar: "/placeholder.svg?height=200&width=200",
+    description:
+      "Chuyên gia marketing digital và phát triển cộng đồng trực tuyến.",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -101,13 +129,18 @@ export default function AboutPage() {
         {/* Hero Section */}
         <section className="py-20 bg-gradient-to-r from-primary/20 to-purple-500/20">
           <div className="container mx-auto px-4 text-center">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Về <span className="gradient-text">VSM</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Vietnam Student Marathon - Nơi kết nối đam mê chạy bộ của sinh viên Việt Nam, xây dựng cộng đồng mạnh mẽ
-                và lan tỏa tinh thần thể thao tích cực.
+                Vietnam Student Marathon - Nơi kết nối đam mê chạy bộ của sinh
+                viên Việt Nam, xây dựng cộng đồng mạnh mẽ và lan tỏa tinh thần
+                thể thao tích cực.
               </p>
             </motion.div>
           </div>
@@ -145,15 +178,20 @@ export default function AboutPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-3xl font-bold mb-6">Sứ mệnh của chúng tôi</h2>
+                <h2 className="text-3xl font-bold mb-6">
+                  Sứ mệnh của chúng tôi
+                </h2>
                 <p className="text-lg text-muted-foreground mb-6">
-                  VSM được thành lập với sứ mệnh kết nối và phát triển cộng đồng chạy bộ sinh viên Việt Nam. Chúng tôi
-                  tin rằng thể thao không chỉ giúp rèn luyện sức khỏe mà còn xây dựng tinh thần đoàn kết, ý chí vượt khó
-                  và lối sống tích cực.
+                  VSM được thành lập với sứ mệnh kết nối và phát triển cộng đồng
+                  chạy bộ sinh viên Việt Nam. Chúng tôi tin rằng thể thao không
+                  chỉ giúp rèn luyện sức khỏe mà còn xây dựng tinh thần đoàn
+                  kết, ý chí vượt khó và lối sống tích cực.
                 </p>
                 <p className="text-lg text-muted-foreground">
-                  Thông qua các hoạt động chạy bộ, chúng tôi mong muốn tạo ra một môi trường lành mạnh để sinh viên có
-                  thể phát triển bản thân, kết bạn và cùng nhau vượt qua những thử thách trong cuộc sống.
+                  Thông qua các hoạt động chạy bộ, chúng tôi mong muốn tạo ra
+                  một môi trường lành mạnh để sinh viên có thể phát triển bản
+                  thân, kết bạn và cùng nhau vượt qua những thử thách trong cuộc
+                  sống.
                 </p>
               </motion.div>
 
@@ -165,7 +203,7 @@ export default function AboutPage() {
               >
                 <div className="aspect-square rounded-2xl overflow-hidden">
                   <img
-                    src="/placeholder.svg?height=500&width=500"
+                    src="public/img/events-icon.png"
                     alt="VSM Mission"
                     className="w-full h-full object-cover"
                   />
@@ -193,8 +231,12 @@ export default function AboutPage() {
                       <div className="w-16 h-16 bg-gradient-to-r from-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                         <value.icon className="h-8 w-8 text-white" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-                      <p className="text-muted-foreground">{value.description}</p>
+                      <h3 className="text-xl font-semibold mb-3">
+                        {value.title}
+                      </h3>
+                      <p className="text-muted-foreground">
+                        {value.description}
+                      </p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -225,18 +267,26 @@ export default function AboutPage() {
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: index * 0.2 }}
-                  className={`flex items-center mb-12 ${index % 2 === 0 ? "flex-row" : "flex-row-reverse"}`}
+                  className={`flex items-center mb-12 ${
+                    index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                  }`}
                 >
-                  <div className={`flex-1 ${index % 2 === 0 ? "pr-8" : "pl-8"}`}>
+                  <div
+                    className={`flex-1 ${index % 2 === 0 ? "pr-8" : "pl-8"}`}
+                  >
                     <Card className="glass">
                       <CardHeader>
                         <div className="flex items-center space-x-3">
-                          <Badge className="bg-primary text-white">{item.year}</Badge>
+                          <Badge className="bg-primary text-white">
+                            {item.year}
+                          </Badge>
                           <CardTitle>{item.title}</CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground">{item.description}</p>
+                        <p className="text-muted-foreground">
+                          {item.description}
+                        </p>
                       </CardContent>
                     </Card>
                   </div>
@@ -262,7 +312,9 @@ export default function AboutPage() {
               className="text-center mb-16"
             >
               <h2 className="text-3xl font-bold mb-6">Đội ngũ lãnh đạo</h2>
-              <p className="text-xl text-muted-foreground">Những người đồng hành cùng VSM từ những ngày đầu</p>
+              <p className="text-xl text-muted-foreground">
+                Những người đồng hành cùng VSM từ những ngày đầu
+              </p>
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -282,11 +334,15 @@ export default function AboutPage() {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
+                      <h3 className="text-xl font-semibold mb-2">
+                        {member.name}
+                      </h3>
                       <Badge variant="secondary" className="mb-3">
                         {member.role}
                       </Badge>
-                      <p className="text-sm text-muted-foreground">{member.description}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {member.description}
+                      </p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -298,5 +354,5 @@ export default function AboutPage() {
 
       <Footer />
     </div>
-  )
+  );
 }

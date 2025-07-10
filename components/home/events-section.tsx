@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef, useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Calendar, MapPin, Users, ArrowRight } from "lucide-react"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, MapPin, Users, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 interface Event {
-  id: string
-  title: string
-  description: string
-  date: string
-  location: string
-  participants: number
-  maxParticipants: number
-  image: string
-  status: "upcoming" | "ongoing" | "completed"
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  participants: number;
+  maxParticipants: number;
+  image: string;
+  status: "upcoming" | "ongoing" | "completed";
 }
 
 export function EventsSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [events, setEvents] = useState<Event[]>([])
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     // Mock data - replace with actual API call
@@ -32,12 +32,13 @@ export function EventsSection() {
       {
         id: "1",
         title: "VSM Marathon Hà Nội 2024",
-        description: "Giải chạy marathon lớn nhất dành cho sinh viên tại Hà Nội",
+        description:
+          "Giải chạy marathon lớn nhất dành cho sinh viên tại Hà Nội",
         date: "2024-03-15",
         location: "Hồ Gươm, Hà Nội",
         participants: 1250,
         maxParticipants: 2000,
-        image: "/placeholder.svg?height=300&width=400",
+        image: "/img/image2.png", ///placeholder.svg?height=300&width=400
         status: "upcoming",
       },
       {
@@ -48,7 +49,7 @@ export function EventsSection() {
         location: "Công viên Tao Đàn, TP.HCM",
         participants: 800,
         maxParticipants: 1000,
-        image: "/placeholder.svg?height=300&width=400",
+        image: "/img/image3.jpg",
         status: "upcoming",
       },
       {
@@ -59,38 +60,38 @@ export function EventsSection() {
         location: "Đà Lạt, Lâm Đồng",
         participants: 300,
         maxParticipants: 500,
-        image: "/placeholder.svg?height=300&width=400",
+        image: "/img/image2.png",
         status: "upcoming",
       },
-    ]
-    setEvents(mockEvents)
-  }, [])
+    ];
+    setEvents(mockEvents);
+  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "upcoming":
-        return "bg-green-500"
+        return "bg-green-500";
       case "ongoing":
-        return "bg-yellow-500"
+        return "bg-yellow-500";
       case "completed":
-        return "bg-gray-500"
+        return "bg-gray-500";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   const getStatusText = (status: string) => {
     switch (status) {
       case "upcoming":
-        return "Sắp diễn ra"
+        return "Sắp diễn ra";
       case "ongoing":
-        return "Đang diễn ra"
+        return "Đang diễn ra";
       case "completed":
-        return "Đã kết thúc"
+        return "Đã kết thúc";
       default:
-        return "Không xác định"
+        return "Không xác định";
     }
-  }
+  };
 
   return (
     <section ref={ref} className="py-20 bg-muted/20">
@@ -105,7 +106,8 @@ export function EventsSection() {
             Sự kiện <span className="gradient-text">sắp tới</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Tham gia các sự kiện chạy bộ hấp dẫn được tổ chức bởi VSM. Cùng nhau tạo nên những kỷ niệm đáng nhớ!
+            Tham gia các sự kiện chạy bộ hấp dẫn được tổ chức bởi VSM. Cùng nhau
+            tạo nên những kỷ niệm đáng nhớ!
           </p>
         </motion.div>
 
@@ -124,13 +126,19 @@ export function EventsSection() {
                     alt={event.title}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <Badge className={`absolute top-4 right-4 ${getStatusColor(event.status)} text-white`}>
+                  <Badge
+                    className={`absolute top-4 right-4 ${getStatusColor(
+                      event.status
+                    )} text-white`}
+                  >
                     {getStatusText(event.status)}
                   </Badge>
                 </div>
 
                 <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">{event.title}</CardTitle>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    {event.title}
+                  </CardTitle>
                   <p className="text-muted-foreground">{event.description}</p>
                 </CardHeader>
 
@@ -153,11 +161,18 @@ export function EventsSection() {
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className="bg-primary h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${(event.participants / event.maxParticipants) * 100}%` }}
+                      style={{
+                        width: `${
+                          (event.participants / event.maxParticipants) * 100
+                        }%`,
+                      }}
                     />
                   </div>
 
-                  <Button className="w-full group-hover:bg-primary group-hover:text-white transition-colors" asChild>
+                  <Button
+                    className="w-full group-hover:bg-primary group-hover:text-white transition-colors"
+                    asChild
+                  >
                     <Link href={`/events/${event.id}`}>
                       Xem chi tiết
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -184,5 +199,5 @@ export function EventsSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

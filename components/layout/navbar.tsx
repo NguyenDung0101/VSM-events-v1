@@ -1,14 +1,19 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Menu, X, User, ShoppingCart } from "lucide-react"
-import { useAuth } from "@/contexts/auth-context"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Menu, X, User, ShoppingCart } from "lucide-react";
+import { useAuth } from "@/contexts/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
   { href: "/", label: "Trang chủ" },
@@ -16,27 +21,33 @@ const navItems = [
   { href: "/news", label: "Tin tức" },
   { href: "/shop", label: "Cửa hàng" },
   { href: "/about", label: "Giới thiệu" },
-]
+];
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
-  const pathname = usePathname()
-  const { user, logout } = useAuth()
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <motion.nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/80 backdrop-blur-md border-b shadow-sm" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300`}
+      style={{
+        backgroundColor: isScrolled
+          ? "var(--nav-bg-scrolled-light)"
+          : "var(--nav-bg-light)",
+        borderBottomColor: isScrolled ? "var(--border-color)" : "transparent",
+        backdropFilter: isScrolled ? "blur(10px)" : "none",
+        boxShadow: isScrolled ? "0 2px 4px rgba(0, 0, 0, 0.1)" : "none",
+      }}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
@@ -48,7 +59,9 @@ export function Navbar() {
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">VSM</span>
             </div>
-            <span className="font-bold text-xl gradient-text">Vietnam Student Marathon</span>
+            <span className="font-bold text-xl gradient-text">
+              Vietnam Student Marathon
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -58,7 +71,9 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={`relative px-3 py-2 text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === item.href ? "text-primary" : "text-muted-foreground"
+                  pathname === item.href
+                    ? "text-primary"
+                    : "text-muted-foreground"
                 }`}
               >
                 {item.label}
@@ -95,7 +110,9 @@ export function Navbar() {
                       <Link href="/admin">Quản trị</Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={logout}>Đăng xuất</DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout}>
+                    Đăng xuất
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
@@ -113,8 +130,16 @@ export function Navbar() {
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
@@ -165,8 +190,8 @@ export function Navbar() {
                       )}
                       <button
                         onClick={() => {
-                          logout()
-                          setIsOpen(false)
+                          logout();
+                          setIsOpen(false);
                         }}
                         className="block w-full text-left px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
                       >
@@ -198,5 +223,5 @@ export function Navbar() {
         </AnimatePresence>
       </div>
     </motion.nav>
-  )
+  );
 }
