@@ -68,8 +68,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Nơi kết nối cộng đồng chạy bộ sinh viên Việt Nam. Cùng nhau vượt qua
-            giới hạn, chinh phục mọi cung đường.
+            Chạy chung kết Việt tương lai 2025
           </motion.p>
 
           <motion.div
