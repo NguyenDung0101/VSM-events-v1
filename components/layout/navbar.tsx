@@ -14,6 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 const navItems = [
   { href: "/", label: "Trang chủ" },
@@ -56,12 +57,17 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">VSM</span>
-            </div>
-            <span className="font-bold text-xl gradient-text">
+            {/* <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"> */}
+            <Image
+              src="/img/logo-vsm.png"
+              alt="Logo"
+              width={125}
+              height={125}
+            />
+            {/* </div> */}
+            {/* <span className="font-bold text-xl gradient-text">
               Vietnam Student Marathon
-            </span>
+            </span> */}
           </Link>
 
           {/* Desktop Navigation */}

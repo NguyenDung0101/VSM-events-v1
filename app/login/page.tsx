@@ -1,35 +1,51 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useAuth } from "@/contexts/auth-context"
-import { useToast } from "@/hooks/use-toast"
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, Info } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuth } from "@/contexts/auth-context";
+import { useToast } from "@/hooks/use-toast";
+import { Eye, EyeOff, Mail, Lock, ArrowLeft, Info } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const loginSchema = z.object({
   email: z
     .string()
     .email("Email không hợp lệ")
-    .refine((email) => email.endsWith("@vsm.org.vn"), "Email phải có đuôi @vsm.org.vn"),
+    .refine(
+      (email) => email.endsWith("@vsm.org.vn"),
+      "Email phải có đuôi @vsm.org.vn"
+    ),
   password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
-})
+});
 
-type LoginForm = z.infer<typeof loginSchema>
+type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const { login } = useAuth()
-  const { toast } = useToast()
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const { toast } = useToast();
 
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -37,29 +53,29 @@ export default function LoginPage() {
       email: "",
       password: "",
     },
-  })
+  });
 
   const onSubmit = async (data: LoginForm) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await login(data.email, data.password)
+      await login(data.email, data.password);
     } catch (error: any) {
       toast({
         title: "Đăng nhập thất bại",
         description: error.message || "Có lỗi xảy ra, vui lòng thử lại",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleDemoLogin = (email: string) => {
     form.reset({
       email,
       password: "password",
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/20 via-background to-purple-500/20 p-4">
@@ -84,16 +100,20 @@ export default function LoginPage() {
               <span className="text-white font-bold text-2xl">VSM</span>
             </div>
             <CardTitle className="text-2xl font-bold">Đăng nhập</CardTitle>
-            <CardDescription>Đăng nhập vào tài khoản VSM của bạn</CardDescription>
+            <CardDescription>
+              Đăng nhập vào tài khoản VSM của bạn
+            </CardDescription>
           </CardHeader>
 
           <CardContent>
             {/* Demo Accounts Alert */}
-            <Alert className="mb-6 bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800">
+            {/* <Alert className="mb-6 bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800">
               <Info className="h-4 w-4" />
               <AlertDescription>
                 <div className="space-y-2">
-                  <p className="font-medium text-blue-800 dark:text-blue-200">Tài khoản demo:</p>
+                  <p className="font-medium text-blue-800 dark:text-blue-200">
+                    Tài khoản demo:
+                  </p>
                   <div className="space-y-1 text-sm text-blue-700 dark:text-blue-300">
                     <div className="flex justify-between items-center">
                       <span>👑 Admin: admin@vsm.org.vn</span>
@@ -137,10 +157,13 @@ export default function LoginPage() {
                   </div>
                 </div>
               </AlertDescription>
-            </Alert>
+            </Alert> */}
 
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 <FormField
                   control={form.control}
                   name="email"
@@ -150,7 +173,11 @@ export default function LoginPage() {
                       <FormControl>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                          <Input placeholder="your-email@vsm.org.vn" className="pl-10" {...field} />
+                          <Input
+                            placeholder="your-email@vsm.org.vn"
+                            className="pl-10"
+                            {...field}
+                          />
                         </div>
                       </FormControl>
                       <FormMessage />
@@ -196,11 +223,17 @@ export default function LoginPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <input type="checkbox" id="remember" className="rounded" />
-                    <label htmlFor="remember" className="text-sm text-muted-foreground">
+                    <label
+                      htmlFor="remember"
+                      className="text-sm text-muted-foreground"
+                    >
                       Ghi nhớ đăng nhập
                     </label>
                   </div>
-                  <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link
+                    href="/forgot-password"
+                    className="text-sm text-primary hover:underline"
+                  >
                     Quên mật khẩu?
                   </Link>
                 </div>
@@ -217,12 +250,18 @@ export default function LoginPage() {
                   <span className="w-full border-t" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">Hoặc</span>
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Hoặc
+                  </span>
                 </div>
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-3">
-                <Button variant="outline" className="w-full bg-transparent" disabled>
+                <Button
+                  variant="outline"
+                  className="w-full bg-transparent"
+                  disabled
+                >
                   <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -243,8 +282,15 @@ export default function LoginPage() {
                   </svg>
                   Google
                 </Button>
-                <Button variant="outline" className="w-full bg-transparent" disabled>
-                  <svg className="mr-2 h-4 w-4 fill-current" viewBox="0 0 24 24">
+                <Button
+                  variant="outline"
+                  className="w-full bg-transparent"
+                  disabled
+                >
+                  <svg
+                    className="mr-2 h-4 w-4 fill-current"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                   Facebook
@@ -255,7 +301,10 @@ export default function LoginPage() {
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
                 Chưa có tài khoản?{" "}
-                <Link href="/register" className="text-primary hover:underline font-medium">
+                <Link
+                  href="/register"
+                  className="text-primary hover:underline font-medium"
+                >
                   Đăng ký ngay
                 </Link>
               </p>
@@ -264,5 +313,5 @@ export default function LoginPage() {
         </Card>
       </motion.div>
     </div>
-  )
+  );
 }

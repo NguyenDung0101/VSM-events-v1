@@ -9,6 +9,17 @@ import { AuthProvider } from "@/contexts/auth-context";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  icons: {
+    // Dành cho tab trình duyệt, bookmarks (ưu tiên file .png chất lượng cao hơn)
+    icon: "/favicon/favicon-16x16.png",
+
+    // Một số trình duyệt cũ hơn vẫn dùng 'shortcut icon'
+    shortcut: "/favicon/favicon.ico",
+
+    // Dành cho khi ghim ra màn hình chính của các thiết bị Apple
+    apple: "/favicon/apple-touch-icon.png",
+  },
+
   title: "VSM - Vietnam Student Marathon",
   description:
     "Trang chủ chính thức của Vietnam Student Marathon - Nơi kết nối cộng đồng chạy bộ sinh viên Việt Nam",
