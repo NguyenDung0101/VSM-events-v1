@@ -1,164 +1,204 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import { useRouter } from "next/navigation"
-import { useToast } from "@/hooks/use-toast"
-import { mockUsers, type User } from "@/lib/mock-data"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/api";
+import { AuthUser } from "@/lib/types";
+
+// Temporary admin emails list - thay thế bằng database sau
+const ADMIN_EMAILS = [
+  "admin@vsm.com",
+  "admin@example.com",
+  // Thêm email admin của bạn vào đây
+];
 
 interface AuthContextType {
-  user: User | null
-  login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, name: string) => Promise<void>
-  logout: () => void
-  loading: boolean
-  updateProfile: (data: Partial<User>) => Promise<void>
+  user: AuthUser | null;
+  login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name: string) => Promise<void>;
+  logout: () => void;
+  loading: boolean;
+  updateProfile: (data: Partial<AuthUser>) => Promise<void>;
+  isAdmin: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-// Mock credentials for demo
-const DEMO_CREDENTIALS = [
-  { email: "admin@vsm.org.vn", password: "password", role: "admin" },
-  { email: "editor@vsm.org.vn", password: "password", role: "editor" },
-  { email: "user1@vsm.org.vn", password: "password", role: "user" },
-  { email: "user2@vsm.org.vn", password: "password", role: "user" },
-]
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const { toast } = useToast()
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  // Helper function để check admin
+  const checkIsAdmin = (userData: AuthUser | null): boolean => {
+    if (!userData) return false;
+
+    // Check role field
+    if (userData.role === "admin" || userData.role === "ADMIN") {
+      return true;
+    }
+
+    // Check user_type field
+    if ((userData as any).user_type === "admin") {
+      return true;
+    }
+
+    // Check isAdmin field
+    if ((userData as any).isAdmin === true) {
+      return true;
+    }
+
+    // Check email in admin list (temporary solution)
+    if (ADMIN_EMAILS.includes(userData.email)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isAdmin = checkIsAdmin(user);
 
   useEffect(() => {
-    checkAuth()
-  }, [])
+    checkAuth();
+  }, []);
 
   const checkAuth = async () => {
     try {
-      const savedUser = localStorage.getItem("vsm_user")
-      if (savedUser) {
-        const userData = JSON.parse(savedUser)
-        setUser(userData)
+      const token = localStorage.getItem("vsm_token");
+      if (token) {
+        apiClient.setToken(token);
+        const userData = await apiClient.getProfile();
+
+        // Log để debug
+        console.log("Fetched user data:", userData);
+
+        // Nếu backend không trả về role, set based on email
+        if (!userData.role && ADMIN_EMAILS.includes(userData.email)) {
+          userData.role = "admin";
+        }
+
+        setUser(userData);
+        console.log("User set with role:", userData.role);
       }
     } catch (error) {
-      localStorage.removeItem("vsm_user")
+      console.error("Auth check failed:", error);
+      // Token is invalid, clear it
+      localStorage.removeItem("vsm_token");
+      apiClient.removeToken();
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const login = async (email: string, password: string) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const response = await apiClient.login(email, password);
 
-    // Check demo credentials
-    const credential = DEMO_CREDENTIALS.find((cred) => cred.email === email && cred.password === password)
+      console.log("Login response:", response);
 
-    if (!credential) {
-      throw new Error("Email hoặc mật khẩu không đúng")
+      // Nếu backend không trả về role, set based on email
+      if (!response.user.role && ADMIN_EMAILS.includes(response.user.email)) {
+        response.user.role = "admin";
+      }
+
+      // Save token and user data
+      localStorage.setItem("vsm_token", response.token);
+      apiClient.setToken(response.token);
+      setUser(response.user);
+
+      console.log("User logged in with role:", response.user.role);
+
+      toast({
+        title: "Đăng nhập thành công",
+        description: `Chào mừng ${response.user.name}!`,
+      });
+
+      // Redirect to home
+      router.push("/");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Đăng nhập thất bại";
+      throw new Error(message);
     }
-
-    // Find user in mock data
-    const userData = mockUsers.find((u) => u.email === email)
-    if (!userData) {
-      throw new Error("Không tìm thấy thông tin người dùng")
-    }
-
-    // Save to localStorage
-    localStorage.setItem("vsm_user", JSON.stringify(userData))
-    setUser(userData)
-
-    toast({
-      title: "Đăng nhập thành công",
-      description: `Chào mừng ${userData.name}!`,
-    })
-
-    // Redirect based on role
-    if (userData.role === "admin" || userData.role === "editor") {
-      router.push("/dashboard")
-    } else {
-      router.push("/")
-    }
-  }
+  };
 
   const register = async (email: string, password: string, name: string) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Check if email already exists
-    const existingUser = mockUsers.find((u) => u.email === email)
-    if (existingUser) {
-      throw new Error("Email đã được sử dụng")
-    }
-
-    // Create new user
-    const newUser: User = {
-      id: `user-${Date.now()}`,
-      name,
-      email,
-      avatar: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 99) + 1}.jpg`,
-      role: "user",
-      createdAt: new Date().toISOString(),
-      isActive: true,
-    }
-
-    // Add to mock users (in real app, this would be saved to database)
-    mockUsers.push(newUser)
-
-    // Save to localStorage
-    localStorage.setItem("vsm_user", JSON.stringify(newUser))
-    setUser(newUser)
-
-    toast({
-      title: "Đăng ký thành công",
-      description: `Chào mừng ${newUser.name} đến với VSM!`,
-    })
-
-    router.push("/")
-  }
-
-  const updateProfile = async (data: Partial<User>) => {
     try {
-      if (!user) throw new Error("Chưa đăng nhập")
+      const response = await apiClient.register(name, email, password);
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      // Nếu backend không trả về role, set based on email
+      if (!response.user.role && ADMIN_EMAILS.includes(response.user.email)) {
+        response.user.role = "admin";
+      }
 
-      const updatedUser = { ...user, ...data }
-      localStorage.setItem("vsm_user", JSON.stringify(updatedUser))
-      setUser(updatedUser)
+      // Save token and user data
+      localStorage.setItem("vsm_token", response.token);
+      apiClient.setToken(response.token);
+      setUser(response.user);
+
+      toast({
+        title: "Đăng ký thành công",
+        description: `Chào mừng ${response.user.name} đến với VSM!`,
+      });
+
+      router.push("/");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Đăng ký thất bại";
+      throw new Error(message);
+    }
+  };
+
+  const updateProfile = async (data: Partial<AuthUser>) => {
+    try {
+      if (!user) throw new Error("Chưa đăng nhập");
+
+      // Note: This would need to be implemented in the backend
+      // For now, we'll just update the local state
+      const updatedUser = { ...user, ...data };
+      setUser(updatedUser);
 
       toast({
         title: "Cập nhật thành công",
         description: "Thông tin cá nhân đã được cập nhật.",
-      })
+      });
     } catch (error: any) {
-      throw new Error(error.message || "Cập nhật thất bại")
+      throw new Error(error.message || "Cập nhật thất bại");
     }
-  }
+  };
 
   const logout = () => {
-    localStorage.removeItem("vsm_user")
-    setUser(null)
-    router.push("/")
+    localStorage.removeItem("vsm_token");
+    apiClient.removeToken();
+    setUser(null);
+    router.push("/");
     toast({
       title: "Đăng xuất thành công",
       description: "Hẹn gặp lại bạn!",
-    })
-  }
+    });
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading, updateProfile }}>
+    <AuthContext.Provider
+      value={{ user, login, register, logout, loading, updateProfile, isAdmin }}
+    >
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context
+  return context;
 }
