@@ -166,28 +166,23 @@ export default function AdminPostsPage() {
   const onSubmit = async (data: PostForm) => {
     try {
       if (editingPost) {
-        console.log("Editing post with ID:", editingPost.id);
-
-        // Prepare update payload with correct field names
+        console.log("Attempting to edit post with ID:", editingPost.id);
         const updatePayload = {
           ...data,
-          category: data.category.toUpperCase(),
-          // Use publishedAt instead of date
-          publishedAt:
-            data.publishedAt || new Date().toISOString().split("T")[0],
-          tags: data.tags || "",
+          category: data.category.toUpperCase(), // Đảm bảo enum uppercase
         };
-
-        console.log("Update payload:", updatePayload);
-
+        console.log(
+          "Full update payload:",
+          JSON.stringify(updatePayload, null, 2)
+        );
         const updatedPost = await apiClient.updatePost(
           editingPost.id,
           updatePayload
         );
-
-        console.log("Raw Response from updatePost:", updatedPost);
-
-        // Update the posts array with the response
+        console.log(
+          "API Response from updatePost:",
+          JSON.stringify(updatedPost, null, 2)
+        );
         setPosts(
           posts.map((post) =>
             post.id === editingPost.id
@@ -198,16 +193,10 @@ export default function AdminPostsPage() {
                     id: updatedPost.author?.id || "",
                     avatar: updatedPost.author?.avatar || "",
                   },
-                  // Ensure date field is properly set
-                  date:
-                    updatedPost.publishedAt ||
-                    updatedPost.date ||
-                    new Date().toISOString().split("T")[0],
                 }
               : post
           )
         );
-
         toast({
           title: "Cập nhật thành công",
           description: "Bài viết đã được cập nhật.",

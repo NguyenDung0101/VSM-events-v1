@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
   Calendar,
@@ -15,22 +15,24 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-} from "lucide-react"
-import { useAuth } from "@/contexts/auth-context"
+  Layout,
+} from "lucide-react";
+import { useAuth } from "@/contexts/auth-context";
 
 const menuItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/homepage", label: "Homepage Manager", icon: Layout },
   { href: "/admin/events", label: "Quản lý sự kiện", icon: Calendar },
   { href: "/admin/posts", label: "Quản lý bài viết", icon: FileText },
   { href: "/admin/products", label: "Quản lý sản phẩm", icon: ShoppingBag },
   { href: "/admin/users", label: "Quản lý người dùng", icon: Users },
   { href: "/admin/settings", label: "Cài đặt", icon: Settings },
-]
+];
 
 export function AdminSidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const pathname = usePathname()
-  const { logout } = useAuth()
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
+  const { logout } = useAuth();
 
   return (
     <motion.div
@@ -53,8 +55,17 @@ export function AdminSidebar() {
                 <span className="font-bold">Admin Panel</span>
               </div>
             )}
-            <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(!isCollapsed)} className="h-8 w-8">
-              {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="h-8 w-8"
+            >
+              {isCollapsed ? (
+                <ChevronRight className="h-4 w-4" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </div>
@@ -63,7 +74,7 @@ export function AdminSidebar() {
         <nav className="flex-1 p-4">
           <ul className="space-y-2">
             {menuItems.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = pathname === item.href;
               return (
                 <li key={item.href}>
                   <Link
@@ -78,7 +89,7 @@ export function AdminSidebar() {
                     {!isCollapsed && <span>{item.label}</span>}
                   </Link>
                 </li>
-              )
+              );
             })}
           </ul>
         </nav>
@@ -96,5 +107,5 @@ export function AdminSidebar() {
         </div>
       </div>
     </motion.div>
-  )
+  );
 }

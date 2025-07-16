@@ -47,6 +47,16 @@ export const metadata: Metadata = {
     "chạy bộ cộng đồng",
     "sinh viên thể thao",
   ],
+  openGraph: {
+    images: [
+      {
+        url: "/long/long.png",
+        width: 1200,
+        height: 630,
+        alt: "VSM - VietNam Student Marathon",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
