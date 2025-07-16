@@ -1,32 +1,33 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { useAuth } from "@/contexts/auth-context"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { AdminDashboard } from "@/components/admin/admin-dashboard"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/auth-context";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { AdminDashboard } from "@/components/admin/admin-dashboard";
 
 export default function AdminPage() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
+  const { user, loading, isAdmin } = useAuth();
+
+  const router = useRouter();
 
   useEffect(() => {
-    if (!loading && (!user || user.role !== "admin")) {
-      router.push("/login")
+    if (!loading && (!user || !isAdmin)) {
+      router.push("/login");
     }
-  }, [user, loading, router])
+  }, [user, isAdmin, loading, router]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
-    )
+    );
   }
 
-  if (!user || user.role !== "admin") {
-    return null
+  if (!user || !isAdmin) {
+    return null;
   }
 
   return (
@@ -45,5 +46,5 @@ export default function AdminPage() {
         </main>
       </div>
     </div>
-  )
+  );
 }

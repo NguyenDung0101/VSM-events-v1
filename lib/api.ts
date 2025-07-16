@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
 
 class ApiClient {
   private baseURL: string;
@@ -6,15 +6,20 @@ class ApiClient {
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
-    if (typeof window !== "undefined") {
-      this.token = localStorage.getItem("vsm_token");
-    }
+    this.updateToken();
+    
   }
 
   setToken(token: string) {
     this.token = token;
     if (typeof window !== "undefined") {
       localStorage.setItem("vsm_token", token);
+    }
+  }
+
+  private updateToken() {
+    if (typeof window !== "undefined") {
+      this.token = localStorage.getItem("vsm_token");
     }
   }
 
@@ -26,6 +31,7 @@ class ApiClient {
   }
 
   private async request(endpoint: string, options: RequestInit = {}) {
+    this.updateToken();
     const url = `${this.baseURL}${endpoint}`;
     const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -55,14 +61,14 @@ if (this.token) {
 
   // Auth endpoints
   async login(email: string, password: string) {
-    return this.request("/api/v1/auth/login", {
+    return this.request("/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
   }
 
   async register(name: string, email: string, password: string) {
-    return this.request("/api/v1/auth/register/self", {
+    return this.request("/auth/register/self", {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     });

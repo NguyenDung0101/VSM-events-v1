@@ -90,9 +90,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error("Auth check failed:", error);
-      // Token is invalid, clear it
-      localStorage.removeItem("vsm_token");
-      apiClient.removeToken();
+      // Chỉ xóa token nếu lỗi 401
+      if (error.message.includes("401")) {
+        localStorage.removeItem("vsm_token");
+        apiClient.removeToken();
+      }
     } finally {
       setLoading(false);
     }
@@ -103,6 +105,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await apiClient.login(email, password);
 
       console.log("Login response:", response);
+      if (!response.access_token) {
+        throw new Error("Access token not found in response from /auth/login");
+      }
 
       // Nếu backend không trả về role, set based on email
       if (!response.user.role && ADMIN_EMAILS.includes(response.user.email)) {
@@ -110,8 +115,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       // Save token and user data
-      localStorage.setItem("vsm_token", response.token);
-      apiClient.setToken(response.token);
+      localStorage.setItem("vsm_token", response.access_token);
+      apiClient.setToken(response.access_token);
       setUser(response.user);
 
       console.log("User logged in with role:", response.user.role);
@@ -134,14 +139,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await apiClient.register(name, email, password);
 
+      if (!response.access_token) {
+        throw new Error(
+          "Access token not found in response from /auth/register"
+        );
+      }
+
       // Nếu backend không trả về role, set based on email
       if (!response.user.role && ADMIN_EMAILS.includes(response.user.email)) {
         response.user.role = "admin";
       }
 
       // Save token and user data
-      localStorage.setItem("vsm_token", response.token);
-      apiClient.setToken(response.token);
+      localStorage.setItem("vsm_token", response.access_token);
+      apiClient.setToken(response.access_token);
       setUser(response.user);
 
       toast({

@@ -2,26 +2,26 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, User, ShoppingCart } from "lucide-react";
+import { Menu, X, User, ShoppingCart, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
 
 const navItems = [
   { href: "/", label: "Trang chủ" },
+  { href: "/about", label: "Giới thiệu" },
   { href: "/events", label: "Sự kiện" },
   { href: "/news", label: "Tin tức" },
   { href: "/shop", label: "Cửa hàng" },
-  { href: "/about", label: "Giới thiệu" },
 ];
 
 export function Navbar() {
@@ -29,6 +29,14 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const router = useRouter();
+
+  // DEBUG: Log user object
+  useEffect(() => {
+    console.log("Current user:", user);
+    console.log("User role:", user?.role);
+    console.log("Is admin:", user?.role === "ADMIN" || user?.role === "admin");
+  }, [user]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +45,18 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleDashboardClick = () => {
+    router.push("/admin");
+  };
+
+  // Kiểm tra user có phải admin không (flexible checking)
+  const isAdmin =
+    user &&
+    (user.role === "admin" ||
+      user.role === "ADMIN" ||
+      (user as any).user_type === "admin" ||
+      (user as any).isAdmin === true);
 
   return (
     <motion.nav
@@ -57,17 +77,12 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            {/* <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center"> */}
-            <Image
-              src="/img/logo-vsm.png"
-              alt="Logo"
-              width={125}
-              height={125}
-            />
-            {/* </div> */}
-            {/* <span className="font-bold text-xl gradient-text">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">VSM</span>
+            </div>
+            <span className="font-bold text-xl gradient-text">
               Vietnam Student Marathon
-            </span> */}
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -111,11 +126,26 @@ export function Navbar() {
                   <DropdownMenuItem asChild>
                     <Link href="/profile">Tài khoản</Link>
                   </DropdownMenuItem>
-                  {user.role === "admin" && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin">Quản trị</Link>
-                    </DropdownMenuItem>
+
+                  {/* Debug info */}
+                  <DropdownMenuItem disabled>
+                    <span className="text-xs text-muted-foreground">
+                      Role: {user.role || "undefined"}
+                    </span>
+                  </DropdownMenuItem>
+
+                  {/* Hiển thị Dashboard - sử dụng isAdmin check linh hoạt */}
+                  {isAdmin && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleDashboardClick}>
+                        <Settings className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </DropdownMenuItem>
+                    </>
                   )}
+
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={logout}>
                     Đăng xuất
                   </DropdownMenuItem>
@@ -185,15 +215,21 @@ export function Navbar() {
                       >
                         Tài khoản
                       </Link>
-                      {user.role === "admin" && (
-                        <Link
-                          href="/admin"
-                          className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
-                          onClick={() => setIsOpen(false)}
+
+                      {/* Dashboard cho mobile */}
+                      {isAdmin && (
+                        <button
+                          onClick={() => {
+                            handleDashboardClick();
+                            setIsOpen(false);
+                          }}
+                          className="flex items-center w-full text-left px-3 py-2 text-base font-medium text-muted-foreground hover:text-primary"
                         >
-                          Quản trị
-                        </Link>
+                          <Settings className="mr-2 h-4 w-4" />
+                          Dashboard
+                        </button>
                       )}
+
                       <button
                         onClick={() => {
                           logout();
