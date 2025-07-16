@@ -1,12 +1,13 @@
-import { Navbar } from "@/components/layout/navbar"
-import { HeroSection } from "@/components/home/hero-section"
-import { AboutSection } from "@/components/home/about-section"
-import { EventsSection } from "@/components/home/events-section"
-import { NewsSection } from "@/components/home/news-section"
-import { TeamSection } from "@/components/home/team-section"
-import { GallerySection } from "@/components/home/gallery-section"
-import { CTASection } from "@/components/home/cta-section"
-import { Footer } from "@/components/layout/footer"
+import { Navbar } from "@/components/layout/navbar";
+import { HeroSection } from "@/components/home/hero-section";
+import { AboutSection } from "@/components/home/about-section";
+import { EventsSection } from "@/components/home/events-section";
+import { NewsSection } from "@/components/home/news-section";
+import { TeamSection } from "@/components/home/team-section";
+import { GallerySection } from "@/components/home/gallery-section";
+import { CTASection } from "@/components/home/cta-section";
+import { Footer } from "@/components/layout/footer";
+import { CountdownTimer } from "@/components/home/countdown-timer";
 
 export default function HomePage() {
   return (
@@ -23,5 +24,5 @@ export default function HomePage() {
       </main>
       <Footer />
     </div>
-  )
+  );
 }

@@ -18,10 +18,10 @@ import Image from "next/image";
 
 const navItems = [
   { href: "/", label: "Trang chủ" },
-  { href: "/events", label: "Sự kiện" },
-  { href: "/news", label: "Tin tức" },
-  { href: "/shop", label: "Cửa hàng" },
   { href: "/about", label: "Giới thiệu" },
+  { href: "/events", label: "Sự kiện" },
+  { href: "/shop", label: "Cửa hàng" },
+  { href: "/news", label: "Tin tức" },
 ];
 
 export function Navbar() {

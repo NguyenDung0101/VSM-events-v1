@@ -1,6 +1,8 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import { Facebook } from "lucide-react";
+import Link from "next/link";
 import { useRef } from "react";
 
 export default function SportsCommunityStory() {
@@ -29,39 +31,47 @@ export default function SportsCommunityStory() {
             <div className="flex items-center mb-6">
               <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-600 mr-4"></div>
               <span className="text-blue-400 uppercase tracking-wider text-sm font-bold">
-                Our Journey
+                Hành Trình của CHÚNG TỐI
               </span>
             </div>
             <h1 className="sports-text text-5xl md:text-6xl font-bold mb-6 leading-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-                Our Sports Story
+                CÂU CHUYỆN VSM
               </span>
             </h1>
             <div className="space-y-6 body-text text-[var(--text-muted)]">
               <p className="text-lg leading-relaxed">
-                Founded in 2020, our sports community began with a simple idea:
-                create a space where students could share their passion for
-                running and grow together.
+                🏃‍♂️Được thành lập từ năm 2023, Vietnam Student Marathon (VSM) ra
+                đời với khát vọng tạo nên một môi trường nơi học sinh, sinh viên
+                có thể rèn luyện ý chí, vượt qua giới hạn bản thân thông qua
+                chạy bộ – một hành trình đơn giản nhưng đầy thử thách và cảm
+                hứng.
               </p>
               <p className="text-lg leading-relaxed">
-                From small running events with just a few dozen participants,
-                we've grown into a massive community with thousands of members
-                across the country.
+                🔥 Câu chuyện ý chí của tuổi trẻ Việt Nam bắt đầu rực cháy qua
+                từng bước chạy và nhịp tim của hàng trăm sinh viên tham gia VSM.
+                Từ những giải chạy đầu tiên với quy mô nhỏ, VSM đã phát triển
+                thành một cộng đồng lớn mạnh, nơi quy tụ những người trẻ cùng
+                niềm đam mê, cùng khát vọng bứt phá chính mình.
               </p>
               <p className="text-lg leading-relaxed">
-                We're proud to have successfully organized many large-scale
-                running events, helping to spread the spirit of sports and
-                healthy living among youth.
+                🏃 VSM không chỉ đơn thuần là một sự kiện thể thao – mà còn là
+                một hành trình trưởng thành. Từng bước chạy là một tuyên ngôn
+                mạnh mẽ, là cách mà chúng ta – một thế hệ trẻ #GenZ – chinh phục
+                những khối kiến thức, vượt qua thách thức cuộc sống bằng trí
+                tuệ, kỷ luật và lòng kiên định.
               </p>
               <p className="text-lg leading-relaxed">
-                Looking ahead, we aim to expand our reach, inspire more young
-                individuals, and build a stronger, more inclusive community for
-                the future.
+                Chúng tôi tự hào khi VSM đã trở thành sân chơi thường niên uy
+                tín, lan tỏa tinh thần thể thao và lối sống tích cực trong giới
+                trẻ. Trong tương lai, VSM tiếp tục mở rộng quy mô, truyền cảm
+                hứng đến nhiều sinh viên hơn nữa, và cùng nhau xây dựng một cộng
+                đồng mạnh mẽ, văn minh và đầy khát vọng.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <div className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center">
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 mr-2"
                   fill="none"
@@ -74,8 +84,14 @@ export default function SportsCommunityStory() {
                     strokeWidth="2"
                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
                   />
-                </svg>
-                Join Our Community
+                </svg> */}
+                <Facebook />
+                <Link
+                  href="https://www.facebook.com/vietnamstudentmarathon"
+                  className="ml-2"
+                >
+                  Facebook
+                </Link>
               </div>
               <div className="px-6 py-3 border border-blue-400 rounded-full flex items-center hover:bg-blue-900/30 transition">
                 <svg
@@ -111,7 +127,7 @@ export default function SportsCommunityStory() {
           >
             <div className="aspect-square rounded-2xl overflow-hidden border-4 border-blue-400/20 shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+                src="img/image1.jpg"
                 alt="Running community"
                 className="w-full h-full object-cover"
               />

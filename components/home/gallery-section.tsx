@@ -1,26 +1,28 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { useState } from "react"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const images = [
   "/placeholder.svg?height=600&width=800",
   "/placeholder.svg?height=600&width=800",
   "/placeholder.svg?height=600&width=800",
   "/placeholder.svg?height=600&width=800",
-]
+];
 
 export function GallerySection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [index, setIndex] = useState(0)
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [index, setIndex] = useState(0);
 
-  const prev = () => setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
-  const next = () => setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+  const prev = () =>
+    setIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  const next = () =>
+    setIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
 
   return (
     <section ref={ref} className="py-20">
@@ -31,8 +33,9 @@ export function GallerySection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold">
-            Khoảnh khắc <span className="gradient-text">đáng nhớ</span>
+          <h2 className="text-4xl md:text-5xl font-bold flex items-center justify-center gap-2 flex-col">
+            VIETNAM STUDENT MARATHON{" "}
+            <span className="gradient-text">RUN TO LAMPAS 2024</span>
           </h2>
         </motion.div>
 
@@ -43,7 +46,12 @@ export function GallerySection() {
           className="relative max-w-4xl mx-auto"
         >
           <div className="aspect-video rounded-xl overflow-hidden">
-            <Image src={images[index] || "/placeholder.svg"} alt="Gallery" fill className="object-cover" />
+            <Image
+              src={images[index] || "/placeholder.svg"}
+              alt="Gallery"
+              fill
+              className="object-cover"
+            />
           </div>
 
           <Button
@@ -65,5 +73,5 @@ export function GallerySection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
