@@ -90,6 +90,11 @@
   background-clip: text;
 }
 
+.gradient-border {
+  border-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-image-slice: 1;
+}
+
 /* Glassmorphism effect */
 .glass {
   background: rgba(255, 255, 255, 0.1);

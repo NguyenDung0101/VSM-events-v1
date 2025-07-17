@@ -16,25 +16,25 @@ const members: Member[] = [
     id: "1",
     name: "42KM – Marathon",
     role: "ĐĂNG KÝ NGAY",
-    avatar: "/placeholder.svg?height=200&width=200",
+    avatar: "/img/VSM/42km.png",
   },
   {
     id: "2",
     name: "21KM – Half Marathon",
     role: "ĐĂNG KÝ NGAY",
-    avatar: "/placeholder.svg?height=200&width=200",
+    avatar: "/img/VSM/21km.png",
   },
   {
     id: "3",
     name: "10KM - Nâng cao",
     role: "ĐĂNG KÝ NGAY",
-    avatar: "/placeholder.svg?height=200&width=200",
+    avatar: "/img/VSM/10km.png",
   },
   {
     id: "4",
     name: "5KM – Khởi đầu",
     role: "ĐĂNG KÝ NGAY",
-    avatar: "/placeholder.svg?height=200&width=200",
+    avatar: "img/VSM/5km.png",
   },
 ];
 
@@ -70,7 +70,7 @@ export function TeamSection() {
             >
               <Card className="glass hover:shadow-lg transition-shadow">
                 <img
-                  src={m.avatar || "/placeholder.svg"}
+                  src={m.avatar || "img/VSM/5km.png"}
                   alt={m.name}
                   className="w-full h-48 object-cover"
                 />

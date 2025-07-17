@@ -51,12 +51,15 @@ export function AboutSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Về <span className="gradient-text">VSM</span>
+            Giới thiệu về <span className="gradient-text">VSM</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Vietnam Student Marathon (VSM) là tổ chức phi lợi nhuận hàng đầu
-            trong việc phát triển phong trào chạy bộ trong cộng đồng sinh viên
-            Việt Nam.
+          <p className="text-xl text-muted-foreground max-w-7xl mx-auto">
+            VSM không chỉ là một giải chạy thường niên dành cho học sinh, sinh
+            viên, mà còn là sân chơi của những bạn trẻ đam mê chạy bộ từ các
+            trường đại học như: ĐH Kinh tế TP.HCM, UEF, ĐH Sư phạm, ĐH Văn
+            Lang,… Đây là nơi bạn không chỉ thử sức qua từng cự ly chạy – mỗi cự
+            ly là một thử thách, một cơ hội để bứt phá giới hạn bản thân – mà
+            còn được rèn luyện ý chí, nâng cao sức khỏe và kết nối cộng đồng.
           </p>
         </motion.div>
 
@@ -82,8 +85,6 @@ export function AboutSection() {
             </motion.div>
           ))}
         </div>
-
-        <SportsCommunityStory />
       </div>
     </section>
   );

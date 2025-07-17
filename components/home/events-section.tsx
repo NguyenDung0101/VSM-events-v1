@@ -50,7 +50,7 @@ export function EventsSection() {
         location: "KDC Bình Lợi , Bình Thành, TP. HCM",
         participants: 0,
         maxParticipants: 50,
-        image: "/img/image3.jpg",
+        image: "/img/VSM/long-run-20_7_2025.png",
         status: "upcoming",
       },
       {
@@ -62,7 +62,7 @@ export function EventsSection() {
         location: "KDC Bình Lợi , Bình Thành, TP. HCM",
         participants: 25,
         maxParticipants: 50,
-        image: "/img/image2.png",
+        image: "/img/VSM/long-run-15_6_2025.png",
         status: "upcoming",
       },
     ];

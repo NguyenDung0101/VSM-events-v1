@@ -10,10 +10,7 @@ export default function SportsCommunityStory() {
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
-    <div
-      className="min-h-screen text-foreground"
-      style={{ background: "var(--sports-bg)" }}
-    >
+    <div className="text-foreground" style={{ background: "var(--sports-bg)" }}>
       <div className="container mx-auto px-4 py-16 md:py-24">
         <motion.div
           ref={ref}

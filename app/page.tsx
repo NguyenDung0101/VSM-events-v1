@@ -8,6 +8,7 @@ import { GallerySection } from "@/components/home/gallery-section";
 import { CTASection } from "@/components/home/cta-section";
 import { Footer } from "@/components/layout/footer";
 import { CountdownTimer } from "@/components/home/countdown-timer";
+import SportsCommunityStory from "@/components/home/SportsCommunityStory";
 
 export default function HomePage() {
   return (
@@ -15,7 +16,9 @@ export default function HomePage() {
       <Navbar />
       <main>
         <HeroSection />
+        <CountdownTimer eventDate="2025-12-28T00:00:00" />
         <AboutSection />
+        <SportsCommunityStory />
         <EventsSection />
         <NewsSection />
         <TeamSection />

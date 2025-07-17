@@ -15,12 +15,27 @@ import {
   Calendar,
   MapPin,
 } from "lucide-react";
+import { HeroSection } from "@/components/home/hero-section";
+import { AboutSection } from "@/components/home/about-section";
+import PartnersSection from "@/components/common/partners-section";
 
 const stats = [
-  { label: "Thành viên", value: "5,000+", icon: Users },
-  { label: "Sự kiện", value: "50+", icon: Calendar },
-  { label: "Thành phố", value: "20+", icon: MapPin },
-  { label: "Giải thưởng", value: "15+", icon: Award },
+  { label: "Sinh viên tham gia qua các mùa", value: "1,000+", icon: Users },
+  {
+    label: "Trường đại học – cao đẳng đồng hành",
+    value: "50+",
+    icon: Calendar,
+  },
+  {
+    label: "Mùa giải đã tổ chức thành công liên tiếp từ năm 2023",
+    value: "4",
+    icon: MapPin,
+  },
+  {
+    label: "Cộng đồng chạy bộ sinh viên lớn nhất tại Việt Nam",
+    value: "1",
+    icon: Award,
+  },
 ];
 
 const values = [
@@ -52,104 +67,147 @@ const values = [
 
 const timeline = [
   {
-    year: "2020",
+    year: "08/2023",
     title: "Thành lập VSM",
     description:
-      "Vietnam Student Marathon được thành lập với sứ mệnh kết nối cộng đồng chạy bộ sinh viên.",
+      "Vietnam Student Marathon chính thức ra đời với sứ mệnh kết nối cộng đồng sinh viên yêu chạy bộ trên khắp Việt Nam.",
   },
   {
-    year: "2021",
+    year: "14/10/2023",
     title: "Sự kiện đầu tiên",
-    description:
-      "Tổ chức thành công VSM Fun Run đầu tiên tại Hà Nội với 500 người tham gia.",
+    description: "VSM tổ chức giải Run For Green 2023 tại Tân Uyên, Bình Dương",
   },
   {
-    year: "2022",
-    title: "Mở rộng toàn quốc",
-    description: "Phát triển hoạt động ra 10 thành phố lớn trên cả nước.",
+    year: "24/12/2023",
+    title: "Vòng chung kết VSM 2023",
+    description:
+      "Diễn ra vào ngày 24/12/2023, vòng chung kết đầu tiên của VSM ghi dấu những bước chạy đầu tiên của “Câu chuyện ý chí” từ hàng trăm sinh viên trên cả nước.",
   },
   {
-    year: "2023",
-    title: "VSM Marathon",
+    year: "31/03/2024",
+    title: "Vòng khởi động VSM 2024",
     description:
-      "Tổ chức thành công VSM Marathon đầu tiên với hơn 2,000 vận động viên tham gia.",
+      "Ngày 31/03/2024, VSM khởi động mùa giải mới với quy mô mở rộng, tạo sân chơi lan tỏa mạnh mẽ đến các trường đại học trên địa bàn TP. Hồ Chí Minh.",
   },
   {
-    year: "2024",
-    title: "Tương lai",
+    year: "22/12/2024",
+    title: "VSM 2024 - Run To Lampas",
     description:
-      "Tiếp tục phát triển và trở thành tổ chức chạy bộ sinh viên hàng đầu Đông Nam Á.",
+      "Ngày 22/12/2024, hàng ngàn sinh viên cùng nhau viết nên hành trình “hướng đến ánh sáng”, nơi mỗi bước chạy là tuyên ngôn của ý chí, tinh thần chiến binh và khát vọng của thế hệ trẻ Việt Nam.",
   },
 ];
 
 const team = [
   {
     name: "Phan Huỳnh Anh",
-    role: "Founder & CEO",
+    role: "Cố vấn",
     avatar: "/placeholder.svg?height=200&width=200",
-    description:
-      "10 năm kinh nghiệm trong lĩnh vực thể thao và tổ chức sự kiện.",
+    description: "",
   },
   {
     name: "Dương Thế Khải",
-    role: "Giám đốc Huấn luyện",
+    role: "Trưởng Ban Tổ Chức",
     avatar: "/placeholder.svg?height=200&width=200",
-    description:
-      "Chuyên gia dinh dưỡng thể thao và huấn luyện viên marathon chứng nhận quốc tế.",
-  },
-  {
-    name: "Quách Thành Long",
-    role: "Giám đốc Sự kiện",
-    avatar: "/placeholder.svg?height=200&width=200",
-    description:
-      "Chuyên gia tổ chức sự kiện với hơn 8 năm kinh nghiệm trong ngành.",
+    description: "",
   },
   {
     name: "Lã Phương Uyên",
-    role: "Giám đốc Marketing",
+    role: "Phó Ban Tổ Chức",
     avatar: "/placeholder.svg?height=200&width=200",
-    description:
-      "Chuyên gia marketing digital và phát triển cộng đồng trực tuyến.",
+    description: "",
   },
   {
-    name: "Nguyễn Tuấn Dũng",
-    role: "Lập trình viên chính",
+    name: "Quách Thành Long",
+    role: "Giám đốc Đường chạy",
     avatar: "/placeholder.svg?height=200&width=200",
-    description:
-      "Chuyên gia marketing digital và phát triển cộng đồng trực tuyến.",
+    description: "",
   },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
-
       <main className="pt-16">
-        {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-r from-primary/20 to-purple-500/20">
-          <div className="container mx-auto px-4 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Về <span className="gradient-text">VSM</span>
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Vietnam Student Marathon - Nơi kết nối đam mê chạy bộ của sinh
-                viên Việt Nam, xây dựng cộng đồng mạnh mẽ và lan tỏa tinh thần
-                thể thao tích cực.
-              </p>
-            </motion.div>
+        <HeroSection />
+        <AboutSection />
+
+        {/* About Section */}
+        <section className="py-12 sm:py-16 md:py-20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 lg:mb-20">
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                className="space-y-4 sm:space-y-6"
+              >
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+                  THÔNG TIN GIẢI
+                </h2>
+                <div className="space-y-4 text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300">
+                  <p>
+                    Mỗi bước chạy trong Vietnam Student Marathon không chỉ là
+                    hành trình thể lực, mà còn là hành trình của tinh thần và ý
+                    chí. Như một chương nhỏ trong cuốn sách tuổi trẻ, mỗi giải
+                    chạy là cơ hội để mỗi sinh viên viết nên câu chuyện vượt qua
+                    chính mình – câu chuyện mang tên “Tôi đã không bỏ cuộc.”
+                  </p>
+                  <p>
+                    Trên từng cây số, bạn sẽ đối diện với giới hạn của bản thân:
+                    EAD: những phút giây đuối sức, những khoảng-optic khoảng
+                    khắc muốn dừng lại, và rồi… bừng tỉnh bằng ý chí mạnh mẽ.
+                    Chính lúc ấy, bạn sẽ hiểu: chiến thắng không nằm ở tốc độ,
+                    mà nằm ở việc bạn đã dám bắt đầu và quyết tâm đi đến cùng.
+                  </p>
+                  <p>
+                    Vietnam Student Marathon không đơn thuần là một cuộc đua –
+                    mà là “sân chơi trưởng thành” dành cho thế hệ Gen Z. Bạn
+                    không chỉ rèn luyện thể chất, mà còn học cách bền bỉ, kiên
+                    trì, và chiến thắng bằng trí tuệ và tinh thần.
+                  </p>
+                  <p>
+                    🎯 Hiểu rõ mục tiêu, chọn đúng cự ly, và sẵn sàng lộ trình
+                    là cách bạn chuẩn bị cho một chặng đường đầy cảm hứng sắp
+                    tới.
+                  </p>
+                  <p>
+                    Hãy bắt đầu chuẩn bị cho giải chạy tiếp theo của bạn cùng
+                    Vietnam Student Marathon – nơi ý chí sinh viên được viết
+                    bằng từng nhịp tim và dấu chân trên đường đua!
+                  </p>
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                className="relative"
+              >
+                <div className="aspect-[4/3] sm:aspect-square rounded-2xl overflow-hidden shadow-lg">
+                  <img
+                    src="img/VSM/Gioi-thieu-VSM.jpeg"
+                    alt="VSM Mission"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-4 sm:-bottom-6 -right-4 sm:-right-6 w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-r from-primary to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-md">
+                  <div className="text-center">
+                    <Globe className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-2" />
+                    <div className="text-xs sm:text-sm font-semibold">
+                      Toàn quốc
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="py-16 bg-muted/20">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {/* Stats Section */}
+        <section className="py-12 sm:py-16 bg-muted/20">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {stats.map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -158,83 +216,52 @@ export default function AboutPage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="text-center"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className="h-8 w-8 text-white" />
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <stat.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </div>
-                  <div className="text-3xl font-bold mb-2">{stat.value}</div>
-                  <div className="text-muted-foreground">{stat.label}</div>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 text-gray-900 dark:text-white">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm sm:text-base text-muted-foreground">
+                    {stat.label}
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Mission & Vision */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <h2 className="text-3xl font-bold mb-6">
-                  Sứ mệnh của chúng tôi
-                </h2>
-                <p className="text-lg text-muted-foreground mb-6">
-                  VSM được thành lập với sứ mệnh kết nối và phát triển cộng đồng
-                  chạy bộ sinh viên Việt Nam. Chúng tôi tin rằng thể thao không
-                  chỉ giúp rèn luyện sức khỏe mà còn xây dựng tinh thần đoàn
-                  kết, ý chí vượt khó và lối sống tích cực.
-                </p>
-                <p className="text-lg text-muted-foreground">
-                  Thông qua các hoạt động chạy bộ, chúng tôi mong muốn tạo ra
-                  một môi trường lành mạnh để sinh viên có thể phát triển bản
-                  thân, kết bạn và cùng nhau vượt qua những thử thách trong cuộc
-                  sống.
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                className="relative"
-              >
-                <div className="aspect-square rounded-2xl overflow-hidden">
-                  <img
-                    src="public/img/events-icon.png"
-                    alt="VSM Mission"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-gradient-to-r from-primary to-purple-600 rounded-2xl flex items-center justify-center text-white">
-                  <div className="text-center">
-                    <Globe className="h-8 w-8 mx-auto mb-2" />
-                    <div className="text-sm font-semibold">Toàn quốc</div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Values */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Values Section */}
+        <section className="py-12 sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-12 sm:mb-16"
+            >
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+                Giá trị cốt lõi
+              </h2>
+              <p className="mt-4 text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Những giá trị định hình hành trình của Vietnam Student Marathon
+              </p>
+            </motion.div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {values.map((value, index) => (
                 <motion.div
                   key={value.title}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-shadow duration-300 glass">
+                  <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow bg-white/80 dark:bg-gray-800/80 backdrop-blur-md">
                     <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 bg-gradient-to-r from-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <value.icon className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="text-xl font-semibold mb-3">
+                      <value.icon className="h-8 w-8 sm:h-10 sm:w-10 mx-auto mb-4 text-primary" />
+                      <h3 className="text-lg sm:text-xl font-semibold mb-2 text-gray-900 dark:text-white">
                         {value.title}
                       </h3>
-                      <p className="text-muted-foreground">
+                      <p className="text-sm sm:text-base text-muted-foreground">
                         {value.description}
                       </p>
                     </CardContent>
@@ -245,104 +272,137 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Timeline */}
-        <section className="py-20 bg-muted/20">
-          <div className="container mx-auto px-4">
+        {/* Timeline Section */}
+        <section className="py-12 sm:py-16 md:py-24 bg-gradient-to-b from-muted/10 to-muted/30">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center mb-16"
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-center mb-12 sm:mb-16"
             >
-              <h2 className="text-3xl font-bold mb-6">Hành trình phát triển</h2>
-              <p className="text-xl text-muted-foreground">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
+                Hành trình phát triển
+              </h2>
+              <p className="mt-4 text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto">
                 Từ những bước chân đầu tiên đến cộng đồng hàng nghìn thành viên
               </p>
             </motion.div>
-
-            <div className="max-w-4xl mx-auto">
+            <div className="relative max-w-4xl mx-auto">
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-primary to-purple-600 h-full hidden sm:block"></div>
               {timeline.map((item, index) => (
                 <motion.div
                   key={item.year}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.2 }}
-                  className={`flex items-center mb-12 ${
-                    index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.3,
+                    ease: "easeOut",
+                  }}
+                  className={`flex flex-col sm:flex-row items-center mb-8 sm:mb-12 relative ${
+                    index % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
                   }`}
                 >
                   <div
-                    className={`flex-1 ${index % 2 === 0 ? "pr-8" : "pl-8"}`}
+                    className={` ${
+                      index % 2 === 0 ? "sm:pr-2" : "sm:pl-2"
+                    } max-w-[400px] sm:w-[45%] `}
                   >
-                    <Card className="glass">
-                      <CardHeader>
-                        <div className="flex items-center space-x-3">
-                          <Badge className="bg-primary text-white">
+                    <Card className="border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg hover:shadow-xl transition-shadow">
+                      <CardHeader className="pb-2">
+                        <div className="flex items-center space-x-2 sm:space-x-4">
+                          <Badge className="bg-gradient-to-r from-primary to-purple-600 text-white text-xs sm:text-sm px-2 sm:px-3 py-1">
                             {item.year}
                           </Badge>
-                          <CardTitle>{item.title}</CardTitle>
+                          <CardTitle className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
+                            {item.title}
+                          </CardTitle>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-muted-foreground">
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                           {item.description}
                         </p>
                       </CardContent>
                     </Card>
                   </div>
-
-                  <div className="w-4 h-4 bg-primary rounded-full relative z-10">
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full"></div>
+                  <div className="w-6 h-6 bg-primary rounded-full relative z-10 shadow-md sm:flex hidden">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full animate-pulse"></div>
                   </div>
-
-                  <div className="flex-1"></div>
+                  <div className="flex-1 sm:w-1/2 hidden sm:block"></div>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Team */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
+        {/* Team Section */}
+        <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-purple-500/5 opacity-50 animate-pulse-slow pointer-events-none"></div>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center mb-16"
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-center mb-12 sm:mb-16"
             >
-              <h2 className="text-3xl font-bold mb-6">Đội ngũ lãnh đạo</h2>
-              <p className="text-xl text-muted-foreground">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                Đội ngũ lãnh đạo
+              </h2>
+              <p className="mt-4 text-sm sm:text-base lg:text-lg text-muted-foreground">
                 Những người đồng hành cùng VSM từ những ngày đầu
               </p>
             </motion.div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {team.map((member, index) => (
                 <motion.div
                   key={member.name}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
+                  whileHover={{
+                    scale: 1.05,
+                    rotate: 1,
+                    transition: { duration: 0.3 },
+                  }}
                   transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="transform-gpu"
                 >
-                  <Card className="glass hover:shadow-lg transition-shadow text-center">
-                    <CardContent className="p-6">
-                      <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4">
-                        <img
+                  <Card className="border-0 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md overflow-hidden group">
+                    <CardContent className="p-4 sm:p-6 text-center relative">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mx-auto mb-4 relative">
+                        <motion.img
                           src={member.avatar || "/placeholder.svg"}
                           alt={member.name}
                           className="w-full h-full object-cover"
+                          whileHover={{ scale: 1.1 }}
+                          transition={{ duration: 0.3 }}
                         />
+                        <motion.div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-full" />
                       </div>
-                      <h3 className="text-xl font-semibold mb-2">
+                      <motion.h3
+                        className="text-base sm:text-lg lg:text-xl font-semibold mb-2 text-gray-900 dark:text-white"
+                        whileHover={{ color: "#9333ea" }}
+                        transition={{ duration: 0.3 }}
+                      >
                         {member.name}
-                      </h3>
-                      <Badge variant="secondary" className="mb-3">
+                      </motion.h3>
+                      <Badge
+                        variant="secondary"
+                        className="mb-3 text-xs sm:text-sm bg-secondary/80 hover:bg-secondary transition-colors duration-300"
+                      >
                         {member.role}
                       </Badge>
-                      <p className="text-sm text-muted-foreground">
+                      <motion.p
+                        className="text-sm sm:text-base text-muted-foreground"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+                      >
                         {member.description}
-                      </p>
+                      </motion.p>
+                      <motion.div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-1 bg-gradient-to-r from-primary to-purple-600 rounded-full group-hover:w-1/3 transition-all duration-300" />
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -350,8 +410,8 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+        <PartnersSection />
       </main>
-
       <Footer />
     </div>
   );

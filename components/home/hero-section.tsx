@@ -50,7 +50,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto"
+          className="max-w-4xl mx-auto mb-12"
         >
           <motion.h1
             className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight"
@@ -59,7 +59,7 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             CHUNG KẾT VIETNAM STUDENT MARATHON 2025
-            <span className="block bg-gradient-to-r block gradient-text bg-clip-text text-transparent drop-shadow-lg">
+            <span className="bg-gradient-to-r block gradient-text bg-clip-text text-transparent drop-shadow-lg">
               CHẠY VÌ TƯƠNG LAI
             </span>
           </motion.h1>
