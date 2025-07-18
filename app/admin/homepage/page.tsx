@@ -255,7 +255,7 @@ ${sectionComponents}
   return (
     <div className="min-h-screen bg-background">
       <AdminSidebar />
-      <div className="border-b bg-card">
+      <div className="border-b bg-card px-[65px]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -283,7 +283,7 @@ ${sectionComponents}
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto pl-20 pr-4 py-6">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
