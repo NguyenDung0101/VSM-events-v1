@@ -99,12 +99,12 @@ export default function HomepageManagerPage() {
   );
   const [activeTab, setActiveTab] = useState("manage");
   const [hasChanges, setHasChanges] = useState(false);
-  const [isDevelopment, setIsDevelopment] = useState(false);
+  // const [isDevelopment, setIsDevelopment] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     // Check if we're in development mode
-    setIsDevelopment(process.env.NODE_ENV === "development");
+    // setIsDevelopment(process.env.NODE_ENV === "development");
 
     // Load saved configuration from localStorage
     const saved = localStorage.getItem("homepage-config");
@@ -232,26 +232,26 @@ ${sectionComponents}
     toast.success("Reset to default configuration");
   };
 
-  if (!isDevelopment) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-500" />
-              Development Only
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              This homepage manager is only available in development mode for
-              security reasons.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // if (!isDevelopment) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <Card className="max-w-md">
+  //         <CardHeader>
+  //           <CardTitle className="flex items-center gap-2">
+  //             <AlertTriangle className="h-5 w-5 text-yellow-500" />
+  //             Development Only
+  //           </CardTitle>
+  //         </CardHeader>
+  //         <CardContent>
+  //           <p className="text-muted-foreground">
+  //             This homepage manager is only available in development mode for
+  //             security reasons.
+  //           </p>
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-muted/20">
