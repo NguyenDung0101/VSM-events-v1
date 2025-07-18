@@ -89,7 +89,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     if (user?.role !== "admin") {
-      router.push("/dashboard");
+      router.push("/admin/users");
       return;
     }
     setUsers(mockUsers);

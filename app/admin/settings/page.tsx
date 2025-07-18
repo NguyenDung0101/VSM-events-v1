@@ -98,8 +98,8 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
-    if (user?.role !== "admin") {
-      router.push("/dashboard");
+    if (user?.role !== "ADMIN") {
+      router.push("/admin/settings");
     }
   }, [user, router]);
 
