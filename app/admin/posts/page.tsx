@@ -1,22 +1,48 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Plus, Search, Edit, Trash2, Eye } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Plus, Search, Edit, Trash2, Eye } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const postSchema = z.object({
   title: z.string().min(1, "Tiêu đề không được để trống"),
@@ -24,31 +50,32 @@ const postSchema = z.object({
   content: z.string().min(1, "Nội dung không được để trống"),
   category: z.enum(["training", "nutrition", "events", "tips"]),
   featured: z.boolean().default(false),
-})
+});
 
-type PostForm = z.infer<typeof postSchema>
+type PostForm = z.infer<typeof postSchema>;
 
 interface Post {
-  id: string
-  title: string
-  excerpt: string
-  content: string
-  cover: string
-  author: string
-  date: string
-  category: "training" | "nutrition" | "events" | "tips"
-  views: number
-  featured: boolean
-  status: "published" | "draft"
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  cover: string;
+  author: string;
+  date: string;
+  category: "training" | "nutrition" | "events" | "tips";
+  views: number;
+  featured: boolean;
+  status: "published" | "draft";
 }
 
 export default function AdminPostsPage() {
-  const [posts, setPosts] = useState<Post[]>([])
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingPost, setEditingPost] = useState<Post | null>(null)
-  const { toast } = useToast()
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
+  const { toast } = useToast();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const form = useForm<PostForm>({
     resolver: zodResolver(postSchema),
@@ -59,7 +86,7 @@ export default function AdminPostsPage() {
       category: "training",
       featured: false,
     },
-  })
+  });
 
   useEffect(() => {
     // Mock data - replace with actual API call
@@ -67,7 +94,8 @@ export default function AdminPostsPage() {
       {
         id: "1",
         title: "Hướng dẫn chuẩn bị cho marathon đầu tiên",
-        excerpt: "5 điều bạn không thể bỏ qua trước khi bắt đầu hành trình 42 km.",
+        excerpt:
+          "5 điều bạn không thể bỏ qua trước khi bắt đầu hành trình 42 km.",
         content: "Nội dung chi tiết...",
         cover: "/placeholder.svg?height=200&width=300",
         author: "Admin",
@@ -103,49 +131,49 @@ export default function AdminPostsPage() {
         featured: true,
         status: "draft",
       },
-    ]
-    setPosts(mockPosts)
-    setFilteredPosts(mockPosts)
-  }, [])
+    ];
+    setPosts(mockPosts);
+    setFilteredPosts(mockPosts);
+  }, []);
 
   useEffect(() => {
     const filtered = posts.filter(
       (post) =>
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
-    setFilteredPosts(filtered)
-  }, [posts, searchTerm])
+        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredPosts(filtered);
+  }, [posts, searchTerm]);
 
   const getCategoryText = (category: string) => {
     switch (category) {
       case "training":
-        return "Huấn luyện"
+        return "Huấn luyện";
       case "nutrition":
-        return "Dinh dưỡng"
+        return "Dinh dưỡng";
       case "events":
-        return "Sự kiện"
+        return "Sự kiện";
       case "tips":
-        return "Mẹo hay"
+        return "Mẹo hay";
       default:
-        return category
+        return category;
     }
-  }
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "training":
-        return "bg-blue-500"
+        return "bg-blue-500";
       case "nutrition":
-        return "bg-green-500"
+        return "bg-green-500";
       case "events":
-        return "bg-purple-500"
+        return "bg-purple-500";
       case "tips":
-        return "bg-orange-500"
+        return "bg-orange-500";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   const onSubmit = async (data: PostForm) => {
     try {
@@ -158,13 +186,13 @@ export default function AdminPostsPage() {
                 ...data,
                 date: new Date().toISOString().split("T")[0],
               }
-            : post,
-        )
-        setPosts(updatedPosts)
+            : post
+        );
+        setPosts(updatedPosts);
         toast({
           title: "Cập nhật thành công",
           description: "Bài viết đã được cập nhật.",
-        })
+        });
       } else {
         // Create new post
         const newPost: Post = {
@@ -175,57 +203,64 @@ export default function AdminPostsPage() {
           date: new Date().toISOString().split("T")[0],
           views: 0,
           status: "published",
-        }
-        setPosts([newPost, ...posts])
+        };
+        setPosts([newPost, ...posts]);
         toast({
           title: "Tạo thành công",
           description: "Bài viết mới đã được tạo.",
-        })
+        });
       }
 
-      setIsDialogOpen(false)
-      setEditingPost(null)
-      form.reset()
+      setIsDialogOpen(false);
+      setEditingPost(null);
+      form.reset();
     } catch (error) {
       toast({
         title: "Có lỗi xảy ra",
         description: "Vui lòng thử lại sau.",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const handleEdit = (post: Post) => {
-    setEditingPost(post)
+    setEditingPost(post);
     form.reset({
       title: post.title,
       excerpt: post.excerpt,
       content: post.content,
       category: post.category,
       featured: post.featured,
-    })
-    setIsDialogOpen(true)
-  }
+    });
+    setIsDialogOpen(true);
+  };
 
   const handleDelete = (postId: string) => {
-    setPosts(posts.filter((post) => post.id !== postId))
+    setPosts(posts.filter((post) => post.id !== postId));
     toast({
       title: "Xóa thành công",
       description: "Bài viết đã được xóa.",
-    })
-  }
+    });
+  };
 
   const handleNewPost = () => {
-    setEditingPost(null)
-    form.reset()
-    setIsDialogOpen(true)
-  }
+    setEditingPost(null);
+    form.reset();
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-muted/20">
       <div className="flex">
-        <AdminSidebar />
-        <main className="flex-1 ml-64">
+        <AdminSidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
+        <main
+          className={`flex-1 transition-all duration-300 ${
+            isCollapsed ? "ml-16" : "ml-64"
+          }`}
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -235,7 +270,9 @@ export default function AdminPostsPage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h1 className="text-3xl font-bold">Quản lý bài viết</h1>
-                <p className="text-muted-foreground">Tạo và quản lý các bài viết trên website</p>
+                <p className="text-muted-foreground">
+                  Tạo và quản lý các bài viết trên website
+                </p>
               </div>
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -247,11 +284,16 @@ export default function AdminPostsPage() {
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>{editingPost ? "Chỉnh sửa bài viết" : "Tạo bài viết mới"}</DialogTitle>
+                    <DialogTitle>
+                      {editingPost ? "Chỉnh sửa bài viết" : "Tạo bài viết mới"}
+                    </DialogTitle>
                   </DialogHeader>
 
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
                       <FormField
                         control={form.control}
                         name="title"
@@ -259,7 +301,10 @@ export default function AdminPostsPage() {
                           <FormItem>
                             <FormLabel>Tiêu đề</FormLabel>
                             <FormControl>
-                              <Input placeholder="Nhập tiêu đề bài viết" {...field} />
+                              <Input
+                                placeholder="Nhập tiêu đề bài viết"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -273,7 +318,11 @@ export default function AdminPostsPage() {
                           <FormItem>
                             <FormLabel>Mô tả ngắn</FormLabel>
                             <FormControl>
-                              <Textarea placeholder="Nhập mô tả ngắn" rows={3} {...field} />
+                              <Textarea
+                                placeholder="Nhập mô tả ngắn"
+                                rows={3}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -287,7 +336,11 @@ export default function AdminPostsPage() {
                           <FormItem>
                             <FormLabel>Nội dung</FormLabel>
                             <FormControl>
-                              <Textarea placeholder="Nhập nội dung bài viết" rows={10} {...field} />
+                              <Textarea
+                                placeholder="Nhập nội dung bài viết"
+                                rows={10}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -301,16 +354,25 @@ export default function AdminPostsPage() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Danh mục</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Chọn danh mục" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  <SelectItem value="training">Huấn luyện</SelectItem>
-                                  <SelectItem value="nutrition">Dinh dưỡng</SelectItem>
-                                  <SelectItem value="events">Sự kiện</SelectItem>
+                                  <SelectItem value="training">
+                                    Huấn luyện
+                                  </SelectItem>
+                                  <SelectItem value="nutrition">
+                                    Dinh dưỡng
+                                  </SelectItem>
+                                  <SelectItem value="events">
+                                    Sự kiện
+                                  </SelectItem>
                                   <SelectItem value="tips">Mẹo hay</SelectItem>
                                 </SelectContent>
                               </Select>
@@ -332,17 +394,25 @@ export default function AdminPostsPage() {
                                   className="rounded"
                                 />
                               </FormControl>
-                              <FormLabel className="!mt-0">Bài viết nổi bật</FormLabel>
+                              <FormLabel className="!mt-0">
+                                Bài viết nổi bật
+                              </FormLabel>
                             </FormItem>
                           )}
                         />
                       </div>
 
                       <div className="flex justify-end space-x-4">
-                        <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsDialogOpen(false)}
+                        >
                           Hủy
                         </Button>
-                        <Button type="submit">{editingPost ? "Cập nhật" : "Tạo bài viết"}</Button>
+                        <Button type="submit">
+                          {editingPost ? "Cập nhật" : "Tạo bài viết"}
+                        </Button>
                       </div>
                     </form>
                   </Form>
@@ -368,7 +438,9 @@ export default function AdminPostsPage() {
             {/* Posts Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Danh sách bài viết ({filteredPosts.length})</CardTitle>
+                <CardTitle>
+                  Danh sách bài viết ({filteredPosts.length})
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -388,32 +460,58 @@ export default function AdminPostsPage() {
                         <TableCell>
                           <div>
                             <div className="font-medium">{post.title}</div>
-                            <div className="text-sm text-muted-foreground line-clamp-1">{post.excerpt}</div>
-                            {post.featured && <Badge className="mt-1 bg-yellow-500 text-white">Nổi bật</Badge>}
+                            <div className="text-sm text-muted-foreground line-clamp-1">
+                              {post.excerpt}
+                            </div>
+                            {post.featured && (
+                              <Badge className="mt-1 bg-yellow-500 text-white">
+                                Nổi bật
+                              </Badge>
+                            )}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={`${getCategoryColor(post.category)} text-white`}>
+                          <Badge
+                            className={`${getCategoryColor(
+                              post.category
+                            )} text-white`}
+                          >
                             {getCategoryText(post.category)}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={post.status === "published" ? "default" : "secondary"}>
-                            {post.status === "published" ? "Đã xuất bản" : "Bản nháp"}
+                          <Badge
+                            variant={
+                              post.status === "published"
+                                ? "default"
+                                : "secondary"
+                            }
+                          >
+                            {post.status === "published"
+                              ? "Đã xuất bản"
+                              : "Bản nháp"}
                           </Badge>
                         </TableCell>
                         <TableCell>{post.views.toLocaleString()}</TableCell>
-                        <TableCell>{new Date(post.date).toLocaleDateString("vi-VN")}</TableCell>
+                        <TableCell>
+                          {new Date(post.date).toLocaleDateString("vi-VN")}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
                             <Button
                               size="icon"
                               variant="ghost"
-                              onClick={() => window.open(`/news/${post.id}`, "_blank")}
+                              onClick={() =>
+                                window.open(`/news/${post.id}`, "_blank")
+                              }
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button size="icon" variant="ghost" onClick={() => handleEdit(post)}>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleEdit(post)}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                             <Button
@@ -436,5 +534,5 @@ export default function AdminPostsPage() {
         </main>
       </div>
     </div>
-  )
+  );
 }

@@ -1,22 +1,57 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Plus, Search, Edit, Trash2, Eye, Calendar, MapPin, Users } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Eye,
+  Calendar,
+  MapPin,
+  Users,
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const eventSchema = z.object({
   title: z.string().min(1, "Tiêu đề không được để trống"),
@@ -26,31 +61,32 @@ const eventSchema = z.object({
   maxParticipants: z.number().min(1, "Số lượng tham gia phải lớn hơn 0"),
   category: z.enum(["marathon", "fun-run", "trail-run"]),
   distance: z.string().min(1, "Cự ly không được để trống"),
-})
+});
 
-type EventForm = z.infer<typeof eventSchema>
+type EventForm = z.infer<typeof eventSchema>;
 
 interface Event {
-  id: string
-  title: string
-  description: string
-  date: string
-  location: string
-  participants: number
-  maxParticipants: number
-  image: string
-  status: "upcoming" | "ongoing" | "completed"
-  category: "marathon" | "fun-run" | "trail-run"
-  distance: string
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  participants: number;
+  maxParticipants: number;
+  image: string;
+  status: "upcoming" | "ongoing" | "completed";
+  category: "marathon" | "fun-run" | "trail-run";
+  distance: string;
 }
 
 export default function AdminEventsPage() {
-  const [events, setEvents] = useState<Event[]>([])
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [editingEvent, setEditingEvent] = useState<Event | null>(null)
-  const { toast } = useToast()
+  const [events, setEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const { toast } = useToast();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const form = useForm<EventForm>({
     resolver: zodResolver(eventSchema),
@@ -63,7 +99,7 @@ export default function AdminEventsPage() {
       category: "fun-run",
       distance: "",
     },
-  })
+  });
 
   useEffect(() => {
     // Mock data - replace with actual API call
@@ -71,7 +107,8 @@ export default function AdminEventsPage() {
       {
         id: "1",
         title: "VSM Marathon Hà Nội 2024",
-        description: "Giải chạy marathon lớn nhất dành cho sinh viên tại Hà Nội",
+        description:
+          "Giải chạy marathon lớn nhất dành cho sinh viên tại Hà Nội",
         date: "2024-03-15",
         location: "Hồ Gươm, Hà Nội",
         participants: 1250,
@@ -107,71 +144,71 @@ export default function AdminEventsPage() {
         category: "trail-run",
         distance: "15km",
       },
-    ]
-    setEvents(mockEvents)
-    setFilteredEvents(mockEvents)
-  }, [])
+    ];
+    setEvents(mockEvents);
+    setFilteredEvents(mockEvents);
+  }, []);
 
   useEffect(() => {
     const filtered = events.filter(
       (event) =>
         event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.location.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
-    setFilteredEvents(filtered)
-  }, [events, searchTerm])
+        event.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredEvents(filtered);
+  }, [events, searchTerm]);
 
   const getCategoryText = (category: string) => {
     switch (category) {
       case "marathon":
-        return "Marathon"
+        return "Marathon";
       case "fun-run":
-        return "Fun Run"
+        return "Fun Run";
       case "trail-run":
-        return "Trail Run"
+        return "Trail Run";
       default:
-        return category
+        return category;
     }
-  }
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "marathon":
-        return "bg-red-500"
+        return "bg-red-500";
       case "fun-run":
-        return "bg-blue-500"
+        return "bg-blue-500";
       case "trail-run":
-        return "bg-green-500"
+        return "bg-green-500";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "upcoming":
-        return "bg-green-500"
+        return "bg-green-500";
       case "ongoing":
-        return "bg-yellow-500"
+        return "bg-yellow-500";
       case "completed":
-        return "bg-gray-500"
+        return "bg-gray-500";
       default:
-        return "bg-gray-500"
+        return "bg-gray-500";
     }
-  }
+  };
 
   const getStatusText = (status: string) => {
     switch (status) {
       case "upcoming":
-        return "Sắp diễn ra"
+        return "Sắp diễn ra";
       case "ongoing":
-        return "Đang diễn ra"
+        return "Đang diễn ra";
       case "completed":
-        return "Đã kết thúc"
+        return "Đã kết thúc";
       default:
-        return "Không xác định"
+        return "Không xác định";
     }
-  }
+  };
 
   const onSubmit = async (data: EventForm) => {
     try {
@@ -186,13 +223,13 @@ export default function AdminEventsPage() {
                 image: event.image, // Keep existing image
                 status: event.status, // Keep existing status
               }
-            : event,
-        )
-        setEvents(updatedEvents)
+            : event
+        );
+        setEvents(updatedEvents);
         toast({
           title: "Cập nhật thành công",
           description: "Sự kiện đã được cập nhật.",
-        })
+        });
       } else {
         // Create new event
         const newEvent: Event = {
@@ -201,28 +238,28 @@ export default function AdminEventsPage() {
           participants: 0,
           image: "/placeholder.svg?height=300&width=400",
           status: "upcoming",
-        }
-        setEvents([newEvent, ...events])
+        };
+        setEvents([newEvent, ...events]);
         toast({
           title: "Tạo thành công",
           description: "Sự kiện mới đã được tạo.",
-        })
+        });
       }
 
-      setIsDialogOpen(false)
-      setEditingEvent(null)
-      form.reset()
+      setIsDialogOpen(false);
+      setEditingEvent(null);
+      form.reset();
     } catch (error) {
       toast({
         title: "Có lỗi xảy ra",
         description: "Vui lòng thử lại sau.",
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const handleEdit = (event: Event) => {
-    setEditingEvent(event)
+    setEditingEvent(event);
     form.reset({
       title: event.title,
       description: event.description,
@@ -231,29 +268,36 @@ export default function AdminEventsPage() {
       maxParticipants: event.maxParticipants,
       category: event.category,
       distance: event.distance,
-    })
-    setIsDialogOpen(true)
-  }
+    });
+    setIsDialogOpen(true);
+  };
 
   const handleDelete = (eventId: string) => {
-    setEvents(events.filter((event) => event.id !== eventId))
+    setEvents(events.filter((event) => event.id !== eventId));
     toast({
       title: "Xóa thành công",
       description: "Sự kiện đã được xóa.",
-    })
-  }
+    });
+  };
 
   const handleNewEvent = () => {
-    setEditingEvent(null)
-    form.reset()
-    setIsDialogOpen(true)
-  }
+    setEditingEvent(null);
+    form.reset();
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-muted/20">
       <div className="flex">
-        <AdminSidebar />
-        <main className="flex-1 ml-64">
+        <AdminSidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
+        <main
+          className={`flex-1 transition-all duration-300 ${
+            isCollapsed ? "ml-16" : "ml-64"
+          }`}
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -263,7 +307,9 @@ export default function AdminEventsPage() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h1 className="text-3xl font-bold">Quản lý sự kiện</h1>
-                <p className="text-muted-foreground">Tạo và quản lý các sự kiện chạy bộ</p>
+                <p className="text-muted-foreground">
+                  Tạo và quản lý các sự kiện chạy bộ
+                </p>
               </div>
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -275,11 +321,16 @@ export default function AdminEventsPage() {
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>{editingEvent ? "Chỉnh sửa sự kiện" : "Tạo sự kiện mới"}</DialogTitle>
+                    <DialogTitle>
+                      {editingEvent ? "Chỉnh sửa sự kiện" : "Tạo sự kiện mới"}
+                    </DialogTitle>
                   </DialogHeader>
 
                   <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-6"
+                    >
                       <FormField
                         control={form.control}
                         name="title"
@@ -287,7 +338,10 @@ export default function AdminEventsPage() {
                           <FormItem>
                             <FormLabel>Tiêu đề</FormLabel>
                             <FormControl>
-                              <Input placeholder="Nhập tiêu đề sự kiện" {...field} />
+                              <Input
+                                placeholder="Nhập tiêu đề sự kiện"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -301,7 +355,11 @@ export default function AdminEventsPage() {
                           <FormItem>
                             <FormLabel>Mô tả</FormLabel>
                             <FormControl>
-                              <Textarea placeholder="Nhập mô tả sự kiện" rows={3} {...field} />
+                              <Textarea
+                                placeholder="Nhập mô tả sự kiện"
+                                rows={3}
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -350,7 +408,11 @@ export default function AdminEventsPage() {
                                   type="number"
                                   placeholder="100"
                                   {...field}
-                                  onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      Number.parseInt(e.target.value) || 0
+                                    )
+                                  }
                                 />
                               </FormControl>
                               <FormMessage />
@@ -364,16 +426,25 @@ export default function AdminEventsPage() {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Loại sự kiện</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Chọn loại" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  <SelectItem value="marathon">Marathon</SelectItem>
-                                  <SelectItem value="fun-run">Fun Run</SelectItem>
-                                  <SelectItem value="trail-run">Trail Run</SelectItem>
+                                  <SelectItem value="marathon">
+                                    Marathon
+                                  </SelectItem>
+                                  <SelectItem value="fun-run">
+                                    Fun Run
+                                  </SelectItem>
+                                  <SelectItem value="trail-run">
+                                    Trail Run
+                                  </SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
@@ -397,10 +468,16 @@ export default function AdminEventsPage() {
                       </div>
 
                       <div className="flex justify-end space-x-4">
-                        <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsDialogOpen(false)}
+                        >
                           Hủy
                         </Button>
-                        <Button type="submit">{editingEvent ? "Cập nhật" : "Tạo sự kiện"}</Button>
+                        <Button type="submit">
+                          {editingEvent ? "Cập nhật" : "Tạo sự kiện"}
+                        </Button>
                       </div>
                     </form>
                   </Form>
@@ -426,7 +503,9 @@ export default function AdminEventsPage() {
             {/* Events Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Danh sách sự kiện ({filteredEvents.length})</CardTitle>
+                <CardTitle>
+                  Danh sách sự kiện ({filteredEvents.length})
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -457,12 +536,20 @@ export default function AdminEventsPage() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={`${getCategoryColor(event.category)} text-white`}>
+                          <Badge
+                            className={`${getCategoryColor(
+                              event.category
+                            )} text-white`}
+                          >
                             {getCategoryText(event.category)}
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge className={`${getStatusColor(event.status)} text-white`}>
+                          <Badge
+                            className={`${getStatusColor(
+                              event.status
+                            )} text-white`}
+                          >
                             {getStatusText(event.status)}
                           </Badge>
                         </TableCell>
@@ -476,21 +563,34 @@ export default function AdminEventsPage() {
                           <div className="w-full bg-muted rounded-full h-1 mt-1">
                             <div
                               className="bg-primary h-1 rounded-full"
-                              style={{ width: `${(event.participants / event.maxParticipants) * 100}%` }}
+                              style={{
+                                width: `${
+                                  (event.participants / event.maxParticipants) *
+                                  100
+                                }%`,
+                              }}
                             />
                           </div>
                         </TableCell>
-                        <TableCell>{new Date(event.date).toLocaleDateString("vi-VN")}</TableCell>
+                        <TableCell>
+                          {new Date(event.date).toLocaleDateString("vi-VN")}
+                        </TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
                             <Button
                               size="icon"
                               variant="ghost"
-                              onClick={() => window.open(`/events/${event.id}`, "_blank")}
+                              onClick={() =>
+                                window.open(`/events/${event.id}`, "_blank")
+                              }
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button size="icon" variant="ghost" onClick={() => handleEdit(event)}>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleEdit(event)}
+                            >
                               <Edit className="h-4 w-4" />
                             </Button>
                             <Button
@@ -513,5 +613,5 @@ export default function AdminEventsPage() {
         </main>
       </div>
     </div>
-  )
+  );
 }
