@@ -1,26 +1,46 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Member {
-  id: string
-  name: string
-  role: string
-  avatar: string
+  id: string;
+  name: string;
+  role: string;
+  avatar: string;
 }
 
 const members: Member[] = [
-  { id: "1", name: "Nguyễn Văn A", role: "Huấn luyện viên trưởng", avatar: "/placeholder.svg?height=200&width=200" },
-  { id: "2", name: "Trần Thị B", role: "Chuyên gia dinh dưỡng", avatar: "/placeholder.svg?height=200&width=200" },
-  { id: "3", name: "Lê Văn C", role: "Đại sứ VSM", avatar: "/placeholder.svg?height=200&width=200" },
-  { id: "4", name: "Phạm Thị D", role: "Chuyên gia vật lý trị liệu", avatar: "/placeholder.svg?height=200&width=200" },
-]
+  {
+    id: "1",
+    name: "42KM – Marathon",
+    role: "ĐĂNG KÝ NGAY",
+    avatar: "/img/VSM/42km.png",
+  },
+  {
+    id: "2",
+    name: "21KM – Half Marathon",
+    role: "ĐĂNG KÝ NGAY",
+    avatar: "/img/VSM/21km.png",
+  },
+  {
+    id: "3",
+    name: "10KM - Nâng cao",
+    role: "ĐĂNG KÝ NGAY",
+    avatar: "/img/VSM/10km.png",
+  },
+  {
+    id: "4",
+    name: "5KM – Khởi đầu",
+    role: "ĐĂNG KÝ NGAY",
+    avatar: "img/VSM/5km.png",
+  },
+];
 
 export function TeamSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section ref={ref} className="py-20 bg-muted/20">
@@ -32,10 +52,11 @@ export function TeamSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Đội ngũ <span className="gradient-text">VSM</span>
+            CỰ LY <span className="gradient-text">ĐĂNG KÝ</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Gặp gỡ những gương mặt tiêu biểu đồng hành cùng chúng tôi.
+            Lựa chọn hành trình phù hợp với bạn – mỗi bước chạy là một thử thách
+            để vượt lên chính mình!
           </p>
         </motion.div>
 
@@ -48,16 +69,22 @@ export function TeamSection() {
               transition={{ duration: 0.8, delay: idx * 0.1 }}
             >
               <Card className="glass hover:shadow-lg transition-shadow">
-                <img src={m.avatar || "/placeholder.svg"} alt={m.name} className="w-full h-48 object-cover" />
+                <img
+                  src={m.avatar || "img/VSM/5km.png"}
+                  alt={m.name}
+                  className="w-full h-48 object-cover"
+                />
                 <CardHeader className="text-center">
                   <CardTitle>{m.name}</CardTitle>
                 </CardHeader>
-                <CardContent className="text-center text-muted-foreground">{m.role}</CardContent>
+                <CardContent className="text-center text-muted-foreground">
+                  {m.role}
+                </CardContent>
               </Card>
             </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

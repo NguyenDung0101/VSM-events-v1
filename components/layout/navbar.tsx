@@ -20,8 +20,8 @@ const navItems = [
   { href: "/", label: "Trang chủ" },
   { href: "/about", label: "Giới thiệu" },
   { href: "/events", label: "Sự kiện" },
-  { href: "/news", label: "Tin tức" },
   { href: "/shop", label: "Cửa hàng" },
+  { href: "/news", label: "Tin tức" },
 ];
 
 export function Navbar() {
@@ -69,9 +69,9 @@ export function Navbar() {
         backdropFilter: isScrolled ? "blur(10px)" : "none",
         boxShadow: isScrolled ? "0 2px 4px rgba(0, 0, 0, 0.1)" : "none",
       }}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
