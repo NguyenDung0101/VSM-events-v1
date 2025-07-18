@@ -1,17 +1,20 @@
-"use client"
+"use client";
 
-import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export function CTASection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-20 bg-gradient-to-r from-primary/20 to-purple-500/20">
+    <section
+      ref={ref}
+      className="py-20 bg-gradient-to-r from-primary/20 to-purple-500/20"
+    >
       <div className="container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -23,7 +26,8 @@ export function CTASection() {
             Sẵn sàng <span className="gradient-text">bứt phá?</span>
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Đăng ký ngay để tham gia sự kiện chạy bộ cùng cộng đồng sinh viên trên toàn quốc!
+            Đăng ký ngay để tham gia sự kiện chạy bộ cùng cộng đồng sinh viên
+            trên toàn quốc!
           </p>
           <Button size="lg" asChild className="px-8 py-4">
             <Link href="/events">
@@ -34,5 +38,5 @@ export function CTASection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

@@ -86,6 +86,7 @@ export default function AdminPostsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPost, setEditingPost] = useState<Post | null>(null);
   const { toast } = useToast();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const form = useForm<PostForm>({
     resolver: zodResolver(postSchema),
@@ -299,8 +300,15 @@ export default function AdminPostsPage() {
   return (
     <div className="min-h-screen bg-muted/20">
       <div className="flex">
-        <AdminSidebar />
-        <main className="flex-1 ml-64">
+        <AdminSidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
+        <main
+          className={`flex-1 transition-all duration-300 ${
+            isCollapsed ? "ml-16" : "ml-64"
+          }`}
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

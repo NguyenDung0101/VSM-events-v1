@@ -50,15 +50,16 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto mb-12"
+          className=" mx-auto mb-12"
         >
           <motion.h1
-            className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight"
+            className="flex flex-col md:leading-tight text-5xl md:text-6xl font-extrabold mb-6  tracking-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            CHUNG KẾT <span>VIETNAM STUDENT MARATHON 2025</span>
+            CHUNG KẾT
+            <span>VIETNAM STUDENT MARATHON 2025</span>
             <span className="bg-gradient-to-r block gradient-text bg-clip-text text-transparent drop-shadow-lg">
               CHẠY VÌ TƯƠNG LAI
             </span>
@@ -71,6 +72,17 @@ export function HeroSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
           >
             NGÀY THI ĐẤU: <strong className="text-white">07/12/2025</strong>
+          </motion.p>
+          <motion.p
+            className="text-lg md:text-2xl mb-10 text-gray-300 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            ĐỊA ĐIỂM :{" "}
+            <strong className="text-white">
+              KHU ĐÔ THỊ SALA, TP.THỦ ĐỨC, TP.HCM
+            </strong>
           </motion.p>
 
           <motion.div

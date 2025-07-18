@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/auth-context";
@@ -11,6 +11,7 @@ export default function AdminPage() {
   const { user, loading, isAdmin } = useAuth();
 
   const router = useRouter();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) {
@@ -33,8 +34,15 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-muted/20">
       <div className="flex">
-        <AdminSidebar />
-        <main className="flex-1 ml-64">
+        <AdminSidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
+        <main
+          className={`flex-1 transition-all duration-300 ${
+            isCollapsed ? "ml-16" : "ml-64"
+          }`}
+        >
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

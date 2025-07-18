@@ -100,11 +100,11 @@ export default function HomepageManagerPage() {
   const [activeTab, setActiveTab] = useState("manage");
   const [hasChanges, setHasChanges] = useState(false);
   const [isDevelopment, setIsDevelopment] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     // Check if we're in development mode
     setIsDevelopment(process.env.NODE_ENV === "development");
-
     // Load saved configuration from localStorage
     const saved = localStorage.getItem("homepage-config");
     if (saved) {
@@ -253,168 +253,189 @@ ${sectionComponents}
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <AdminSidebar />
-      <div className="border-b bg-card px-[65px]">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Homepage Manager</h1>
-              <p className="text-muted-foreground">
-                Manage your homepage sections with drag-and-drop
-              </p>
-            </div>
-            <div className="flex gap-2">
-              {hasChanges && (
-                <Badge variant="secondary" className="mr-2">
-                  Unsaved changes
-                </Badge>
-              )}
-              <Button variant="outline" onClick={resetToDefault}>
-                <RotateCcw className="h-4 w-4 mr-2" />
-                Reset
-              </Button>
-              <Button onClick={saveToFile} disabled={!hasChanges}>
-                <Save className="h-4 w-4 mr-2" />
-                Save Changes
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto pl-20 pr-4 py-6">
-        <Tabs
-          value={activeTab}
-          onValueChange={setActiveTab}
-          className="space-y-6"
+    <div className="min-h-screen bg-muted/20">
+      <div className="flex">
+        <AdminSidebar
+          isCollapsed={isCollapsed}
+          setIsCollapsed={setIsCollapsed}
+        />
+        <main
+          className={`flex-1 transition-all duration-300 ${
+            isCollapsed ? "ml-16" : "ml-64"
+          }`}
         >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="manage">Manage Sections</TabsTrigger>
-            <TabsTrigger value="preview">Live Preview</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="manage" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-4">
+          <div className="min-h-screen bg-background">
+            <div className="border-b bg-card px-[65px]">
+              <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold">Current Sections</h2>
-                  <div className="text-sm text-muted-foreground">
-                    Drag to reorder • Click to edit
+                  <div>
+                    <h1 className="text-2xl font-bold">Homepage Manager</h1>
+                    <p className="text-muted-foreground">
+                      Manage your homepage sections with drag-and-drop
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    {hasChanges && (
+                      <Badge variant="secondary" className="mr-2">
+                        Unsaved changes
+                      </Badge>
+                    )}
+                    <Button variant="outline" onClick={resetToDefault}>
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      Reset
+                    </Button>
+                    <Button onClick={saveToFile} disabled={!hasChanges}>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Changes
+                    </Button>
                   </div>
                 </div>
-
-                <Reorder.Group
-                  axis="y"
-                  values={sections}
-                  onReorder={handleReorder}
-                  className="space-y-3"
-                >
-                  {sections.map((section) => (
-                    <Reorder.Item
-                      key={section.id}
-                      value={section}
-                      className="cursor-grab active:cursor-grabbing"
-                    >
-                      <Card
-                        className={`${
-                          section.enabled ? "bg-card" : "bg-muted/50"
-                        } hover:shadow-md transition-shadow`}
-                      >
-                        <CardContent className="p-4">
-                          <div className="flex items-center gap-3">
-                            <GripVertical className="h-5 w-5 text-muted-foreground" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <h3 className="font-medium">{section.name}</h3>
-                                <Badge
-                                  variant={
-                                    section.enabled ? "default" : "secondary"
-                                  }
-                                >
-                                  {section.enabled ? "Enabled" : "Disabled"}
-                                </Badge>
-                              </div>
-                              <p className="text-sm text-muted-foreground mt-1">
-                                {section.component}
-                              </p>
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => toggleSection(section.id)}
-                              >
-                                <Eye className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setEditingSection(section)}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => removeSection(section.id)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Reorder.Item>
-                  ))}
-                </Reorder.Group>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-xl font-semibold">Add Section</h2>
-                <div className="space-y-2">
-                  {AVAILABLE_SECTIONS.map((section) => (
-                    <Button
-                      key={section.id}
-                      variant="outline"
-                      className="w-full justify-start"
-                      onClick={() => addSection(section.id)}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      {section.name}
-                    </Button>
-                  ))}
-                </div>
-
-                <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-                  <h3 className="font-medium mb-2">Usage Guide</h3>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• Drag sections to reorder</li>
-                    <li>• Toggle visibility with eye icon</li>
-                    <li>• Edit content with edit icon</li>
-                    <li>• Remove sections with trash icon</li>
-                    <li>• Preview changes in Live Preview tab</li>
-                    <li>• Save changes to update app/page.tsx</li>
-                  </ul>
-                </div>
               </div>
             </div>
-          </TabsContent>
 
-          <TabsContent value="preview">
-            <HomepagePreview sections={sections} />
-          </TabsContent>
-        </Tabs>
+            <div className="container mx-auto pl-20 pr-4 py-6">
+              <Tabs
+                value={activeTab}
+                onValueChange={setActiveTab}
+                className="space-y-6"
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="manage">Manage Sections</TabsTrigger>
+                  <TabsTrigger value="preview">Live Preview</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="manage" className="space-y-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-xl font-semibold">
+                          Current Sections
+                        </h2>
+                        <div className="text-sm text-muted-foreground">
+                          Drag to reorder • Click to edit
+                        </div>
+                      </div>
+
+                      <Reorder.Group
+                        axis="y"
+                        values={sections}
+                        onReorder={handleReorder}
+                        className="space-y-3"
+                      >
+                        {sections.map((section) => (
+                          <Reorder.Item
+                            key={section.id}
+                            value={section}
+                            className="cursor-grab active:cursor-grabbing"
+                          >
+                            <Card
+                              className={`${
+                                section.enabled ? "bg-card" : "bg-muted/50"
+                              } hover:shadow-md transition-shadow`}
+                            >
+                              <CardContent className="p-4">
+                                <div className="flex items-center gap-3">
+                                  <GripVertical className="h-5 w-5 text-muted-foreground" />
+                                  <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                      <h3 className="font-medium">
+                                        {section.name}
+                                      </h3>
+                                      <Badge
+                                        variant={
+                                          section.enabled
+                                            ? "default"
+                                            : "secondary"
+                                        }
+                                      >
+                                        {section.enabled
+                                          ? "Enabled"
+                                          : "Disabled"}
+                                      </Badge>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                      {section.component}
+                                    </p>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => toggleSection(section.id)}
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => setEditingSection(section)}
+                                    >
+                                      <Edit className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => removeSection(section.id)}
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </Reorder.Item>
+                        ))}
+                      </Reorder.Group>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h2 className="text-xl font-semibold">Add Section</h2>
+                      <div className="space-y-2">
+                        {AVAILABLE_SECTIONS.map((section) => (
+                          <Button
+                            key={section.id}
+                            variant="outline"
+                            className="w-full justify-start"
+                            onClick={() => addSection(section.id)}
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            {section.name}
+                          </Button>
+                        ))}
+                      </div>
+
+                      <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                        <h3 className="font-medium mb-2">Usage Guide</h3>
+                        <ul className="text-sm text-muted-foreground space-y-1">
+                          <li>• Drag sections to reorder</li>
+                          <li>• Toggle visibility with eye icon</li>
+                          <li>• Edit content with edit icon</li>
+                          <li>• Remove sections with trash icon</li>
+                          <li>• Preview changes in Live Preview tab</li>
+                          <li>• Save changes to update app/page.tsx</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="preview">
+                  <HomepagePreview sections={sections} />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {editingSection && (
+              <SectionEditor
+                section={editingSection}
+                onSave={(config) => updateSection(editingSection.id, config)}
+                onClose={() => setEditingSection(null)}
+              />
+            )}
+            <Toaster richColors position="top-right" />
+          </div>
+        </main>
       </div>
-
-      {editingSection && (
-        <SectionEditor
-          section={editingSection}
-          onSave={(config) => updateSection(editingSection.id, config)}
-          onClose={() => setEditingSection(null)}
-        />
-      )}
-      <Toaster richColors position="top-right" />
     </div>
   );
 }
