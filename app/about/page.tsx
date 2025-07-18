@@ -18,6 +18,7 @@ import {
 import { HeroSection } from "@/components/home/hero-section";
 import { AboutSection } from "@/components/home/about-section";
 import PartnersSection from "@/components/common/partners-section";
+import AboutFeatures from "@/components/home/about-features";
 
 const stats = [
   { label: "Sinh viên tham gia qua các mùa", value: "1,000+", icon: Users },
@@ -122,6 +123,30 @@ const team = [
     avatar: "/placeholder.svg?height=200&width=200",
     description: "",
   },
+  {
+    name: "Phan Huỳnh Anh",
+    role: "Cố vấn",
+    avatar: "/placeholder.svg?height=200&width=200",
+    description: "",
+  },
+  {
+    name: "Dương Thế Khải",
+    role: "Trưởng Ban Tổ Chức",
+    avatar: "/placeholder.svg?height=200&width=200",
+    description: "",
+  },
+  {
+    name: "Lã Phương Uyên",
+    role: "Phó Ban Tổ Chức",
+    avatar: "/placeholder.svg?height=200&width=200",
+    description: "",
+  },
+  {
+    name: "Quách Thành Long",
+    role: "Giám đốc Đường chạy",
+    avatar: "/placeholder.svg?height=200&width=200",
+    description: "",
+  },
 ];
 
 export default function AboutPage() {
@@ -135,6 +160,7 @@ export default function AboutPage() {
         {/* About Section */}
         <section className="py-12 sm:py-16 md:py-20">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <AboutFeatures />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 lg:mb-20">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -205,31 +231,6 @@ export default function AboutPage() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-12 sm:py-16 bg-muted/20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="text-center"
-                >
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-primary to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <stat.icon className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-                  </div>
-                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 text-gray-900 dark:text-white">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm sm:text-base text-muted-foreground">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Values Section */}
         <section className="py-12 sm:py-16">

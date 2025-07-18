@@ -11,6 +11,7 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
+import { SiFacebook, SiInstagram, SiTiktok, SiYoutube } from "react-icons/si";
 import { useState } from "react";
 
 export function Footer() {
@@ -37,7 +38,9 @@ export function Footer() {
             />
             <div className="flex items-start gap-2 text-muted-foreground text-sm">
               <MapPin className="w-4 h-4 mt-1" />
-              <span>279 Nguyễn Tri Phương, Quận 10, TP.Hồ Chí Minh</span>
+              <span>
+                Tầng 15 - 279 Nguyễn Tri Phương, Phường Diên Hồng, TP. HCM
+              </span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground text-sm">
               <Phone className="w-4 h-4" />
@@ -90,13 +93,16 @@ export function Footer() {
                 target="_blank"
                 className="hover:text-primary"
               >
-                <Facebook className="h-6 w-6" />
+                <SiFacebook className="h-6 w-6" />
               </Link>
               <Link href="#" className="hover:text-primary">
-                <Youtube className="h-6 w-6" />
+                <SiYoutube className="h-6 w-6" />
               </Link>
               <Link href="#" className="hover:text-primary">
-                <Instagram className="h-6 w-6" />
+                <SiInstagram className="h-6 w-6" />
+              </Link>
+              <Link href="#" className="hover:text-primary">
+                <SiTiktok className="h-6 w-6" />
               </Link>
             </div>
 
@@ -140,7 +146,7 @@ export function Footer() {
               Đăng ký để nhận thông tin sự kiện và ưu đãi mới nhất từ chúng tôi.
             </p> */}
             <div>
-              <h4 className="font-semibold mb-4">Liên kết nhanh</h4>
+              <h4 className="font-semibold mb-4">Liên hệ</h4>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
                   <Link href="/help" className="hover:text-primary">
