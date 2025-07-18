@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Layout,
   Upload,
+  House,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 
@@ -28,6 +29,7 @@ const menuItems = [
   { href: "/admin/products", label: "Quản lý sản phẩm", icon: ShoppingBag },
   { href: "/admin/users", label: "Quản lý người dùng", icon: Users },
   { href: "/admin/uploads", label: "Quản lý thư viện", icon: Upload },
+  { href: "/", label: "Về trang chủ", icon: House },
   { href: "/admin/settings", label: "Cài đặt", icon: Settings },
 ];
 
