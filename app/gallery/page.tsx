@@ -500,7 +500,7 @@ export default function GalleryPage() {
           open={!!selectedImage}
           onOpenChange={() => setSelectedImage(null)}
         >
-          <DialogContent className="max-w-5xl max-h-[90vh] p-0 bg-transparent border-none">
+          <DialogContent className="max-w-2xl max-h-[90vh] p-0 bg-transparent border-none">
             {selectedImage && (
               <div className="relative bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
                 {filteredImages.length > 1 && (
