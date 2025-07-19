@@ -22,6 +22,8 @@ const navItems = [
   { href: "/events", label: "Sự kiện" },
   { href: "/shop", label: "Cửa hàng" },
   { href: "/news", label: "Tin tức" },
+  { href: "/gallery", label: "Thư viện ảnh" },
+  { href: "/contact", label: "Liên hệ" },
 ];
 
 export function Navbar() {

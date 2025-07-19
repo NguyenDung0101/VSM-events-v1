@@ -178,7 +178,7 @@ export const mockPosts: Post[] = [
     cover: "/placeholder.svg?height=400&width=800",
     author: "Biên tập viên VSM",
     authorId: "editor-1",
-    date: "2024-01-08",
+    date: "2025-12-08",
     category: "tips",
     views: 980,
     likes: 67,
@@ -260,7 +260,7 @@ export const mockComments: Comment[] = [
 
 export const mockEvents: Event[] = [
   {
-    id: "event-1",
+    id: "1",
     name: "VSM Marathon 2024",
     description: "Giải chạy marathon thường niên của VSM với cự ly 42.195km",
     content: `
@@ -283,7 +283,7 @@ export const mockEvents: Event[] = [
         <li>Tất cả finisher đều nhận huy chương</li>
       </ul>
     `,
-    date: "2024-03-15T05:00:00Z",
+    date: "2025-12-15T05:00:00Z",
     location: "Công viên Thống Nhất, Hà Nội",
     image: "/placeholder.svg?height=400&width=800",
     maxParticipants: 5000,
@@ -299,7 +299,7 @@ export const mockEvents: Event[] = [
     createdAt: "2024-01-01T00:00:00Z",
   },
   {
-    id: "event-2",
+    id: "2",
     name: "Fun Run Cuối Tuần",
     description: "Chạy bộ vui vẻ cùng cộng đồng VSM",
     content: `
