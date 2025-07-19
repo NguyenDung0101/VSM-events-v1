@@ -71,7 +71,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            NGÀY THI ĐẤU: <strong className="text-white">07/12/2025</strong>
+            NGÀY THI ĐẤU: <strong className="text-white">28/12/2025</strong>
           </motion.p>
           <motion.p
             className="text-lg md:text-2xl mb-10 text-gray-300 max-w-2xl mx-auto"
