@@ -260,7 +260,7 @@ export const mockComments: Comment[] = [
 
 export const mockEvents: Event[] = [
   {
-    id: "event-1",
+    id: "1",
     name: "VSM Marathon 2024",
     description: "Giải chạy marathon thường niên của VSM với cự ly 42.195km",
     content: `
@@ -299,7 +299,7 @@ export const mockEvents: Event[] = [
     createdAt: "2024-01-01T00:00:00Z",
   },
   {
-    id: "event-2",
+    id: "2",
     name: "Fun Run Cuối Tuần",
     description: "Chạy bộ vui vẻ cùng cộng đồng VSM",
     content: `

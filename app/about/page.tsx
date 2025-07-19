@@ -20,6 +20,7 @@ import { AboutSection } from "@/components/home/about-section";
 import PartnersSection from "@/components/common/partners-section";
 import AboutFeatures from "@/components/home/about-features";
 import ValuesSection from "@/components/common/values-section";
+import Timeline from "@/components/common/timeline-item";
 
 const stats = [
   { label: "Sinh viên tham gia qua các mùa", value: "1,000+", icon: Users },

@@ -45,7 +45,7 @@ export function HeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-20 container mx-auto px-6 text-center text-white">
+      <div className="relative z-20 container mx-auto my-24 px-6 text-center text-white">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
