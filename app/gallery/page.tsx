@@ -112,7 +112,7 @@ const mockGalleryImages: GalleryImage[] = [
     title: "Marathon 2022 - Cầu Rồng",
     event: "VSM Marathon 2022",
     location: "Đà Nẵng",
-    year: 2022,
+    year: 2024,
     category: "marathon",
     description: "Runners chạy qua Cầu Rồng nổi tiếng Đà Nẵng",
     participants: 4500,
@@ -123,7 +123,7 @@ const mockGalleryImages: GalleryImage[] = [
     title: "Trao giải Marathon 2022",
     event: "VSM Marathon 2022",
     location: "Đà Nẵng",
-    year: 2022,
+    year: 2025,
     category: "marathon",
     description: "Lễ trao giải cho các VĐV xuất sắc",
   },
@@ -133,7 +133,7 @@ const mockGalleryImages: GalleryImage[] = [
     title: "Fun Run Phú Quốc",
     event: "VSM Fun Run Phú Quốc",
     location: "Phú Quốc",
-    year: 2022,
+    year: 2024,
     category: "fun-run",
     description: "Chạy bộ trên bãi biển Phú Quốc",
     participants: 1200,
@@ -144,7 +144,7 @@ const mockGalleryImages: GalleryImage[] = [
     title: "Trail Run Đà Lạt 2022",
     event: "VSM Trail Đà Lạt",
     location: "Đà Lạt",
-    year: 2022,
+    year: 2024,
     category: "trail-run",
     description: "Thách thức trail running tại thành phố ngàn hoa",
     participants: 600,
@@ -155,7 +155,7 @@ const mockGalleryImages: GalleryImage[] = [
     title: "Marathon 2021 - Khởi động",
     event: "VSM Marathon 2021",
     location: "Hà Nội",
-    year: 2021,
+    year: 2024,
     category: "marathon",
     description: "Buổi khởi động tập thể trước marathon",
     participants: 3000,
@@ -166,7 +166,7 @@ const mockGalleryImages: GalleryImage[] = [
     title: "Finish Line Marathon 2021",
     event: "VSM Marathon 2021",
     location: "Hà Nội",
-    year: 2021,
+    year: 2025,
     category: "marathon",
     description: "Cảm xúc về đích của các marathon runner",
   },
@@ -253,6 +253,42 @@ export default function GalleryPage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Navbar />
         <main className="pt-16">
+          <section className="py-16 bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-blue-900 dark:via-gray-900 dark:to-purple-900">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="text-center"
+              >
+                <div className="flex items-center justify-center mb-6">
+                  <Camera className="h-10 w-10 text-primary mr-4" />
+                  <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Thư viện ảnh VSM
+                  </h1>
+                </div>
+                <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+                  Khám phá những khoảnh khắc đáng nhớ từ các sự kiện chạy bộ của
+                  Vietnam Student Marathon, nơi tinh thần thể thao và cộng đồng
+                  hòa quyện.
+                </p>
+                <div className="flex items-center justify-center mt-8 space-x-6 sm:space-x-10 text-sm sm:text-base text-muted-foreground">
+                  <div className="flex items-center">
+                    <Trophy className="h-5 w-5 mr-2 text-yellow-500" />
+                    <span>{images.length} ảnh kỷ niệm</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="h-5 w-5 mr-2 text-blue-500" />
+                    <span>2023 - 2025</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Users className="h-5 w-5 mr-2 text-green-500" />
+                    <span>Hàng nghìn runner</span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </section>
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
               <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-primary mx-auto mb-4"></div>
@@ -297,7 +333,7 @@ export default function GalleryPage() {
                 </div>
                 <div className="flex items-center">
                   <Calendar className="h-5 w-5 mr-2 text-blue-500" />
-                  <span>2021 - 2023</span>
+                  <span>2023 - 2025</span>
                 </div>
                 <div className="flex items-center">
                   <Users className="h-5 w-5 mr-2 text-green-500" />
@@ -474,7 +510,7 @@ export default function GalleryPage() {
                             {categoryLabels[image.category]}
                           </Badge>
                         </div>
-                        <CardContent className="p-4 bg-white dark:bg-gray-800">
+                        {/* <CardContent className="p-4 bg-white dark:bg-gray-800">
                           <h3 className="font-semibold text-base sm:text-lg text-gray-900 dark:text-gray-100 line-clamp-1">
                             {image.title}
                           </h3>
@@ -485,7 +521,7 @@ export default function GalleryPage() {
                             <span>{image.event}</span>
                             <span>{image.year}</span>
                           </div>
-                        </CardContent>
+                        </CardContent> */}
                       </Card>
                     </motion.div>
                   ))}

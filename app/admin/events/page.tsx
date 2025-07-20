@@ -581,7 +581,8 @@ export default function AdminEventsPage() {
                               size="icon"
                               variant="ghost"
                               onClick={() =>
-                                window.open(`/events/${event.id}`, "_blank")
+                                // window.open(`/events/${event.id}`, "_blank")
+                                window.open(`/admin/events/${event.id}`)
                               }
                             >
                               <Eye className="h-4 w-4" />
