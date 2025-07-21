@@ -644,7 +644,7 @@ export default function GalleryPage() {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="w-[250px] sm:w-[350px] mx-2"
+                            className="w-[250px] sm:w-[350px] mx-2 min-w-80"
                           >
                             <Card
                               className="group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
