@@ -178,7 +178,7 @@ export const mockPosts: Post[] = [
     cover: "/placeholder.svg?height=400&width=800",
     author: "Biên tập viên VSM",
     authorId: "editor-1",
-    date: "2024-01-08",
+    date: "2025-12-08",
     category: "tips",
     views: 980,
     likes: 67,
@@ -283,7 +283,7 @@ export const mockEvents: Event[] = [
         <li>Tất cả finisher đều nhận huy chương</li>
       </ul>
     `,
-    date: "2024-03-15T05:00:00Z",
+    date: "2025-12-15T05:00:00Z",
     location: "Công viên Thống Nhất, Hà Nội",
     image: "/placeholder.svg?height=400&width=800",
     maxParticipants: 5000,

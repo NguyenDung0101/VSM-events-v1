@@ -44,7 +44,7 @@ export function CountdownTimer({ eventDate }: CountdownTimerProps) {
     <div className="flex flex-col items-center justify-center py-6 sm:py-10 gap-4 w-full">
       <div className="flex flex-col sm:flex-row items-center justify-center mt-6 sm:mt-10 gap-4 sm:gap-8 w-full">
         <div className="flex flex-col text-xl sm:text-2xl font-bold tracking-widest gradient-text uppercase text-center sm:text-left">
-          Ngày đua: <span className="block sm:inline">07/12/2025</span>
+          Ngày đua: <span className="block sm:inline">28/12/2025</span>
         </div>
         {!timeLeft ? (
           <motion.p

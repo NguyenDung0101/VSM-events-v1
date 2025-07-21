@@ -23,8 +23,14 @@ export const metadata: Metadata = {
   title: "VSM - Vietnam Student Marathon",
   description:
     "Trang chủ chính thức của Vietnam Student Marathon - Nơi kết nối cộng đồng chạy bộ sinh viên Việt Nam",
-  generator: "VSM Frontend",
-  applicationName: "VSM Frontend",
+  generator: "VSM - Vietnam Student Marathon",
+  applicationName: "VSM - Vietnam Student Marathon",
+  authors: [
+    {
+      name: "VSM Team",
+      url: "img/logo.png",
+    },
+  ],
   keywords: [
     "VSM",
     "Vietnam Student Marathon",

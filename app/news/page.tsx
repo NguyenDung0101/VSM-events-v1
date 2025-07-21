@@ -17,13 +17,6 @@ import {
 } from "@/components/ui/select";
 import { Search, Calendar, User, Eye, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { apiClient } from "@/lib/api";
-
-interface Author {
-  id: string;
-  name: string;
-  avatar?: string;
-}
 
 interface Post {
   id: string;
@@ -31,15 +24,11 @@ interface Post {
   excerpt: string;
   content: string;
   cover: string;
-  author: Author;
+  author: string;
   date: string;
-  category: "TRAINING" | "NUTRITION" | "EVENTS" | "TIPS";
+  category: "training" | "nutrition" | "events" | "tips";
   views: number;
   featured: boolean;
-  status: "published" | "draft";
-  likes: number;
-  commentsCount: number;
-  tags: string;
 }
 
 export default function NewsPage() {
@@ -48,24 +37,79 @@ export default function NewsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
-  // Fetch posts from API
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const data = await apiClient.getPosts();
-        const postsArray = Array.isArray(data) ? data : data.data || [];
-        setPosts(postsArray);
-        setFilteredPosts(postsArray);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setPosts([]);
-        setFilteredPosts([]);
-      }
-    };
-    fetchPosts();
+    // Mock data - replace with actual API call
+    const mockPosts: Post[] = [
+      {
+        id: "1",
+        title: "Hướng dẫn chuẩn bị cho marathon đầu tiên",
+        excerpt:
+          "5 điều bạn không thể bỏ qua trước khi bắt đầu hành trình 42 km đầu tiên của mình.",
+        content: "Nội dung chi tiết về cách chuẩn bị marathon...",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: "Nguyễn Văn A",
+        date: "2024-01-10",
+        category: "training",
+        views: 1250,
+        featured: true,
+      },
+      {
+        id: "2",
+        title: "Bí quyết giữ phong độ khi chạy đường dài",
+        excerpt:
+          "Chuyên gia VSM chia sẻ các tip giúp bạn tránh chấn thương và duy trì hiệu suất.",
+        content: "Nội dung chi tiết về cách giữ phong độ...",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: "Trần Thị B",
+        date: "2024-01-08",
+        category: "tips",
+        views: 980,
+        featured: false,
+      },
+      {
+        id: "3",
+        title: "Chế độ dinh dưỡng cho vận động viên sinh viên",
+        excerpt:
+          "Ăn gì để tối ưu hiệu suất và hồi phục nhanh chóng? Hướng dẫn chi tiết từ chuyên gia.",
+        content: "Nội dung chi tiết về dinh dưỡng...",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: "Lê Văn C",
+        date: "2024-01-05",
+        category: "nutrition",
+        views: 756,
+        featured: true,
+      },
+      {
+        id: "4",
+        title: "Recap VSM Marathon Hà Nội 2023",
+        excerpt:
+          "Nhìn lại những khoảnh khắc đáng nhớ tại giải chạy lớn nhất năm của VSM.",
+        content: "Nội dung chi tiết về sự kiện...",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: "Phạm Thị D",
+        date: "2024-01-03",
+        category: "events",
+        views: 2100,
+        featured: false,
+      },
+      {
+        id: "5",
+        title: "Kỹ thuật thở đúng cách khi chạy bộ",
+        excerpt:
+          "Làm thế nào để thở hiệu quả và tăng sức bền trong quá trình chạy.",
+        content: "Nội dung chi tiết về kỹ thuật thở...",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: "Hoàng Văn E",
+        date: "2024-01-01",
+        category: "training",
+        views: 634,
+        featured: false,
+      },
+    ];
+    setPosts(mockPosts);
+    setFilteredPosts(mockPosts);
   }, []);
 
-  // Handle filtering on frontend
   useEffect(() => {
     let filtered = posts;
 
@@ -78,9 +122,7 @@ export default function NewsPage() {
     }
 
     if (categoryFilter !== "all") {
-      filtered = filtered.filter(
-        (post) => post.category.toLowerCase() === categoryFilter
-      );
+      filtered = filtered.filter((post) => post.category === categoryFilter);
     }
 
     // Sort by date (newest first)
@@ -140,10 +182,9 @@ export default function NewsPage() {
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Tin tức <span className="gradient-text">VSM</span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Cập nhật kiến thức, mẹo hay và hoạt động mới nhất từ cộng đồng
-                chạy bộ sinh viên Việt Nam.
-              </p>
+              {/* <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Cập nhật kiến thức, mẹo hay và hoạt động mới nhất từ cộng đồng chạy bộ sinh viên Việt Nam.
+              </p> */}
             </motion.div>
           </div>
         </section>

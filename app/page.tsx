@@ -17,7 +17,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         <HeroSection />
-        <CountdownTimer eventDate="2025-12-28T00:00:00" />
+        <CountdownTimer eventDate="2025-12-28T04:30:00" />
         <AboutSection />
         <Stats />
         <SportsCommunityStory />
