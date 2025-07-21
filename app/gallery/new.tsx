@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useMediaQuery } from "react-responsive";
 import { motion, AnimatePresence } from "framer-motion";
 import Flicking from "@egjs/react-flicking";
 import "@egjs/react-flicking/dist/flicking.css";
@@ -200,8 +199,8 @@ const mockGalleryImages: GalleryImage[] = [
   {
     id: "15",
     src: "/img/Gallery/img5.jpg",
-    title: "Trail Run Cát Bà 2025",
-    event: "VSM Trail Cát Bà",
+    title: "Trail UITRun Cát Bà 2025",
+    event: "UIT Trail Cát Bà",
     location: "Cát Bà, Hải Phòng",
     year: 2025,
     category: "trail-run",
@@ -212,7 +211,7 @@ const mockGalleryImages: GalleryImage[] = [
     id: "16",
     src: "/img/Gallery/img5.jpg",
     title: "Marathon TP.HCM 2025",
-    event: "VSM Marathon 2025",
+    event: "UIT Marathon 2025",
     location: "TP.HCM",
     year: 2025,
     category: "marathon",
@@ -223,7 +222,7 @@ const mockGalleryImages: GalleryImage[] = [
     id: "17",
     src: "/img/Gallery/img5.jpg",
     title: "Fun Run Hội An 2024",
-    event: "VSM Fun Run Hội An",
+    event: "UIT Fun Run Hội An",
     location: "Hội An, Quảng Nam",
     year: 2024,
     category: "fun-run",
@@ -234,7 +233,7 @@ const mockGalleryImages: GalleryImage[] = [
     id: "18",
     src: "/img/Gallery/img5.jpg",
     title: "Night Run Vũng Tàu 2023",
-    event: "VSM Night Run Vũng Tàu",
+    event: "UIT Night Run Vũng Tàu",
     location: "Vũng Tàu",
     year: 2023,
     category: "night-run",
@@ -324,8 +323,6 @@ export default function GalleryPage() {
     setCategoryFilter("all");
     setLocationFilter("all");
   };
-
-  const isMobile = useMediaQuery({ maxWidth: 639 });
 
   if (isLoading) {
     return (
@@ -423,22 +420,22 @@ export default function GalleryPage() {
         </section>
 
         {/* Filters Section */}
-        <section className="py-4 sm:py-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-16 z-10">
+        <section className="py-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-16 z-10">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="sm:flex sm:items-center sm:justify-between sm:gap-4 flex justify-between">
-                <div className="flex items-center space-x-3 sm:mb-0">
+              <div className="sm:flex sm:items-center sm:justify-between sm:gap-4 flex">
+                <div className="flex items-center space-x-3 mb-4 sm:mb-0">
                   <Filter className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                   <span className="text-lg font-semibold text-gray-900 dark:text-white">
                     Lọc ảnh:
                   </span>
                 </div>
                 {/* Mobile Dropdown */}
-                <div className="sm:hidden relative w-[150px]">
+                <div className="sm:hidden relative">
                   <Button
                     variant="outline"
                     onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -633,23 +630,22 @@ export default function GalleryPage() {
                       <Flicking
                         align="center"
                         circular={true}
-                        panelsPerView={isMobile ? 1 : 3}
+                        panelsPerView={3}
                         horizontal={true}
                         className="relative"
-                        duration={300}
-                        easing={(t) => 1 - Math.pow(1 - t, 3)}
-                        renderOnSame={true}
-                        interruptable={true}
-                        moveType="snap"
+                        duration={300} // Smooth transition duration (ms)
+                        easing={(t) => 1 - Math.pow(1 - t, 3)} // Cubic easing for smoother slides
+                        renderOnSame={true} // Optimize rendering for same-position panels
                         breakpoints={{
+                          0: { panelsPerView: 1 },
                           640: { panelsPerView: 3 },
                         }}
                       >
-                        {groupedImages[year].map((image) => (
+                        {groupedImages[year].map((image, index) => (
                           <div
                             key={image.id}
-                            className="w-full sm:w-[350px] mx-2"
-                            style={{ willChange: "transform" }}
+                            className="w-[250px] sm:w-[350px] mx-2 min-w-[320px]"
+                            style={{ willChange: "transform" }} // Hint for320px GPU acceleration
                           >
                             <Card
                               className="group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
@@ -661,9 +657,9 @@ export default function GalleryPage() {
                                   alt={image.title}
                                   className="w-full h-full object-cover"
                                   loading="lazy"
-                                  decoding="async"
+                                  decoding="async" // Optimize image decoding
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                                     <h3 className="font-semibold text-base sm:text-lg">
                                       {image.title}
@@ -687,7 +683,7 @@ export default function GalleryPage() {
                                     )}
                                   </div>
                                 </div>
-                                <div className="absolute top-3 right-3 opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
                                   <div className="bg-white/20 backdrop-blur-sm rounded-full p-1.5">
                                     <ZoomIn className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                                   </div>
