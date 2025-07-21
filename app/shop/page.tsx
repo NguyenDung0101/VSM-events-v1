@@ -47,7 +47,7 @@ export default function ShopPage() {
         description: "Nhân sâm đen đến từ Mỹ",
         price: 350000,
         originalPrice: 499000,
-        image: "/placeholder.svg?height=300&width=300",
+        image: "img/store/coming.png",
         category: "apparel",
         rating: 4.8,
         reviews: 124,

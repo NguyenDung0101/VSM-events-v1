@@ -7,67 +7,67 @@ export declare class UsersController {
     create(createUserDto: CreateUserDto): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
-        password: string;
         phone: string | null;
+        password: string;
         avatar: string | null;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findAll(): Promise<{
         id: string;
         name: string;
-        email: string;
-        avatar: string;
-        role: import(".prisma/client").$Enums.Role;
-        isActive: boolean;
         createdAt: Date;
         updatedAt: Date;
         _count: {
             posts: number;
             comments: number;
         };
+        email: string;
+        avatar: string;
+        role: import(".prisma/client").$Enums.Role;
+        isActive: boolean;
     }[]>;
     findOne(id: string): Promise<{
         _count: {
+            events: number;
             posts: number;
             comments: number;
-            events: number;
         };
     } & {
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
-        password: string;
         phone: string | null;
+        password: string;
         avatar: string | null;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     update(id: string, updateUserDto: UpdateUserDto, req: any): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         avatar: string;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
-        password: string;
         phone: string | null;
+        password: string;
         avatar: string | null;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

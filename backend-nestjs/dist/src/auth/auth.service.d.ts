@@ -29,18 +29,18 @@ export declare class AuthService {
     }>;
     getProfile(userId: string): Promise<{
         _count: {
+            events: number;
             posts: number;
             comments: number;
-            events: number;
         };
         id: string;
         name: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         phone: string | null;
         avatar: string | null;
         role: import(".prisma/client").$Enums.Role;
         isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

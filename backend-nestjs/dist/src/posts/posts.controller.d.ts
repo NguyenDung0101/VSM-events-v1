@@ -6,58 +6,58 @@ export declare class PostsController {
     private readonly postsService;
     constructor(postsService: PostsService);
     create(createPostDto: CreatePostDto, req: any): Promise<{
+        author: {
+            id: string;
+            name: string;
+            avatar: string;
+        };
         _count: {
             comments: number;
         };
-        author: {
-            name: string;
-            avatar: string;
-            id: string;
-        };
     } & {
-        title: string;
-        tags: string;
-        content: string;
         id: string;
+        content: string;
+        category: import(".prisma/client").$Enums.PostCategory;
+        status: import(".prisma/client").$Enums.PostStatus;
+        featured: boolean;
         createdAt: Date;
         updatedAt: Date;
+        authorId: string;
+        title: string;
         excerpt: string;
         cover: string | null;
-        category: import(".prisma/client").$Enums.PostCategory;
         views: number;
         likes: number;
-        featured: boolean;
-        status: import(".prisma/client").$Enums.PostStatus;
+        tags: string;
         commentsCount: number;
         publishedAt: Date | null;
-        authorId: string;
     }>;
     findAll(query: QueryPostsDto): Promise<{
         data: {
             tags: string[];
             commentsCount: number;
+            author: {
+                id: string;
+                name: string;
+                avatar: string;
+            };
             _count: {
                 comments: number;
             };
-            author: {
-                name: string;
-                avatar: string;
-                id: string;
-            };
-            title: string;
-            content: string;
             id: string;
+            content: string;
+            category: import(".prisma/client").$Enums.PostCategory;
+            status: import(".prisma/client").$Enums.PostStatus;
+            featured: boolean;
             createdAt: Date;
             updatedAt: Date;
+            authorId: string;
+            title: string;
             excerpt: string;
             cover: string | null;
-            category: import(".prisma/client").$Enums.PostCategory;
             views: number;
             likes: number;
-            featured: boolean;
-            status: import(".prisma/client").$Enums.PostStatus;
             publishedAt: Date | null;
-            authorId: string;
         }[];
         meta: {
             total: number;
@@ -69,69 +69,69 @@ export declare class PostsController {
     findOne(id: string): Promise<{
         tags: string[];
         commentsCount: number;
+        author: {
+            id: string;
+            name: string;
+            avatar: string;
+        };
         _count: {
             comments: number;
         };
-        author: {
-            name: string;
-            avatar: string;
-            id: string;
-        };
-        title: string;
-        content: string;
         id: string;
+        content: string;
+        category: import(".prisma/client").$Enums.PostCategory;
+        status: import(".prisma/client").$Enums.PostStatus;
+        featured: boolean;
         createdAt: Date;
         updatedAt: Date;
+        authorId: string;
+        title: string;
         excerpt: string;
         cover: string | null;
-        category: import(".prisma/client").$Enums.PostCategory;
         views: number;
         likes: number;
-        featured: boolean;
-        status: import(".prisma/client").$Enums.PostStatus;
         publishedAt: Date | null;
-        authorId: string;
     }>;
     update(id: string, updatePostDto: UpdatePostDto, req: any): Promise<{
         author: {
+            id: string;
             name: string;
             avatar: string;
-            id: string;
         };
     } & {
-        title: string;
-        tags: string;
-        content: string;
         id: string;
+        content: string;
+        category: import(".prisma/client").$Enums.PostCategory;
+        status: import(".prisma/client").$Enums.PostStatus;
+        featured: boolean;
         createdAt: Date;
         updatedAt: Date;
+        authorId: string;
+        title: string;
         excerpt: string;
         cover: string | null;
-        category: import(".prisma/client").$Enums.PostCategory;
         views: number;
         likes: number;
-        featured: boolean;
-        status: import(".prisma/client").$Enums.PostStatus;
+        tags: string;
         commentsCount: number;
         publishedAt: Date | null;
-        authorId: string;
     }>;
     remove(id: string, req: any): Promise<{
-        title: string;
-        tags: string;
-        content: string;
         id: string;
+        content: string;
+        category: import(".prisma/client").$Enums.PostCategory;
+        status: import(".prisma/client").$Enums.PostStatus;
+        featured: boolean;
         createdAt: Date;
         updatedAt: Date;
+        authorId: string;
+        title: string;
         excerpt: string;
         cover: string | null;
-        category: import(".prisma/client").$Enums.PostCategory;
         views: number;
         likes: number;
-        featured: boolean;
-        status: import(".prisma/client").$Enums.PostStatus;
+        tags: string;
         commentsCount: number;
         publishedAt: Date | null;
-        authorId: string;
     }>;
 }
