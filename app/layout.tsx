@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "VSM Team",
-      url: "https://vsm.com.vn",
+      url: "img/logo.png",
     },
   ],
   keywords: [
