@@ -53,7 +53,7 @@ export function HeroSection() {
           className=" mx-auto mb-12"
         >
           <motion.h1
-            className="flex flex-col md:leading-tight text-5xl md:text-6xl font-extrabold mb-6  tracking-tight"
+            className="flex flex-col md:leading-tight text-5xl md:text-6xl font-extrabold mb-6 mt-20  tracking-tight"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}

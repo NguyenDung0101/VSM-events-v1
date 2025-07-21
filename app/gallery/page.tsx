@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Flicking from "@egjs/react-flicking";
+import "@egjs/react-flicking/dist/flicking.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,6 +29,8 @@ import {
   Users,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 interface GalleryImage {
@@ -44,7 +48,7 @@ interface GalleryImage {
 const mockGalleryImages: GalleryImage[] = [
   {
     id: "1",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/img1.jpg",
     title: "Khoảnh khắc xuất phát VSM Marathon 2023",
     event: "VSM Marathon 2023",
     location: "Hà Nội",
@@ -55,7 +59,7 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "2",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/img2.jpg",
     title: "Runners tại km 21 VSM Marathon",
     event: "VSM Marathon 2023",
     location: "Hà Nội",
@@ -65,7 +69,7 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "3",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/img3.jpg",
     title: "Fun Run cùng gia đình",
     event: "VSM Family Fun Run",
     location: "TP.HCM",
@@ -76,7 +80,7 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "4",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/img4.jpg",
     title: "Trail Run Sa Pa 2023",
     event: "VSM Trail Sa Pa",
     location: "Sa Pa, Lào Cai",
@@ -87,7 +91,7 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "5",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/img4.jpg",
     title: "Về đích Marathon 2023",
     event: "VSM Marathon 2023",
     location: "Hà Nội",
@@ -97,7 +101,7 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "6",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/img5.jpg",
     title: "Night Run Landmark 81",
     event: "VSM Night Run",
     location: "TP.HCM",
@@ -108,9 +112,9 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "7",
-    src: "/placeholder.svg?height=600&width=800",
-    title: "Marathon 2022 - Cầu Rồng",
-    event: "VSM Marathon 2022",
+    src: "/img/Gallery/img6.jpg",
+    title: "Marathon 2024 - Cầu Rồng",
+    event: "VSM Marathon 2024",
     location: "Đà Nẵng",
     year: 2024,
     category: "marathon",
@@ -119,17 +123,17 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "8",
-    src: "/placeholder.svg?height=600&width=800",
-    title: "Trao giải Marathon 2022",
-    event: "VSM Marathon 2022",
+    src: "/img/Gallery/DSC04302.JPG",
+    title: "Trao giải Marathon 2024",
+    event: "VSM Marathon 2024",
     location: "Đà Nẵng",
-    year: 2025,
+    year: 2024,
     category: "marathon",
     description: "Lễ trao giải cho các VĐV xuất sắc",
   },
   {
     id: "9",
-    src: "/placeholder.svg?height=600&width=800",
+    src: "/img/Gallery/DSC04244.JPG",
     title: "Fun Run Phú Quốc",
     event: "VSM Fun Run Phú Quốc",
     location: "Phú Quốc",
@@ -140,8 +144,8 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "10",
-    src: "/placeholder.svg?height=600&width=800",
-    title: "Trail Run Đà Lạt 2022",
+    src: "/img/Gallery/DSC04139.JPG",
+    title: "Trail Run Đà Lạt 2024",
     event: "VSM Trail Đà Lạt",
     location: "Đà Lạt",
     year: 2024,
@@ -151,9 +155,9 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "11",
-    src: "/placeholder.svg?height=600&width=800",
-    title: "Marathon 2021 - Khởi động",
-    event: "VSM Marathon 2021",
+    src: "/img/Gallery/DSC03758.JPG",
+    title: "Marathon 2024 - Khởi động",
+    event: "VSM Marathon 2024",
     location: "Hà Nội",
     year: 2024,
     category: "marathon",
@@ -162,13 +166,79 @@ const mockGalleryImages: GalleryImage[] = [
   },
   {
     id: "12",
-    src: "/placeholder.svg?height=600&width=800",
-    title: "Finish Line Marathon 2021",
-    event: "VSM Marathon 2021",
+    src: "/img/Gallery/img5.jpg",
+    title: "Finish Line Marathon 2024",
+    event: "VSM Marathon 2024",
     location: "Hà Nội",
-    year: 2025,
+    year: 2024,
     category: "marathon",
     description: "Cảm xúc về đích của các marathon runner",
+  },
+  {
+    id: "13",
+    src: "/img/Gallery/img5.jpg",
+    title: "Night Run Hà Nội 2025",
+    event: "VSM Night Run 2025",
+    location: "Hà Nội",
+    year: 2025,
+    category: "night-run",
+    description: "Chạy đêm quanh Hồ Hoàn Kiếm với ánh đèn rực rỡ",
+    participants: 1800,
+  },
+  {
+    id: "14",
+    src: "/img/Gallery/img5.jpg",
+    title: "Fun Run Đà Nẵng 2025",
+    event: "VSM Family Fun Run 2025",
+    location: "Đà Nẵng",
+    year: 2025,
+    category: "fun-run",
+    description: "Sự kiện chạy bộ gia đình bên bãi biển Mỹ Khê",
+    participants: 2500,
+  },
+  {
+    id: "15",
+    src: "/img/Gallery/img5.jpg",
+    title: "Trail UITRun Cát Bà 2025",
+    event: "UIT Trail Cát Bà",
+    location: "Cát Bà, Hải Phòng",
+    year: 2025,
+    category: "trail-run",
+    description: "Chinh phục địa hình đồi núi và rừng Cát Bà",
+    participants: 700,
+  },
+  {
+    id: "16",
+    src: "/img/Gallery/img5.jpg",
+    title: "Marathon TP.HCM 2025",
+    event: "UIT Marathon 2025",
+    location: "TP.HCM",
+    year: 2025,
+    category: "marathon",
+    description: "Marathon lớn nhất năm tại trung tâm TP.HCM",
+    participants: 6000,
+  },
+  {
+    id: "17",
+    src: "/img/Gallery/img5.jpg",
+    title: "Fun Run Hội An 2024",
+    event: "UIT Fun Run Hội An",
+    location: "Hội An, Quảng Nam",
+    year: 2024,
+    category: "fun-run",
+    description: "Chạy bộ qua các con phố cổ Hội An",
+    participants: 1500,
+  },
+  {
+    id: "18",
+    src: "/img/Gallery/img5.jpg",
+    title: "Night Run Vũng Tàu 2023",
+    event: "UIT Night Run Vũng Tàu",
+    location: "Vũng Tàu",
+    year: 2023,
+    category: "night-run",
+    description: "Chạy đêm dọc bờ biển Vũng Tàu",
+    participants: 1200,
   },
 ];
 
@@ -196,6 +266,7 @@ export default function GalleryPage() {
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [locationFilter, setLocationFilter] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(true);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const years = Array.from(new Set(images.map((img) => img.year))).sort(
     (a, b) => b - a
@@ -222,6 +293,11 @@ export default function GalleryPage() {
     }
     setFilteredImages(filtered);
   }, [images, yearFilter, categoryFilter, locationFilter]);
+
+  const groupedImages = years.reduce((acc, year) => {
+    acc[year] = filteredImages.filter((img) => img.year === year);
+    return acc;
+  }, {} as Record<number, GalleryImage[]>);
 
   const openLightbox = (image: GalleryImage) => {
     setSelectedImage(image);
@@ -262,17 +338,16 @@ export default function GalleryPage() {
                 className="text-center"
               >
                 <div className="flex items-center justify-center mb-6">
-                  <Camera className="h-10 w-10 text-primary mr-4" />
-                  <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <Camera className="h-10 w-10 text-blue-600 dark:text-blue-400 mr-4" />
+                  <h1 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Thư viện ảnh VSM
                   </h1>
                 </div>
-                <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                   Khám phá những khoảnh khắc đáng nhớ từ các sự kiện chạy bộ của
-                  Vietnam Student Marathon, nơi tinh thần thể thao và cộng đồng
-                  hòa quyện.
+                  Vietnam Student Marathon.
                 </p>
-                <div className="flex items-center justify-center mt-8 space-x-6 sm:space-x-10 text-sm sm:text-base text-muted-foreground">
+                <div className="flex items-center justify-center mt-8 space-x-6 sm:space-x-10 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                   <div className="flex items-center">
                     <Trophy className="h-5 w-5 mr-2 text-yellow-500" />
                     <span>{images.length} ảnh kỷ niệm</span>
@@ -291,8 +366,8 @@ export default function GalleryPage() {
           </section>
           <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-primary mx-auto mb-4"></div>
-              <p className="text-lg text-muted-foreground">
+              <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-blue-600 dark:border-blue-400 mx-auto mb-4"></div>
+              <p className="text-lg text-gray-600 dark:text-gray-300">
                 Đang tải thư viện ảnh...
               </p>
             </div>
@@ -316,17 +391,17 @@ export default function GalleryPage() {
               className="text-center"
             >
               <div className="flex items-center justify-center mb-6">
-                <Camera className="h-10 w-10 text-primary mr-4" />
-                <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <Camera className="h-10 w-10 text-blue-600 dark:text-blue-400 mr-4" />
+                <h1 className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Thư viện ảnh VSM
                 </h1>
               </div>
-              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 Khám phá những khoảnh khắc đáng nhớ từ các sự kiện chạy bộ của
                 Vietnam Student Marathon, nơi tinh thần thể thao và cộng đồng
                 hòa quyện.
               </p>
-              <div className="flex items-center justify-center mt-8 space-x-6 sm:space-x-10 text-sm sm:text-base text-muted-foreground">
+              <div className="flex items-center justify-center mt-8 space-x-6 sm:space-x-10 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                 <div className="flex items-center">
                   <Trophy className="h-5 w-5 mr-2 text-yellow-500" />
                   <span>{images.length} ảnh kỷ niệm</span>
@@ -345,23 +420,117 @@ export default function GalleryPage() {
         </section>
 
         {/* Filters Section */}
-        <section className="py-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <section className="py-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-16 z-10">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex items-center space-x-3">
-                  <Filter className="h-6 w-6 text-primary" />
-                  <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <div className="sm:flex sm:items-center sm:justify-between sm:gap-4">
+                <div className="flex items-center space-x-3 mb-4 sm:mb-0">
+                  <Filter className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <span className="text-lg font-semibold text-gray-900 dark:text-white">
                     Lọc ảnh:
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-4">
+                {/* Mobile Dropdown */}
+                <div className="sm:hidden relative">
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg flex items-center justify-between"
+                  >
+                    <span>Bộ lọc</span>
+                    {isFilterOpen ? (
+                      <ChevronUp className="h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <AnimatePresence>
+                    {isFilterOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg p-4 z-20"
+                      >
+                        <div className="flex flex-col gap-4">
+                          <Select
+                            value={yearFilter}
+                            onValueChange={setYearFilter}
+                          >
+                            <SelectTrigger className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg">
+                              <SelectValue placeholder="Chọn năm" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">Tất cả năm</SelectItem>
+                              {years.map((year) => (
+                                <SelectItem key={year} value={year.toString()}>
+                                  {year}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Select
+                            value={categoryFilter}
+                            onValueChange={setCategoryFilter}
+                          >
+                            <SelectTrigger className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg">
+                              <SelectValue placeholder="Loại sự kiện" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">
+                                Tất cả sự kiện
+                              </SelectItem>
+                              {categories.map((category) => (
+                                <SelectItem key={category} value={category}>
+                                  {categoryLabels[category]}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Select
+                            value={locationFilter}
+                            onValueChange={setLocationFilter}
+                          >
+                            <SelectTrigger className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg">
+                              <SelectValue placeholder="Địa điểm" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="all">
+                                Tất cả địa điểm
+                              </SelectItem>
+                              {locations.map((location) => (
+                                <SelectItem key={location} value={location}>
+                                  {location}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          {(yearFilter !== "all" ||
+                            categoryFilter !== "all" ||
+                            locationFilter !== "all") && (
+                            <Button
+                              variant="outline"
+                              onClick={resetFilters}
+                              className="w-full bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg"
+                            >
+                              <X className="h-4 w-4 mr-2" />
+                              Xóa bộ lọc
+                            </Button>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                {/* Desktop Layout */}
+                <div className="hidden sm:flex flex-wrap items-center gap-4">
                   <Select value={yearFilter} onValueChange={setYearFilter}>
-                    <SelectTrigger className="w-36 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                    <SelectTrigger className="w-36 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg">
                       <SelectValue placeholder="Chọn năm" />
                     </SelectTrigger>
                     <SelectContent>
@@ -377,7 +546,7 @@ export default function GalleryPage() {
                     value={categoryFilter}
                     onValueChange={setCategoryFilter}
                   >
-                    <SelectTrigger className="w-44 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                    <SelectTrigger className="w-44 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg">
                       <SelectValue placeholder="Loại sự kiện" />
                     </SelectTrigger>
                     <SelectContent>
@@ -393,7 +562,7 @@ export default function GalleryPage() {
                     value={locationFilter}
                     onValueChange={setLocationFilter}
                   >
-                    <SelectTrigger className="w-44 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                    <SelectTrigger className="w-44 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-lg">
                       <SelectValue placeholder="Địa điểm" />
                     </SelectTrigger>
                     <SelectContent>
@@ -411,7 +580,7 @@ export default function GalleryPage() {
                     <Button
                       variant="outline"
                       onClick={resetFilters}
-                      className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                      className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg"
                     >
                       <X className="h-4 w-4 mr-2" />
                       Xóa bộ lọc
@@ -419,14 +588,14 @@ export default function GalleryPage() {
                   )}
                 </div>
               </div>
-              <div className="mt-4 text-sm text-muted-foreground">
+              <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
                 Hiển thị {filteredImages.length} / {images.length} ảnh
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* Gallery Grid */}
+        {/* Gallery by Year */}
         <section className="py-12">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {filteredImages.length === 0 ? (
@@ -435,98 +604,104 @@ export default function GalleryPage() {
                 animate={{ opacity: 1 }}
                 className="text-center py-16"
               >
-                <Images className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                <Images className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4" />
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   Không tìm thấy ảnh
                 </h3>
-                <p className="text-muted-foreground mb-4">
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
                   Không có ảnh nào phù hợp với bộ lọc hiện tại.
                 </p>
                 <Button
                   onClick={resetFilters}
                   variant="outline"
-                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg"
                 >
                   Xóa bộ lọc
                 </Button>
               </motion.div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <AnimatePresence>
-                  {filteredImages.map((image, index) => (
-                    <motion.div
-                      key={image.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                    >
-                      <Card
-                        className="group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
-                        onClick={() => openLightbox(image)}
+              years.map(
+                (year) =>
+                  groupedImages[year].length > 0 && (
+                    <div key={year} className="mb-12">
+                      <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                        {year}
+                      </h2>
+                      <Flicking
+                        align="center"
+                        circular={true}
+                        panelsPerView={3}
+                        horizontal={true}
+                        className="relative"
+                        breakpoints={{
+                          0: { panelsPerView: 1 },
+                          640: { panelsPerView: 3 },
+                        }}
                       >
-                        <div className="relative w-full aspect-[4/3]">
-                          <img
-                            src={image.src}
-                            alt={image.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                              <h3 className="font-semibold text-base sm:text-lg">
-                                {image.title}
-                              </h3>
-                              <div className="flex items-center space-x-4 text-xs sm:text-sm mt-2">
-                                <div className="flex items-center">
-                                  <Calendar className="h-4 w-4 mr-1" />
-                                  {image.year}
-                                </div>
-                                <div className="flex items-center">
-                                  <MapPin className="h-4 w-4 mr-1" />
-                                  {image.location}
-                                </div>
-                              </div>
-                              {image.participants && (
-                                <div className="flex items-center mt-2 text-xs sm:text-sm">
-                                  <Users className="h-4 w-4 mr-1" />
-                                  {image.participants.toLocaleString()} người
-                                  tham gia
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
-                            <div className="bg-white/20 backdrop-blur-sm rounded-full p-1.5">
-                              <ZoomIn className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-                            </div>
-                          </div>
-                          <Badge
-                            variant="secondary"
-                            className={`absolute top-3 left-3 ${
-                              categoryColors[image.category]
-                            } text-white border-none text-xs sm:text-sm`}
+                        {groupedImages[year].map((image, index) => (
+                          <motion.div
+                            key={image.id}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                            className="w-[250px] sm:w-[350px] mx-2"
                           >
-                            {categoryLabels[image.category]}
-                          </Badge>
-                        </div>
-                        {/* <CardContent className="p-4 bg-white dark:bg-gray-800">
-                          <h3 className="font-semibold text-base sm:text-lg text-gray-900 dark:text-gray-100 line-clamp-1">
-                            {image.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                            {image.description}
-                          </p>
-                          <div className="flex items-center justify-between text-sm text-muted-foreground mt-2">
-                            <span>{image.event}</span>
-                            <span>{image.year}</span>
-                          </div>
-                        </CardContent> */}
-                      </Card>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </div>
+                            <Card
+                              className="group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
+                              onClick={() => openLightbox(image)}
+                            >
+                              <div className="relative w-full aspect-[4/3]">
+                                <img
+                                  src={image.src}
+                                  alt={image.title}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                    <h3 className="font-semibold text-base sm:text-lg">
+                                      {image.title}
+                                    </h3>
+                                    <div className="flex items-center space-x-4 text-xs sm:text-sm mt-2">
+                                      <div className="flex items-center">
+                                        <Calendar className="h-4 w-4 mr-1" />
+                                        {image.year}
+                                      </div>
+                                      <div className="flex items-center">
+                                        <MapPin className="h-4 w-4 mr-1" />
+                                        {image.location}
+                                      </div>
+                                    </div>
+                                    {image.participants && (
+                                      <div className="flex items-center mt-2 text-xs sm:text-sm">
+                                        <Users className="h-4 w-4 mr-1" />
+                                        {image.participants.toLocaleString()}{" "}
+                                        người tham gia
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-1.5">
+                                    <ZoomIn className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                                  </div>
+                                </div>
+                                <Badge
+                                  variant="secondary"
+                                  className={`absolute top-3 left-3 ${
+                                    categoryColors[image.category]
+                                  } text-white border-none text-xs sm:text-sm`}
+                                >
+                                  {categoryLabels[image.category]}
+                                </Badge>
+                              </div>
+                            </Card>
+                          </motion.div>
+                        ))}
+                      </Flicking>
+                    </div>
+                  )
+              )
             )}
           </div>
         </section>
