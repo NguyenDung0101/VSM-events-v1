@@ -52,31 +52,71 @@ import {
   Users,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/api";
 
+// Định nghĩa schema cho form dựa trên CreateEventDto
 const eventSchema = z.object({
-  title: z.string().min(1, "Tiêu đề không được để trống"),
+  name: z.string().min(1, "Tên sự kiện không được để trống"),
   description: z.string().min(1, "Mô tả không được để trống"),
+  content: z.string().min(1, "Nội dung không được để trống"),
   date: z.string().min(1, "Ngày tổ chức không được để trống"),
   location: z.string().min(1, "Địa điểm không được để trống"),
   maxParticipants: z.number().min(1, "Số lượng tham gia phải lớn hơn 0"),
-  category: z.enum(["marathon", "fun-run", "trail-run"]),
-  distance: z.string().min(1, "Cự ly không được để trống"),
+  category: z.enum([
+    "MARATHON",
+    "HALF_MARATHON",
+    "FIVE_K",
+    "TEN_K",
+    "FUN_RUN",
+    "TRAIL_RUN",
+    "NIGHT_RUN",
+  ]),
+  distance: z.string().min(1, "Cự ly không được để trống").optional(),
+  registrationFee: z
+    .number()
+    .min(0, "Phí đăng ký phải lớn hơn hoặc bằng 0")
+    .optional(),
+  requirements: z.string().optional(),
+  published: z.boolean().optional(),
+  featured: z.boolean().optional(),
+  registrationDeadline: z.string().optional(),
+  organizer: z.string().optional(),
+  image: z.string().optional(),
+  status: z.enum(["UPCOMING", "ONGOING", "COMPLETED", "CANCELLED"]).optional(),
 });
 
 type EventForm = z.infer<typeof eventSchema>;
 
+// Interface cho sự kiện từ backend
 interface Event {
   id: string;
-  title: string;
+  name: string;
   description: string;
+  content: string;
   date: string;
   location: string;
-  participants: number;
-  maxParticipants: number;
   image: string;
-  status: "upcoming" | "ongoing" | "completed";
-  category: "marathon" | "fun-run" | "trail-run";
-  distance: string;
+  maxParticipants: number;
+  currentParticipants: number;
+  registeredUsers: string[];
+  category:
+    | "marathon"
+    | "half-marathon"
+    | "5k"
+    | "10k"
+    | "fun-run"
+    | "trail-run"
+    | "night-run";
+  status: "upcoming" | "ongoing" | "completed" | "cancelled";
+  distance?: string;
+  registrationFee?: number;
+  requirements?: string;
+  published: boolean;
+  authorId: string;
+  createdAt: string;
+  registrationDeadline?: string;
+  organizer?: string;
+  featured?: boolean;
 }
 
 export default function AdminEventsPage() {
@@ -91,197 +131,289 @@ export default function AdminEventsPage() {
   const form = useForm<EventForm>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
-      title: "",
+      name: "",
       description: "",
+      content: "",
       date: "",
       location: "",
       maxParticipants: 100,
-      category: "fun-run",
+      category: "FUN_RUN",
       distance: "",
+      registrationFee: 0,
+      requirements: "",
+      published: true,
+      featured: false,
+      registrationDeadline: "",
+      organizer: "",
+      image: "",
+      status: "UPCOMING",
     },
   });
 
+  // Fetch events from backend
   useEffect(() => {
-    // Mock data - replace with actual API call
-    const mockEvents: Event[] = [
-      {
-        id: "1",
-        title: "VSM Talk 01 | Gen Z & Sức bền",
-        description:
-          "Buổi chia sẻ đầy cảm hứng về việc rèn luyện thể chất & tinh thần bền bỉ trong cuộc sống.",
-        date: "Sắp diễn ra",
-        location: "Tp. Hồ Chí Minh",
-        participants: 0,
-        maxParticipants: 100,
-        image: "/img/image2.png", ///placeholder.svg?height=300&width=400
-        status: "upcoming",
-        category: "marathon",
-        distance: "42.2km",
-      },
-      {
-        id: "2",
-        title: "VSM Long Run | 20/07/2025",
-        description:
-          "Sự kiện chạy dài định kỳ giao lưu cùng các anh chị Cà Khịa Bình Lợi Runner.",
-        date: "2025-07-20",
-        location: "KDC Bình Lợi , Bình Thành, TP. HCM",
-        participants: 0,
-        maxParticipants: 50,
-        image: "/img/VSM/long-run-20_7_2025.png",
-        status: "upcoming",
-        category: "fun-run",
-        distance: "5km",
-      },
-      {
-        id: "3",
-        title: "VSM Long Run | 15/06/2025",
-        description:
-          "Sự kiện chạy dài định kỳ giao lưu cùng các anh chị Cà Khịa Bình Lợi Runner.",
-        date: "2025-06-15",
-        location: "KDC Bình Lợi , Bình Thành, TP. HCM",
-        participants: 25,
-        maxParticipants: 50,
-        image: "/img/VSM/long-run-15_6_2025.png",
-        status: "upcoming",
-        category: "trail-run",
-        distance: "15km",
-      },
-    ];
-    setEvents(mockEvents);
-    setFilteredEvents(mockEvents);
+    const fetchEvents = async () => {
+      try {
+        const data = await apiClient.getEventStats();
+        if (data.recentEvents && Array.isArray(data.recentEvents)) {
+          // Chuyển đổi category và status từ uppercase sang lowercase để khớp với interface
+          const normalizedEvents = data.recentEvents.map((event: any) => ({
+            ...event,
+            category: event.category
+              .toLowerCase()
+              .replace(/_/g, "-")
+              .replace("five-k", "5k")
+              .replace("ten-k", "10k"),
+            status: event.status.toLowerCase(),
+          }));
+          setEvents(normalizedEvents);
+          setFilteredEvents(normalizedEvents);
+        } else {
+          setEvents([]);
+          setFilteredEvents([]);
+          toast({
+            title: "Cảnh báo",
+            description: "Không có dữ liệu sự kiện gần đây.",
+            variant: "default",
+          });
+        }
+      } catch (err) {
+        toast({
+          title: "Lỗi",
+          description: "Không thể tải danh sách sự kiện: " + (err as string),
+          variant: "destructive",
+        });
+        setEvents([]);
+        setFilteredEvents([]);
+      }
+    };
+    fetchEvents();
   }, []);
 
+  // Lọc sự kiện theo từ khóa tìm kiếm
   useEffect(() => {
     const filtered = events.filter(
       (event) =>
-        event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        event.location.toLowerCase().includes(searchTerm.toLowerCase())
+        event.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        event.location?.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredEvents(filtered);
   }, [events, searchTerm]);
 
+  // Chuyển đổi category sang text
   const getCategoryText = (category: string) => {
-    switch (category) {
-      case "marathon":
-        return "Marathon";
-      case "fun-run":
-        return "Fun Run";
-      case "trail-run":
-        return "Trail Run";
-      default:
-        return category;
-    }
+    const categoryMap: { [key: string]: string } = {
+      marathon: "Marathon",
+      "half-marathon": "Half Marathon",
+      "5k": "5K",
+      "10k": "10K",
+      "fun-run": "Fun Run",
+      "trail-run": "Trail Run",
+      "night-run": "Night Run",
+    };
+    return categoryMap[category.toLowerCase()] || category;
   };
 
+  // Màu sắc cho category
   const getCategoryColor = (category: string) => {
-    switch (category) {
+    switch (category.toLowerCase()) {
       case "marathon":
         return "bg-red-500";
-      case "fun-run":
+      case "half-marathon":
+        return "bg-orange-500";
+      case "5k":
+      case "10k":
         return "bg-blue-500";
-      case "trail-run":
+      case "fun-run":
         return "bg-green-500";
+      case "trail-run":
+        return "bg-purple-500";
+      case "night-run":
+        return "bg-indigo-500";
       default:
         return "bg-gray-500";
     }
   };
 
+  // Màu sắc cho status
   const getStatusColor = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "upcoming":
         return "bg-green-500";
       case "ongoing":
         return "bg-yellow-500";
       case "completed":
         return "bg-gray-500";
+      case "cancelled":
+        return "bg-red-500";
       default:
         return "bg-gray-500";
     }
   };
 
+  // Chuyển đổi status sang text
   const getStatusText = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "upcoming":
         return "Sắp diễn ra";
       case "ongoing":
         return "Đang diễn ra";
       case "completed":
         return "Đã kết thúc";
+      case "cancelled":
+        return "Đã hủy";
       default:
         return "Không xác định";
     }
   };
 
+  // Xử lý submit form (tạo hoặc cập nhật)
   const onSubmit = async (data: EventForm) => {
     try {
+      const eventData = {
+        ...data,
+        date: new Date(data.date).toISOString(),
+        maxParticipants: Number(data.maxParticipants),
+        status: data.status || "UPCOMING",
+        published: data.published ?? true,
+        featured: data.featured ?? false,
+        registrationFee: data.registrationFee ?? 0,
+        registrationDeadline: data.registrationDeadline
+          ? new Date(data.registrationDeadline).toISOString()
+          : undefined,
+        // Chuyển category từ lowercase sang uppercase và thay thế "-" bằng "_"
+        category: data.category
+          .toUpperCase()
+          .replace(/-/g, "_")
+          .replace("5K", "FIVE_K")
+          .replace("10K", "TEN_K"),
+      };
+
       if (editingEvent) {
-        // Update existing event
-        const updatedEvents = events.map((event) =>
-          event.id === editingEvent.id
-            ? {
-                ...event,
-                ...data,
-                participants: event.participants, // Keep existing participants
-                image: event.image, // Keep existing image
-                status: event.status, // Keep existing status
-              }
-            : event
+        // Cập nhật sự kiện
+        const updatedEvent = await apiClient.updateEvent(
+          editingEvent.id,
+          eventData
         );
-        setEvents(updatedEvents);
+        setEvents(
+          events.map((event) =>
+            event.id === editingEvent.id ? updatedEvent : event
+          )
+        );
         toast({
           title: "Cập nhật thành công",
           description: "Sự kiện đã được cập nhật.",
         });
       } else {
-        // Create new event
-        const newEvent: Event = {
-          id: Date.now().toString(),
-          ...data,
-          participants: 0,
-          image: "/placeholder.svg?height=300&width=400",
-          status: "upcoming",
-        };
-        setEvents([newEvent, ...events]);
-        toast({
-          title: "Tạo thành công",
-          description: "Sự kiện mới đã được tạo.",
-        });
+        // Tạo sự kiện mới
+        const newEvent = await apiClient.createEvent(eventData);
+        if (newEvent && newEvent.id) {
+          // Chuyển đổi category và status từ uppercase sang lowercase để khớp interface
+          const normalizedEvent = {
+            ...newEvent,
+            category: newEvent.category
+              .toLowerCase()
+              .replace(/_/g, "-")
+              .replace("FIVE_K", "5k")
+              .replace("TEN_K", "10k"),
+            status: newEvent.status.toLowerCase(),
+          };
+          setEvents([normalizedEvent, ...events]);
+          toast({
+            title: "Tạo thành công",
+            description: "Sự kiện mới đã được tạo.",
+          });
+        } else {
+          throw new Error("Không nhận được dữ liệu sự kiện từ server");
+        }
       }
-
       setIsDialogOpen(false);
       setEditingEvent(null);
       form.reset();
     } catch (error) {
       toast({
         title: "Có lỗi xảy ra",
-        description: "Vui lòng thử lại sau.",
+        description: `Vui lòng thử lại sau: ${
+          error instanceof Error ? error.message : "Lỗi không xác định"
+        }`,
+        variant: "destructive",
+      });
+      console.error("Error details:", error);
+    }
+  };
+
+  // Xử lý chỉnh sửa
+  const handleEdit = (event: Event) => {
+    setEditingEvent(event);
+    form.reset({
+      name: event.name,
+      description: event.description,
+      content: event.content,
+      date: new Date(event.date).toISOString().split("T")[0] || "", // Tránh lỗi nếu date không hợp lệ
+      location: event.location,
+      maxParticipants: event.maxParticipants,
+      category: (() => {
+        const upperCategory = event.category
+          .toUpperCase()
+          .replace(/-/g, "_")
+          .replace("5k", "FIVE_K")
+          .replace("10k", "TEN_K");
+        const validCategories = [
+          "MARATHON",
+          "HALF_MARATHON",
+          "FIVE_K",
+          "TEN_K",
+          "FUN_RUN",
+          "TRAIL_RUN",
+          "NIGHT_RUN",
+        ] as const;
+        return (validCategories.find((cat) => cat === upperCategory) ||
+          "FUN_RUN") as (typeof validCategories)[number]; // Type assertion
+      })(),
+      distance: event.distance || "",
+      registrationFee: event.registrationFee || 0,
+      requirements: event.requirements || "",
+      published: event.published || true,
+      featured: event.featured || false,
+      registrationDeadline: event.registrationDeadline
+        ? new Date(event.registrationDeadline).toISOString().split("T")[0] || ""
+        : "",
+      organizer: event.organizer || "",
+      image: event.image || "",
+      status: (() => {
+        const upperStatus = event.status.toUpperCase();
+        const validStatuses = [
+          "UPCOMING",
+          "ONGOING",
+          "COMPLETED",
+          "CANCELLED",
+        ] as const;
+        return (validStatuses.find((stat) => stat === upperStatus) ||
+          "UPCOMING") as (typeof validStatuses)[number]; // Type assertion
+      })(),
+    });
+    setIsDialogOpen(true);
+  };
+
+  // Xử lý xóa
+  const handleDelete = async (eventId: string) => {
+    try {
+      await apiClient.deleteEvent(eventId);
+      setEvents(events.filter((event) => event.id !== eventId));
+      toast({
+        title: "Xóa thành công",
+        description: "Sự kiện đã được xóa.",
+      });
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể xóa sự kiện: " + (error as string),
         variant: "destructive",
       });
     }
   };
 
-  const handleEdit = (event: Event) => {
-    setEditingEvent(event);
-    form.reset({
-      title: event.title,
-      description: event.description,
-      date: event.date,
-      location: event.location,
-      maxParticipants: event.maxParticipants,
-      category: event.category,
-      distance: event.distance,
-    });
-    setIsDialogOpen(true);
-  };
-
-  const handleDelete = (eventId: string) => {
-    setEvents(events.filter((event) => event.id !== eventId));
-    toast({
-      title: "Xóa thành công",
-      description: "Sự kiện đã được xóa.",
-    });
-  };
-
+  // Mở form tạo sự kiện mới
   const handleNewEvent = () => {
     setEditingEvent(null);
     form.reset();
@@ -335,13 +467,13 @@ export default function AdminEventsPage() {
                     >
                       <FormField
                         control={form.control}
-                        name="title"
+                        name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Tiêu đề</FormLabel>
+                            <FormLabel>Tên sự kiện</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Nhập tiêu đề sự kiện"
+                                placeholder="Nhập tên sự kiện"
                                 {...field}
                               />
                             </FormControl>
@@ -360,6 +492,24 @@ export default function AdminEventsPage() {
                               <Textarea
                                 placeholder="Nhập mô tả sự kiện"
                                 rows={3}
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="content"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nội dung</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Nhập nội dung chi tiết"
+                                rows={4}
                                 {...field}
                               />
                             </FormControl>
@@ -430,7 +580,7 @@ export default function AdminEventsPage() {
                               <FormLabel>Loại sự kiện</FormLabel>
                               <Select
                                 onValueChange={field.onChange}
-                                defaultValue={field.value}
+                                value={field.value}
                               >
                                 <FormControl>
                                   <SelectTrigger>
@@ -438,14 +588,22 @@ export default function AdminEventsPage() {
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  <SelectItem value="marathon">
+                                  <SelectItem value="MARATHON">
                                     Marathon
                                   </SelectItem>
-                                  <SelectItem value="fun-run">
+                                  <SelectItem value="HALF_MARATHON">
+                                    Half Marathon
+                                  </SelectItem>
+                                  <SelectItem value="FIVE_K">5K</SelectItem>
+                                  <SelectItem value="TEN_K">10K</SelectItem>
+                                  <SelectItem value="FUN_RUN">
                                     Fun Run
                                   </SelectItem>
-                                  <SelectItem value="trail-run">
+                                  <SelectItem value="TRAIL_RUN">
                                     Trail Run
+                                  </SelectItem>
+                                  <SelectItem value="NIGHT_RUN">
+                                    Night Run
                                   </SelectItem>
                                 </SelectContent>
                               </Select>
@@ -461,8 +619,199 @@ export default function AdminEventsPage() {
                             <FormItem>
                               <FormLabel>Cự ly</FormLabel>
                               <FormControl>
-                                <Input placeholder="5km" {...field} />
+                                <Input
+                                  placeholder="5km"
+                                  value={field.value || ""}
+                                  onChange={(e) =>
+                                    field.onChange(e.target.value)
+                                  }
+                                />
                               </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="registrationFee"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Phí đăng ký (VND)</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  placeholder="0"
+                                  {...field}
+                                  onChange={(e) =>
+                                    field.onChange(
+                                      Number.parseInt(e.target.value) || 0
+                                    )
+                                  }
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="registrationDeadline"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Hạn đăng ký</FormLabel>
+                              <FormControl>
+                                <Input type="date" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name="requirements"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Yêu cầu</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Nhập yêu cầu (nếu có)"
+                                rows={2}
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="organizer"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Tổ chức bởi</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Nhập tên tổ chức"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="image"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>URL ảnh</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Nhập URL ảnh" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="published"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Đã xuất bản</FormLabel>
+                              <FormControl>
+                                <Select
+                                  onValueChange={(value) =>
+                                    field.onChange(value === "true")
+                                  }
+                                  value={field.value ? "true" : "false"}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Chọn trạng thái" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="true">Có</SelectItem>
+                                    <SelectItem value="false">Không</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="featured"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Nổi bật</FormLabel>
+                              <FormControl>
+                                <Select
+                                  onValueChange={(value) =>
+                                    field.onChange(value === "true")
+                                  }
+                                  value={field.value ? "true" : "false"}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Chọn trạng thái" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="true">Có</SelectItem>
+                                    <SelectItem value="false">Không</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="status"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Trạng thái</FormLabel>
+                              <Select
+                                onValueChange={field.onChange}
+                                value={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Chọn trạng thái" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="UPCOMING">
+                                    Sắp diễn ra
+                                  </SelectItem>
+                                  <SelectItem value="ONGOING">
+                                    Đang diễn ra
+                                  </SelectItem>
+                                  <SelectItem value="COMPLETED">
+                                    Đã kết thúc
+                                  </SelectItem>
+                                  <SelectItem value="CANCELLED">
+                                    Đã hủy
+                                  </SelectItem>
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -526,7 +875,7 @@ export default function AdminEventsPage() {
                       <TableRow key={event.id}>
                         <TableCell>
                           <div>
-                            <div className="font-medium">{event.title}</div>
+                            <div className="font-medium">{event.name}</div>
                             <div className="text-sm text-muted-foreground flex items-center mt-1">
                               <MapPin className="h-3 w-3 mr-1" />
                               {event.location}
@@ -559,7 +908,8 @@ export default function AdminEventsPage() {
                           <div className="flex items-center space-x-2">
                             <Users className="h-4 w-4 text-muted-foreground" />
                             <span>
-                              {event.participants}/{event.maxParticipants}
+                              {event.currentParticipants}/
+                              {event.maxParticipants}
                             </span>
                           </div>
                           <div className="w-full bg-muted rounded-full h-1 mt-1">
@@ -567,7 +917,8 @@ export default function AdminEventsPage() {
                               className="bg-primary h-1 rounded-full"
                               style={{
                                 width: `${
-                                  (event.participants / event.maxParticipants) *
+                                  (event.currentParticipants /
+                                    event.maxParticipants) *
                                   100
                                 }%`,
                               }}
@@ -583,8 +934,10 @@ export default function AdminEventsPage() {
                               size="icon"
                               variant="ghost"
                               onClick={() =>
-                                // window.open(`/events/${event.id}`, "_blank")
-                                window.open(`/admin/events/${event.id}`)
+                                window.open(
+                                  `/admin/events/${event.id}`,
+                                  "_blank"
+                                )
                               }
                             >
                               <Eye className="h-4 w-4" />

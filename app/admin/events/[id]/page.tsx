@@ -43,152 +43,127 @@ import {
   Share2,
   Star,
 } from "lucide-react";
-import { mockEvents, mockEventRegistrations } from "@/lib/mock-data";
+import { useToast } from "@/hooks/use-toast";
+import { apiClient } from "@/lib/api";
 
-// Extended mock data for event registrations
-const extendedRegistrations = [
-  {
-    id: "reg1",
-    eventId: "1",
-    userId: "user1",
-    fullName: "Nguyễn Văn An",
-    email: "an.nguyen@email.com",
-    phone: "0901234567",
-    emergencyContact: "Nguyễn Thị Bình",
-    emergencyPhone: "0987654321",
-    medicalConditions: "Không có",
-    experience: "intermediate",
-    status: "confirmed",
-    registeredAt: "2024-01-10T08:30:00Z",
-    paymentStatus: "paid",
-    bibNumber: "A001",
-    category: "main",
-    team: "",
-    notes: "Đã tham gia nhiều giải chạy",
-  },
-  {
-    id: "reg2",
-    eventId: "1",
-    userId: "user2",
-    fullName: "Trần Thị Bình",
-    email: "binh.tran@email.com",
-    phone: "0912345678",
-    emergencyContact: "Trần Văn C",
-    emergencyPhone: "0923456789",
-    medicalConditions: "Hen suyễn nhẹ",
-    experience: "beginner",
-    status: "pending",
-    registeredAt: "2024-01-12T14:20:00Z",
-    paymentStatus: "pending",
-    bibNumber: "",
-    category: "main",
-    team: "",
-    notes: "",
-  },
-  {
-    id: "reg3",
-    eventId: "1",
-    userId: "user3",
-    fullName: "Lê Minh Châu",
-    email: "chau.le@email.com",
-    phone: "0934567890",
-    emergencyContact: "Lê Thị D",
-    emergencyPhone: "0945678901",
-    medicalConditions: "Không có",
-    experience: "advanced",
-    status: "confirmed",
-    registeredAt: "2024-01-08T09:15:00Z",
-    paymentStatus: "paid",
-    bibNumber: "A002",
-    category: "vip",
-    team: "VSM Running Club",
-    notes: "VIP runner, nhiều thành tích",
-  },
-  {
-    id: "reg4",
-    eventId: "1",
-    userId: "user4",
-    fullName: "Phạm Đức Duy",
-    email: "duy.pham@email.com",
-    phone: "0956789012",
-    emergencyContact: "Phạm Thị E",
-    emergencyPhone: "0967890123",
-    medicalConditions: "Chấn thương gối cũ",
-    experience: "intermediate",
-    status: "waitlist",
-    registeredAt: "2024-01-15T16:45:00Z",
-    paymentStatus: "paid",
-    bibNumber: "",
-    category: "main",
-    team: "",
-    notes: "Đang chờ slot trống",
-  },
-  {
-    id: "reg5",
-    eventId: "1",
-    userId: "user5",
-    fullName: "Võ Thị Lan",
-    email: "lan.vo@email.com",
-    phone: "0978901234",
-    emergencyContact: "Võ Văn F",
-    emergencyPhone: "0989012345",
-    medicalConditions: "Không có",
-    experience: "beginner",
-    status: "cancelled",
-    registeredAt: "2024-01-05T11:30:00Z",
-    paymentStatus: "refunded",
-    bibNumber: "",
-    category: "main",
-    team: "",
-    notes: "Hủy do lịch trình cá nhân",
-  },
-];
+export interface Author {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface Registration {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  emergencyContact: string;
+  emergencyPhone: string;
+  medicalConditions: string;
+  experience: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+  status: "CONFIRMED" | "PENDING" | "WAITLIST" | "CANCELLED";
+  registeredAt: string;
+  updatedAt: string;
+  eventId: string;
+  userId: string;
+  user: Author;
+}
+
+export interface EventCount {
+  registrations: number;
+}
+
+export interface Event {
+  id: string;
+  name: string;
+  description: string;
+  content: string;
+  date: string;
+  location: string;
+  image: string;
+  maxParticipants: number;
+  currentParticipants: number;
+  category:
+    | "MARATHON"
+    | "HALF_MARATHON"
+    | "FIVE_K"
+    | "TEN_K"
+    | "FUN_RUN"
+    | "TRAIL_RUN"
+    | "NIGHT_RUN";
+  status: "UPCOMING" | "ONGOING" | "COMPLETED" | "CANCELLED";
+  distance?: string;
+  registrationFee?: number;
+  requirements?: string;
+  published: boolean;
+  featured?: boolean;
+  registrationDeadline?: string;
+  organizer?: string;
+  createdAt: string;
+  updatedAt: string;
+  authorId: string;
+  author: Author;
+  registrations: Registration[];
+  _count: EventCount;
+}
 
 export default function AdminEventDetailPage() {
   const params = useParams();
   const router = useRouter();
+  const { toast } = useToast();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [event, setEvent] = useState<any>(null);
-  const [registrations, setRegistrations] = useState(extendedRegistrations);
+  const [event, setEvent] = useState<Event | null>(null);
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [experienceFilter, setExperienceFilter] = useState("all");
-  const [selectedRegistration, setSelectedRegistration] = useState<any>(null);
+  const [selectedRegistration, setSelectedRegistration] =
+    useState<Registration | null>(null);
   const [isRegistrationDialogOpen, setIsRegistrationDialogOpen] =
     useState(false);
 
   useEffect(() => {
     const eventId = params.id as string;
-    const foundEvent = mockEvents.find((e) => e.id === eventId);
-    if (foundEvent) {
-      setEvent(foundEvent);
-    }
+    const fetchEventDetails = async () => {
+      try {
+        const eventData = await apiClient.getEvent(eventId);
+        setEvent(eventData);
+        setRegistrations(eventData.registrations || []); // Trích xuất registrations từ event
+      } catch (err) {
+        toast({
+          title: "Lỗi",
+          description: "Không thể tải thông tin sự kiện: " + (err as string),
+          variant: "destructive",
+        });
+      }
+    };
+    fetchEventDetails();
   }, [params.id]);
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case "confirmed":
+      case "CONFIRMED":
         return {
           label: "Đã xác nhận",
           color: "bg-green-500",
           textColor: "text-green-700",
           bgColor: "bg-green-50",
         };
-      case "pending":
+      case "PENDING":
         return {
           label: "Chờ xác nhận",
           color: "bg-yellow-500",
           textColor: "text-yellow-700",
           bgColor: "bg-yellow-50",
         };
-      case "waitlist":
+      case "WAITLIST":
         return {
           label: "Danh sách chờ",
           color: "bg-orange-500",
           textColor: "text-orange-700",
           bgColor: "bg-orange-50",
         };
-      case "cancelled":
+      case "CANCELLED":
         return {
           label: "Đã hủy",
           color: "bg-red-500",
@@ -207,11 +182,11 @@ export default function AdminEventDetailPage() {
 
   const getExperienceText = (experience: string) => {
     switch (experience) {
-      case "beginner":
+      case "BEGINNER":
         return "Mới bắt đầu";
-      case "intermediate":
+      case "INTERMEDIATE":
         return "Trung bình";
-      case "advanced":
+      case "ADVANCED":
         return "Nâng cao";
       default:
         return experience;
@@ -243,14 +218,13 @@ export default function AdminEventDetailPage() {
     }
   };
 
-  // Filter registrations
   const filteredRegistrations = registrations.filter((reg) => {
     const matchesSearch =
       searchTerm === "" ||
       reg.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reg.phone.includes(searchTerm) ||
-      reg.bibNumber.toLowerCase().includes(searchTerm.toLowerCase());
+      (reg.user?.name || "").toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus = statusFilter === "all" || reg.status === statusFilter;
     const matchesExperience =
@@ -259,21 +233,19 @@ export default function AdminEventDetailPage() {
     return matchesSearch && matchesStatus && matchesExperience;
   });
 
-  // Statistics
   const stats = {
     total: registrations.length,
-    confirmed: registrations.filter((r) => r.status === "confirmed").length,
-    pending: registrations.filter((r) => r.status === "pending").length,
-    waitlist: registrations.filter((r) => r.status === "waitlist").length,
-    cancelled: registrations.filter((r) => r.status === "cancelled").length,
-    paid: registrations.filter((r) => r.paymentStatus === "paid").length,
+    confirmed: registrations.filter((r) => r.status === "CONFIRMED").length,
+    pending: registrations.filter((r) => r.status === "PENDING").length,
+    waitlist: registrations.filter((r) => r.status === "WAITLIST").length,
+    cancelled: registrations.filter((r) => r.status === "CANCELLED").length,
+    paid: 0, // Cần điều chỉnh nếu backend cung cấp paymentStatus
     revenue:
-      registrations.filter((r) => r.paymentStatus === "paid").length *
-      (event?.registrationFee || 0),
+      (event?.registrationFee || 0) *
+      registrations.filter((r) => r.status === "CONFIRMED").length,
   };
 
   const handleExportRegistrations = () => {
-    // In real app, this would generate and download Excel/CSV file
     console.log("Exporting registrations...", filteredRegistrations);
     alert(`Đang xuất ${filteredRegistrations.length} đăng ký ra file Excel...`);
   };
@@ -281,13 +253,24 @@ export default function AdminEventDetailPage() {
   const handleUpdateRegistrationStatus = (regId: string, newStatus: string) => {
     setRegistrations((prev) =>
       prev.map((reg) =>
-        reg.id === regId ? { ...reg, status: newStatus } : reg
+        reg.id === regId
+          ? { ...reg, status: newStatus as Registration["status"] }
+          : reg
       )
     );
+    // Gọi API để cập nhật trạng thái trên server nếu cần
+    apiClient
+      .updateRegistrationStatus(event?.id || "", regId, newStatus)
+      .catch((err) => {
+        toast({
+          title: "Lỗi",
+          description: "Không thể cập nhật trạng thái: " + err,
+          variant: "destructive",
+        });
+      });
   };
 
-  const handleSendEmail = (registration: any) => {
-    // In real app, this would send email
+  const handleSendEmail = (registration: Registration) => {
     console.log("Sending email to:", registration.email);
     alert(`Đang gửi email tới ${registration.email}...`);
   };
@@ -314,7 +297,6 @@ export default function AdminEventDetailPage() {
           }`}
         >
           <div className="min-h-screen bg-background">
-            {/* Header */}
             <div className="border-b bg-card px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -326,7 +308,6 @@ export default function AdminEventDetailPage() {
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Về danh sách
                   </Button>
-
                   <div>
                     <h1 className="text-2xl font-bold">{event.name}</h1>
                     <p className="text-muted-foreground">
@@ -334,7 +315,6 @@ export default function AdminEventDetailPage() {
                     </p>
                   </div>
                 </div>
-
                 <div className="flex items-center gap-3">
                   <Button variant="outline" size="sm">
                     <Edit className="h-4 w-4 mr-2" />
@@ -355,9 +335,7 @@ export default function AdminEventDetailPage() {
             </div>
 
             <div className="p-6">
-              {/* Event Overview */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                {/* Event Info Card */}
                 <Card className="lg:col-span-2">
                   <CardContent className="p-6">
                     <div className="flex gap-6">
@@ -371,7 +349,6 @@ export default function AdminEventDetailPage() {
                           className="w-full h-full object-cover"
                         />
                       </div>
-
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-4">
                           <div>
@@ -379,31 +356,30 @@ export default function AdminEventDetailPage() {
                               {event.name}
                             </h2>
                             <Badge
-                              className={`${
-                                event.status === "upcoming"
+                              className={
+                                event.status === "UPCOMING"
                                   ? "bg-blue-500"
-                                  : event.status === "ongoing"
+                                  : event.status === "ONGOING"
                                   ? "bg-green-500"
-                                  : event.status === "completed"
+                                  : event.status === "COMPLETED"
                                   ? "bg-gray-500"
                                   : "bg-red-500"
-                              } text-white`}
+                              }
+                              text-white
                             >
-                              {event.status === "upcoming"
+                              {event.status === "UPCOMING"
                                 ? "Sắp diễn ra"
-                                : event.status === "ongoing"
+                                : event.status === "ONGOING"
                                 ? "Đang diễn ra"
-                                : event.status === "completed"
+                                : event.status === "COMPLETED"
                                 ? "Đã kết thúc"
                                 : "Đã hủy"}
                             </Badge>
                           </div>
-
                           <Button variant="outline" size="sm">
                             <Star className="h-4 w-4" />
                           </Button>
                         </div>
-
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div className="flex items-center text-muted-foreground">
                             <Calendar className="h-4 w-4 mr-2" />
@@ -430,7 +406,6 @@ export default function AdminEventDetailPage() {
                             {event.registrationFee?.toLocaleString("vi-VN")}đ
                           </div>
                         </div>
-
                         <div className="mt-4">
                           <p className="text-sm text-muted-foreground line-clamp-3">
                             {event.description}
@@ -441,7 +416,6 @@ export default function AdminEventDetailPage() {
                   </CardContent>
                 </Card>
 
-                {/* Quick Stats */}
                 <div className="space-y-4">
                   <Card>
                     <CardContent className="p-4">
@@ -514,7 +488,6 @@ export default function AdminEventDetailPage() {
                 </div>
               </div>
 
-              {/* Detailed Stats Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <Card>
                   <CardContent className="p-4 text-center">
@@ -554,7 +527,6 @@ export default function AdminEventDetailPage() {
                 </Card>
               </div>
 
-              {/* Main Content Tabs */}
               <Tabs defaultValue="registrations" className="space-y-6">
                 <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="registrations">
@@ -565,13 +537,11 @@ export default function AdminEventDetailPage() {
                   <TabsTrigger value="settings">Cài đặt</TabsTrigger>
                 </TabsList>
 
-                {/* Registrations Tab */}
                 <TabsContent value="registrations">
                   <Card>
                     <CardHeader>
                       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <CardTitle>Danh sách đăng ký</CardTitle>
-
                         <div className="flex flex-col sm:flex-row gap-3">
                           <div className="relative">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -582,19 +552,17 @@ export default function AdminEventDetailPage() {
                               className="pl-10 w-full sm:w-64"
                             />
                           </div>
-
                           <select
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                             className="px-3 py-2 border rounded-md text-sm"
                           >
                             <option value="all">Tất cả trạng thái</option>
-                            <option value="confirmed">Đã xác nhận</option>
-                            <option value="pending">Chờ xác nh��n</option>
-                            <option value="waitlist">Danh sách chờ</option>
-                            <option value="cancelled">Đã hủy</option>
+                            <option value="CONFIRMED">Đã xác nhận</option>
+                            <option value="PENDING">Chờ xác nhận</option>
+                            <option value="WAITLIST">Danh sách chờ</option>
+                            <option value="CANCELLED">Đã hủy</option>
                           </select>
-
                           <select
                             value={experienceFilter}
                             onChange={(e) =>
@@ -603,11 +571,10 @@ export default function AdminEventDetailPage() {
                             className="px-3 py-2 border rounded-md text-sm"
                           >
                             <option value="all">Tất cả trình độ</option>
-                            <option value="beginner">Mới bắt đầu</option>
-                            <option value="intermediate">Trung bình</option>
-                            <option value="advanced">Nâng cao</option>
+                            <option value="BEGINNER">Mới bắt đầu</option>
+                            <option value="INTERMEDIATE">Trung bình</option>
+                            <option value="ADVANCED">Nâng cao</option>
                           </select>
-
                           <Button onClick={handleExportRegistrations}>
                             <Download className="h-4 w-4 mr-2" />
                             Xuất Excel
@@ -649,9 +616,8 @@ export default function AdminEventDetailPage() {
                               const statusConfig = getStatusConfig(
                                 registration.status
                               );
-                              const paymentConfig = getPaymentStatusConfig(
-                                registration.paymentStatus
-                              );
+                              const paymentConfig =
+                                getPaymentStatusConfig("paid"); // Giả định tạm thời, cần điều chỉnh nếu có paymentStatus
                               const PaymentIcon = paymentConfig.icon;
 
                               return (
@@ -675,9 +641,9 @@ export default function AdminEventDetailPage() {
                                         <p className="font-medium">
                                           {registration.fullName}
                                         </p>
-                                        {registration.team && (
+                                        {registration.user?.name && (
                                           <p className="text-xs text-muted-foreground">
-                                            {registration.team}
+                                            {registration.user.name}
                                           </p>
                                         )}
                                       </div>
@@ -700,7 +666,8 @@ export default function AdminEventDetailPage() {
                                       variant="outline"
                                       className="font-mono"
                                     >
-                                      {registration.bibNumber || "---"}
+                                      {"---"}{" "}
+                                      {/* Chưa có SBD trong dữ liệu, cần backend cung cấp */}
                                     </Badge>
                                   </td>
                                   <td className="p-3">
@@ -762,10 +729,8 @@ export default function AdminEventDetailPage() {
                                               {registration.fullName}
                                             </DialogTitle>
                                           </DialogHeader>
-
                                           {selectedRegistration && (
                                             <div className="space-y-6">
-                                              {/* Personal Info */}
                                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
                                                   <label className="text-sm font-medium text-muted-foreground">
@@ -803,8 +768,6 @@ export default function AdminEventDetailPage() {
                                                   </p>
                                                 </div>
                                               </div>
-
-                                              {/* Emergency Contact */}
                                               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div>
                                                   <label className="text-sm font-medium text-muted-foreground">
@@ -826,8 +789,6 @@ export default function AdminEventDetailPage() {
                                                   </p>
                                                 </div>
                                               </div>
-
-                                              {/* Additional Info */}
                                               <div className="space-y-4">
                                                 <div>
                                                   <label className="text-sm font-medium text-muted-foreground">
@@ -862,8 +823,6 @@ export default function AdminEventDetailPage() {
                                                   </div>
                                                 )}
                                               </div>
-
-                                              {/* Status and Actions */}
                                               <div className="flex flex-wrap gap-3 pt-4 border-t">
                                                 <select
                                                   value={
@@ -876,25 +835,25 @@ export default function AdminEventDetailPage() {
                                                     );
                                                     setSelectedRegistration({
                                                       ...selectedRegistration,
-                                                      status: e.target.value,
+                                                      status: e.target
+                                                        .value as Registration["status"],
                                                     });
                                                   }}
                                                   className="px-3 py-2 border rounded-md text-sm"
                                                 >
-                                                  <option value="pending">
+                                                  <option value="PENDING">
                                                     Chờ xác nhận
                                                   </option>
-                                                  <option value="confirmed">
+                                                  <option value="CONFIRMED">
                                                     Đã xác nhận
                                                   </option>
-                                                  <option value="waitlist">
+                                                  <option value="WAITLIST">
                                                     Danh sách chờ
                                                   </option>
-                                                  <option value="cancelled">
+                                                  <option value="CANCELLED">
                                                     Đã hủy
                                                   </option>
                                                 </select>
-
                                                 <Button
                                                   variant="outline"
                                                   size="sm"
@@ -907,7 +866,6 @@ export default function AdminEventDetailPage() {
                                                   <Send className="h-4 w-4 mr-2" />
                                                   Gửi email
                                                 </Button>
-
                                                 <Button
                                                   variant="outline"
                                                   size="sm"
@@ -920,7 +878,6 @@ export default function AdminEventDetailPage() {
                                           )}
                                         </DialogContent>
                                       </Dialog>
-
                                       <Button
                                         variant="ghost"
                                         size="sm"
@@ -930,7 +887,6 @@ export default function AdminEventDetailPage() {
                                       >
                                         <Send className="h-4 w-4" />
                                       </Button>
-
                                       <Button variant="ghost" size="sm">
                                         <MoreHorizontal className="h-4 w-4" />
                                       </Button>
@@ -946,7 +902,6 @@ export default function AdminEventDetailPage() {
                   </Card>
                 </TabsContent>
 
-                {/* Analytics Tab */}
                 <TabsContent value="analytics">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <Card>
@@ -960,7 +915,6 @@ export default function AdminEventDetailPage() {
                         </div>
                       </CardContent>
                     </Card>
-
                     <Card>
                       <CardHeader>
                         <CardTitle>Phân bố theo trình độ</CardTitle>
@@ -972,7 +926,7 @@ export default function AdminEventDetailPage() {
                             <span className="font-medium">
                               {
                                 registrations.filter(
-                                  (r) => r.experience === "beginner"
+                                  (r) => r.experience === "BEGINNER"
                                 ).length
                               }
                             </span>
@@ -982,7 +936,7 @@ export default function AdminEventDetailPage() {
                             <span className="font-medium">
                               {
                                 registrations.filter(
-                                  (r) => r.experience === "intermediate"
+                                  (r) => r.experience === "INTERMEDIATE"
                                 ).length
                               }
                             </span>
@@ -992,7 +946,7 @@ export default function AdminEventDetailPage() {
                             <span className="font-medium">
                               {
                                 registrations.filter(
-                                  (r) => r.experience === "advanced"
+                                  (r) => r.experience === "ADVANCED"
                                 ).length
                               }
                             </span>
@@ -1003,7 +957,6 @@ export default function AdminEventDetailPage() {
                   </div>
                 </TabsContent>
 
-                {/* Communications Tab */}
                 <TabsContent value="communications">
                   <Card>
                     <CardHeader>
@@ -1021,7 +974,6 @@ export default function AdminEventDetailPage() {
                   </Card>
                 </TabsContent>
 
-                {/* Settings Tab */}
                 <TabsContent value="settings">
                   <Card>
                     <CardHeader>
@@ -1029,7 +981,6 @@ export default function AdminEventDetailPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-center py-12">
-                        {/* <Settings className="mx-auto h-16 w-16 text-muted-foreground mb-4" /> */}
                         <h3 className="text-lg font-medium mb-2">
                           Cài đặt nâng cao
                         </h3>

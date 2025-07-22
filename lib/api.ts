@@ -101,7 +101,7 @@ if (this.token) {
 
   async updateEvent(id: string, data: any) {
     return this.request(`/events/${id}`, {
-      method: "PATCH",
+      method: "PUT",
       body: JSON.stringify(data),
     });
   }
@@ -112,6 +112,11 @@ if (this.token) {
     });
   }
 
+  async getEventStats(params?: any) {
+    const query = params ? `?${new URLSearchParams(params).toString()}` : "";
+    return this.request(`/events/stats/overview${query}`);
+  }
+
   async registerForEvent(eventId: string, data: any) {
     return this.request(`/events/${eventId}/register`, {
       method: "POST",
@@ -119,8 +124,9 @@ if (this.token) {
     });
   }
 
-  async getEventRegistrations(eventId: string) {
-    return this.request(`/events/${eventId}/registrations`);
+  async getEventRegistrations(eventId: string): Promise<Registration[]> {
+    const event = await this.getEvent(eventId); // Lấy toàn bộ event
+    return event.registrations; // Trả về mảng registrations từ event
   }
 
   async updateRegistrationStatus(
