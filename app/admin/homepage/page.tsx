@@ -31,61 +31,69 @@ interface SectionConfig {
 }
 
 const AVAILABLE_SECTIONS = [
-  { id: "hero", name: "Hero Section", component: "HeroSection" },
-  { id: "about", name: "About Section", component: "AboutSection" },
-  { id: "events", name: "Events Section", component: "EventsSection" },
-  { id: "news", name: "News Section", component: "NewsSection" },
-  { id: "team", name: "Team Section", component: "TeamSection" },
-  { id: "gallery", name: "Gallery Section", component: "GallerySection" },
-  { id: "cta", name: "CTA Section", component: "CTASection" },
+  { id: "hero", name: "Phần đầu trang", component: "HeroSection" },
+  { id: "about", name: "Phần giới thiệu", component: "AboutSection" },
+  {
+    id: "events",
+    name: "Hiển thị các sự kiện sắp tới",
+    component: "EventsSection",
+  },
+  { id: "news", name: "Tin tức mới nhất", component: "NewsSection" },
+  { id: "team", name: "Phần giới thiệu đội ngũ", component: "TeamSection" },
+  {
+    id: "gallery",
+    name: "Phần hiển thị bộ sưu tập",
+    component: "GallerySection",
+  },
+  { id: "cta", name: "Phần kêu gọi", component: "CTASection" },
 ];
 
 const DEFAULT_SECTIONS: SectionConfig[] = [
   {
     id: "hero",
-    name: "Hero Section",
+    name: "Phần đầu trang",
     component: "HeroSection",
     enabled: true,
     config: {},
   },
   {
     id: "about",
-    name: "About Section",
+    name: "Phần giới thiệu",
     component: "AboutSection",
     enabled: true,
     config: {},
   },
   {
     id: "events",
-    name: "Events Section",
+    name: "Hiển thị các sự kiện sắp tới",
     component: "EventsSection",
     enabled: true,
     config: {},
   },
   {
     id: "news",
-    name: "News Section",
+    name: "Tin tức mới nhất",
     component: "NewsSection",
     enabled: true,
     config: {},
   },
   {
     id: "team",
-    name: "Team Section",
+    name: "Phần giới thiệu đội ngũ",
     component: "TeamSection",
     enabled: true,
     config: {},
   },
   {
     id: "gallery",
-    name: "Gallery Section",
+    name: "Phần hiển thị bộ sưu tập",
     component: "GallerySection",
     enabled: true,
     config: {},
   },
   {
     id: "cta",
-    name: "CTA Section",
+    name: "Phần kêu gọi",
     component: "CTASection",
     enabled: true,
     config: {},
@@ -103,28 +111,25 @@ export default function HomepageManagerPage() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
-    // Check if we're in development mode
     setIsDevelopment(process.env.NODE_ENV === "development");
-    // Load saved configuration from localStorage
     const saved = localStorage.getItem("homepage-config");
     if (saved) {
       try {
         setSections(JSON.parse(saved));
       } catch (error) {
-        console.error("Failed to load saved configuration:", error);
+        console.error("Không thể tải cấu hình đã lưu:", error);
       }
     }
   }, []);
 
   useEffect(() => {
-    // Auto-save to localStorage
     localStorage.setItem("homepage-config", JSON.stringify(sections));
   }, [sections]);
 
   const handleReorder = (newSections: SectionConfig[]) => {
     setSections(newSections);
     setHasChanges(true);
-    toast.success("Sections reordered");
+    toast.success("Đã sắp xếp lại các phần");
   };
 
   const toggleSection = (id: string) => {
@@ -134,7 +139,7 @@ export default function HomepageManagerPage() {
       )
     );
     setHasChanges(true);
-    toast.success("Section visibility updated");
+    toast.success("Đã cập nhật trạng thái hiển thị của phần");
   };
 
   const addSection = (sectionType: string) => {
@@ -151,13 +156,13 @@ export default function HomepageManagerPage() {
 
     setSections((prev) => [...prev, newSection]);
     setHasChanges(true);
-    toast.success("Section added");
+    toast.success("Đã thêm phần mới");
   };
 
   const removeSection = (id: string) => {
     setSections((prev) => prev.filter((section) => section.id !== id));
     setHasChanges(true);
-    toast.success("Section removed");
+    toast.success("Đã xóa phần");
   };
 
   const updateSection = (id: string, config: Record<string, any>) => {
@@ -168,7 +173,7 @@ export default function HomepageManagerPage() {
     );
     setHasChanges(true);
     setEditingSection(null);
-    toast.success("Section updated");
+    toast.success("Đã cập nhật phần");
   };
 
   const saveToFile = async () => {
@@ -206,7 +211,6 @@ ${sectionComponents}
   )
 }`;
 
-      // In a real implementation, this would call an API endpoint to save the file
       const response = await fetch("/api/admin/save-homepage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -215,12 +219,12 @@ ${sectionComponents}
 
       if (response.ok) {
         setHasChanges(false);
-        toast.success("Homepage saved successfully!");
+        toast.success("Đã lưu trang chủ thành công!");
       } else {
-        throw new Error("Failed to save");
+        throw new Error("Không thể lưu");
       }
     } catch (error) {
-      toast.error("Failed to save homepage. Using localStorage for demo.");
+      toast.error("Không thể lưu trang chủ. Sử dụng bộ nhớ tạm cho demo.");
       setHasChanges(false);
     }
   };
@@ -228,7 +232,7 @@ ${sectionComponents}
   const resetToDefault = () => {
     setSections(DEFAULT_SECTIONS);
     setHasChanges(true);
-    toast.success("Reset to default configuration");
+    toast.success("Đã đặt lại về cấu hình mặc định");
   };
 
   if (!isDevelopment) {
@@ -238,13 +242,13 @@ ${sectionComponents}
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-yellow-500" />
-              Development Only
+              Chỉ dành cho chế độ phát triển
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
-              This homepage manager is only available in development mode for
-              security reasons.
+              Trình quản lý trang chủ chỉ khả dụng trong chế độ phát triển vì lý
+              do bảo mật.
             </p>
           </CardContent>
         </Card>
@@ -269,24 +273,24 @@ ${sectionComponents}
               <div className="container mx-auto px-4 py-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h1 className="text-2xl font-bold">Homepage Manager</h1>
+                    <h1 className="text-2xl font-bold">Quản lý Trang chủ</h1>
                     <p className="text-muted-foreground">
-                      Manage your homepage sections with drag-and-drop
+                      Quản lý các phần của trang chủ bằng cách kéo thả
                     </p>
                   </div>
                   <div className="flex gap-2">
                     {hasChanges && (
                       <Badge variant="secondary" className="mr-2">
-                        Unsaved changes
+                        Có thay đổi chưa lưu
                       </Badge>
                     )}
                     <Button variant="outline" onClick={resetToDefault}>
                       <RotateCcw className="h-4 w-4 mr-2" />
-                      Reset
+                      Đặt lại
                     </Button>
                     <Button onClick={saveToFile} disabled={!hasChanges}>
                       <Save className="h-4 w-4 mr-2" />
-                      Save Changes
+                      Lưu thay đổi
                     </Button>
                   </div>
                 </div>
@@ -300,8 +304,8 @@ ${sectionComponents}
                 className="space-y-6"
               >
                 <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="manage">Manage Sections</TabsTrigger>
-                  <TabsTrigger value="preview">Live Preview</TabsTrigger>
+                  <TabsTrigger value="manage">Quản lý các phần</TabsTrigger>
+                  <TabsTrigger value="preview">Xem trước trực tiếp</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="manage" className="space-y-6">
@@ -309,10 +313,10 @@ ${sectionComponents}
                     <div className="lg:col-span-2 space-y-4">
                       <div className="flex items-center justify-between">
                         <h2 className="text-xl font-semibold">
-                          Current Sections
+                          Các phần hiện tại
                         </h2>
                         <div className="text-sm text-muted-foreground">
-                          Drag to reorder • Click to edit
+                          Kéo để sắp xếp • Nhấn để chỉnh sửa
                         </div>
                       </div>
 
@@ -348,9 +352,7 @@ ${sectionComponents}
                                             : "secondary"
                                         }
                                       >
-                                        {section.enabled
-                                          ? "Enabled"
-                                          : "Disabled"}
+                                        {section.enabled ? "Đã bật" : "Đã tắt"}
                                       </Badge>
                                     </div>
                                     <p className="text-sm text-muted-foreground mt-1">
@@ -389,7 +391,7 @@ ${sectionComponents}
                     </div>
 
                     <div className="space-y-4">
-                      <h2 className="text-xl font-semibold">Add Section</h2>
+                      <h2 className="text-xl font-semibold">Thêm phần</h2>
                       <div className="space-y-2">
                         {AVAILABLE_SECTIONS.map((section) => (
                           <Button
@@ -405,14 +407,16 @@ ${sectionComponents}
                       </div>
 
                       <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-                        <h3 className="font-medium mb-2">Usage Guide</h3>
+                        <h3 className="font-medium mb-2">Hướng dẫn sử dụng</h3>
                         <ul className="text-sm text-muted-foreground space-y-1">
-                          <li>• Drag sections to reorder</li>
-                          <li>• Toggle visibility with eye icon</li>
-                          <li>• Edit content with edit icon</li>
-                          <li>• Remove sections with trash icon</li>
-                          <li>• Preview changes in Live Preview tab</li>
-                          <li>• Save changes to update app/page.tsx</li>
+                          <li>• Kéo các phần để sắp xếp lại</li>
+                          <li>• Bật/tắt hiển thị bằng biểu tượng con mắt</li>
+                          <li>• Chỉnh sửa nội dung bằng biểu tượng bút</li>
+                          <li>• Xóa phần bằng biểu tượng thùng rác</li>
+                          <li>
+                            • Xem trước thay đổi trong tab Xem trước trực tiếp
+                          </li>
+                          <li>• Lưu thay đổi để cập nhật trang chủ</li>
                         </ul>
                       </div>
                     </div>
