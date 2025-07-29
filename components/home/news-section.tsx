@@ -1,54 +1,64 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useRef } from "react"
-import { motion, useInView } from "framer-motion"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface Post {
-  id: string
-  title: string
-  excerpt: string
-  cover: string
-  date: string
+  id: string;
+  title: string;
+  excerpt: string;
+  cover: string;
+  date: string;
 }
 
-export function NewsSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [posts, setPosts] = useState<Post[]>([])
+interface NewsSectionProps {
+  posts?: Post[];
+  title?: string;
+  title1?: string;
+  description?: string;
+  customClasses?: string;
+}
 
-  useEffect(() => {
-    // TODO: replace with real API
-    setPosts([
-      {
-        id: "1",
-        title: "Hướng dẫn chuẩn bị cho marathon đầu tiên",
-        excerpt: "5 điều bạn không thể bỏ qua trước khi bắt đầu hành trình 42 km.",
-        cover: "/placeholder.svg?height=300&width=400",
-        date: "10/01/2024",
-      },
-      {
-        id: "2",
-        title: "Bí quyết giữ phong độ khi chạy đường dài",
-        excerpt: "Chuyên gia VSM chia sẻ các tip giúp bạn tránh chấn thương.",
-        cover: "/placeholder.svg?height=300&width=400",
-        date: "08/01/2024",
-      },
-      {
-        id: "3",
-        title: "Chế độ dinh dưỡng cho vận động viên sinh viên",
-        excerpt: "Ăn gì để tối ưu hiệu suất và hồi phục nhanh chóng?",
-        cover: "/placeholder.svg?height=300&width=400",
-        date: "05/01/2024",
-      },
-    ])
-  }, [])
+const DEFAULT_POSTS: Post[] = [
+  {
+    id: "1",
+    title: "Hướng dẫn chuẩn bị cho marathon đầu tiên",
+    excerpt: "5 điều bạn không thể bỏ qua trước khi bắt đầu hành trình 42 km.",
+    cover: "/placeholder.svg?height=300&width=400",
+    date: "10/01/2024",
+  },
+  {
+    id: "2",
+    title: "Bí quyết giữ phong độ khi chạy đường dài",
+    excerpt: "Chuyên gia VSM chia sẻ các tip giúp bạn tránh chấn thương.",
+    cover: "/placeholder.svg?height=300&width=400",
+    date: "08/01/2024",
+  },
+  {
+    id: "3",
+    title: "Chế độ dinh dưỡng cho vận động viên sinh viên",
+    excerpt: "Ăn gì để tối ưu hiệu suất và hồi phục nhanh chóng?",
+    cover: "/placeholder.svg?height=300&width=400",
+    date: "05/01/2024",
+  },
+];
+
+export function NewsSection({
+  posts = DEFAULT_POSTS,
+  title = "Tin tức",
+  title1 = "mới nhất",
+  description = "Cập nhật kiến thức và hoạt động mới nhất từ cộng đồng VSM.",
+  customClasses = "",
+}: NewsSectionProps = {}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-20">
+    <section ref={ref} className={`py-20 ${customClasses}`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -57,10 +67,10 @@ export function NewsSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Tin tức <span className="gradient-text">mới nhất</span>
+            {title} <span className="gradient-text">{title1}</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Cập nhật kiến thức và hoạt động mới nhất từ cộng đồng VSM.
+            {description}
           </p>
         </motion.div>
 
@@ -79,10 +89,14 @@ export function NewsSection() {
                   className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <CardHeader>
-                  <CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    {post.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                  <p className="text-muted-foreground line-clamp-3">
+                    {post.excerpt}
+                  </p>
                   <Button variant="link" className="p-0" asChild>
                     <Link href={`/news/${post.id}`}>
                       Đọc thêm <ArrowRight className="ml-1 h-4 w-4" />
@@ -109,5 +123,5 @@ export function NewsSection() {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

@@ -87,19 +87,9 @@ export function HomepagePreview({ sections }: HomepagePreviewProps) {
                 section.config && section.config.eventDate
                   ? section.config.eventDate
                   : "2025-12-28T04:30:00";
-              props = { eventDate };
-              if (section.config && section.config.customClasses) {
-                props.className = section.config.customClasses;
-              }
-            } else if (
-              ["AboutFeatures", "SportsCommunityStory", "Stats"].includes(
-                section.component
-              )
-            ) {
-              props =
-                section.config && section.config.customClasses
-                  ? { className: section.config.customClasses }
-                  : {};
+              props = { ...section.config, eventDate };
+            } else {
+              props = { ...section.config };
             }
             return (
               <div key={section.id} className="relative group">

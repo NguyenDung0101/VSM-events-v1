@@ -21,53 +21,64 @@ interface Event {
   status: "upcoming" | "ongoing" | "completed";
 }
 
-export function EventsSection() {
+interface EventsSectionProps {
+  events?: Event[];
+  title?: string;
+  title1?: string;
+  description?: string;
+  backgroundColor?: string;
+  customClasses?: string;
+}
+
+const DEFAULT_EVENTS: Event[] = [
+  {
+    id: "1",
+    title: "VSM Talk 01 | Gen Z & Sức bền",
+    description:
+      "Buổi chia sẻ đầy cảm hứng về việc rèn luyện thể chất & tinh thần bền bỉ trong cuộc sống.",
+    date: "Sắp diễn ra",
+    location: "Tp. Hồ Chí Minh",
+    participants: 0,
+    maxParticipants: 100,
+    image: "/img/image2.png",
+    status: "upcoming",
+  },
+  {
+    id: "2",
+    title: "VSM Long Run | 20/07/2025",
+    description:
+      "Sự kiện chạy dài định kỳ giao lưu cùng các anh chị Cà Khịa Bình Lợi Runner.",
+    date: "2025-07-20",
+    location: "KDC Bình Lợi , Bình Thành, TP. HCM",
+    participants: 0,
+    maxParticipants: 50,
+    image: "/img/VSM/long-run-20_7_2025.png",
+    status: "upcoming",
+  },
+  {
+    id: "3",
+    title: "VSM Long Run | 15/06/2025",
+    description:
+      "Sự kiện chạy dài định kỳ giao lưu cùng các anh chị Cà Khịa Bình Lợi Runner.",
+    date: "2025-06-15",
+    location: "KDC Bình Lợi , Bình Thành, TP. HCM",
+    participants: 25,
+    maxParticipants: 50,
+    image: "/img/VSM/long-run-15_6_2025.png",
+    status: "upcoming",
+  },
+];
+
+export function EventsSection({
+  events = DEFAULT_EVENTS,
+  title = "Sự kiện",
+  title1 = "sắp tới",
+  description = "Tham gia các sự kiện chạy bộ hấp dẫn được tổ chức bởi VSM. Cùng nhau tạo nên những kỷ niệm đáng nhớ!",
+  backgroundColor = "bg-muted/20",
+  customClasses = "",
+}: EventsSectionProps = {}) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [events, setEvents] = useState<Event[]>([]);
-
-  useEffect(() => {
-    // Mock data - replace with actual API call
-    const mockEvents: Event[] = [
-      {
-        id: "1",
-        title: "VSM Talk 01 | Gen Z & Sức bền",
-        description:
-          "Buổi chia sẻ đầy cảm hứng về việc rèn luyện thể chất & tinh thần bền bỉ trong cuộc sống.",
-        date: "Sắp diễn ra",
-        location: "Tp. Hồ Chí Minh",
-        participants: 0,
-        maxParticipants: 100,
-        image: "/img/image2.png", ///placeholder.svg?height=300&width=400
-        status: "upcoming",
-      },
-      {
-        id: "2",
-        title: "VSM Long Run | 20/07/2025",
-        description:
-          "Sự kiện chạy dài định kỳ giao lưu cùng các anh chị Cà Khịa Bình Lợi Runner.",
-        date: "2025-07-20",
-        location: "KDC Bình Lợi , Bình Thành, TP. HCM",
-        participants: 0,
-        maxParticipants: 50,
-        image: "/img/VSM/long-run-20_7_2025.png",
-        status: "upcoming",
-      },
-      {
-        id: "3",
-        title: "VSM Long Run | 15/06/2025",
-        description:
-          "Sự kiện chạy dài định kỳ giao lưu cùng các anh chị Cà Khịa Bình Lợi Runner.",
-        date: "2025-06-15",
-        location: "KDC Bình Lợi , Bình Thành, TP. HCM",
-        participants: 25,
-        maxParticipants: 50,
-        image: "/img/VSM/long-run-15_6_2025.png",
-        status: "upcoming",
-      },
-    ];
-    setEvents(mockEvents);
-  }, []);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -96,7 +107,7 @@ export function EventsSection() {
   };
 
   return (
-    <section ref={ref} className="py-20 bg-muted/20">
+    <section ref={ref} className={`py-20 ${backgroundColor} ${customClasses}`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -105,11 +116,10 @@ export function EventsSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Sự kiện <span className="gradient-text">sắp tới</span>
+            {title} <span className="gradient-text">{title1}</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Tham gia các sự kiện chạy bộ hấp dẫn được tổ chức bởi VSM. Cùng nhau
-            tạo nên những kỷ niệm đáng nhớ!
+            {description}
           </p>
         </motion.div>
 

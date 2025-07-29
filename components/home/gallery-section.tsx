@@ -4,9 +4,21 @@ import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 
-const YOUTUBE_ID = "4EGVAQYuqsU";
+interface GallerySectionProps {
+  youtubeId?: string;
+  title?: string;
+  subtitle?: string;
+  customClasses?: string;
+}
 
-export function GallerySection() {
+const DEFAULT_YOUTUBE_ID = "4EGVAQYuqsU";
+
+export function GallerySection({
+  youtubeId = DEFAULT_YOUTUBE_ID,
+  title = "VIETNAM STUDENT MARATHON",
+  subtitle = "RUN TO LAMPAS 2024",
+  customClasses = "",
+}: GallerySectionProps = {}) {
   const [muted, setMuted] = useState(true);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -64,10 +76,10 @@ export function GallerySection() {
     });
   };
 
-  const VIDEO_URL = `https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
+  const VIDEO_URL = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1`;
 
   return (
-    <section className="py-20">
+    <section className={`py-20 ${customClasses}`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -76,8 +88,7 @@ export function GallerySection() {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-bold flex items-center justify-center gap-2 flex-col">
-            VIETNAM STUDENT MARATHON{" "}
-            <span className="gradient-text">RUN TO LAMPAS 2024</span>
+            {title} <span className="gradient-text">{subtitle}</span>
           </h2>
         </motion.div>
 

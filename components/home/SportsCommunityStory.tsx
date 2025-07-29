@@ -5,12 +5,39 @@ import { Facebook } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
 
-export default function SportsCommunityStory() {
+interface SportsCommunityStoryProps {
+  subtitle?: string;
+  title?: string;
+  paragraph1?: string;
+  paragraph2?: string;
+  paragraph3?: string;
+  paragraph4?: string;
+  image?: string;
+  statsValue?: string;
+  statsLabel?: string;
+  customClasses?: string;
+}
+
+export default function SportsCommunityStory({
+  subtitle = "Hành Trình của CHÚNG TỐI",
+  title = "CÂU CHUYỆN VSM",
+  paragraph1 = "🏃‍♂️Được thành lập từ năm 2023, Vietnam Student Marathon (VSM) ra đời với khát vọng tạo nên một môi trường nơi học sinh, sinh viên có thể rèn luyện ý chí, vượt qua giới hạn bản thân thông qua chạy bộ – một hành trình đơn giản nhưng đầy thử thách và cảm hứng.",
+  paragraph2 = "�� Câu chuyện ý chí của tuổi trẻ Việt Nam bắt đầu rực cháy qua từng bước chạy và nhịp tim của hàng trăm sinh viên tham gia VSM. Từ những giải chạy đầu tiên với quy mô nhỏ, VSM đã phát triển thành một cộng đồng lớn mạnh, nơi quy tụ những người trẻ cùng niềm đam mê, cùng khát vọng bứt phá chính mình.",
+  paragraph3 = "🏃 VSM không chỉ đơn thuần là một sự kiện thể thao – mà còn là một hành trình trưởng thành. Từng bước chạy là một tuyên ngôn mạnh mẽ, là cách mà chúng ta – một thế hệ trẻ #GenZ – chinh phục những khối kiến thức, vượt qua thách thức cuộc sống bằng trí tuệ, kỷ luật và lòng kiên định.",
+  paragraph4 = "Chúng tôi tự hào khi VSM đã trở thành sân chơi thường niên uy tín, lan tỏa tinh thần thể thao và lối sống tích cực trong giới trẻ. Trong tương lai, VSM tiếp tục mở rộng quy mô, truyền cảm hứng đến nhiều sinh viên hơn nữa, và cùng nhau xây dựng một cộng đồng mạnh mẽ, văn minh và đầy khát vọng.",
+  image = "img/image1.jpg",
+  statsValue = "5000+",
+  statsLabel = "Members",
+  customClasses = "",
+}: SportsCommunityStoryProps = {}) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
-    <div className="text-foreground" style={{ background: "var(--sports-bg)" }}>
+    <div
+      className={`text-foreground ${customClasses}`}
+      style={{ background: "var(--sports-bg)" }}
+    >
       <div className="container mx-auto px-4 py-16 md:py-24">
         <motion.div
           ref={ref}
@@ -28,60 +55,22 @@ export default function SportsCommunityStory() {
             <div className="flex items-center mb-6">
               <div className="w-12 h-1 bg-gradient-to-r from-blue-400 to-purple-600 mr-4"></div>
               <span className="text-blue-400 uppercase tracking-wider text-sm font-bold">
-                Hành Trình của CHÚNG TỐI
+                {subtitle}
               </span>
             </div>
             <h1 className="sports-text text-5xl md:text-6xl font-bold mb-6 leading-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
-                CÂU CHUYỆN VSM
+                {title}
               </span>
             </h1>
             <div className="space-y-6 body-text text-[var(--text-muted)]">
-              <p className="text-lg leading-relaxed">
-                🏃‍♂️Được thành lập từ năm 2023, Vietnam Student Marathon (VSM) ra
-                đời với khát vọng tạo nên một môi trường nơi học sinh, sinh viên
-                có thể rèn luyện ý chí, vượt qua giới hạn bản thân thông qua
-                chạy bộ – một hành trình đơn giản nhưng đầy thử thách và cảm
-                hứng.
-              </p>
-              <p className="text-lg leading-relaxed">
-                🔥 Câu chuyện ý chí của tuổi trẻ Việt Nam bắt đầu rực cháy qua
-                từng bước chạy và nhịp tim của hàng trăm sinh viên tham gia VSM.
-                Từ những giải chạy đầu tiên với quy mô nhỏ, VSM đã phát triển
-                thành một cộng đồng lớn mạnh, nơi quy tụ những người trẻ cùng
-                niềm đam mê, cùng khát vọng bứt phá chính mình.
-              </p>
-              <p className="text-lg leading-relaxed">
-                🏃 VSM không chỉ đơn thuần là một sự kiện thể thao – mà còn là
-                một hành trình trưởng thành. Từng bước chạy là một tuyên ngôn
-                mạnh mẽ, là cách mà chúng ta – một thế hệ trẻ #GenZ – chinh phục
-                những khối kiến thức, vượt qua thách thức cuộc sống bằng trí
-                tuệ, kỷ luật và lòng kiên định.
-              </p>
-              <p className="text-lg leading-relaxed">
-                Chúng tôi tự hào khi VSM đã trở thành sân chơi thường niên uy
-                tín, lan tỏa tinh thần thể thao và lối sống tích cực trong giới
-                trẻ. Trong tương lai, VSM tiếp tục mở rộng quy mô, truyền cảm
-                hứng đến nhiều sinh viên hơn nữa, và cùng nhau xây dựng một cộng
-                đồng mạnh mẽ, văn minh và đầy khát vọng.
-              </p>
+              <p className="text-lg leading-relaxed">{paragraph1}</p>
+              <p className="text-lg leading-relaxed">{paragraph2}</p>
+              <p className="text-lg leading-relaxed">{paragraph3}</p>
+              <p className="text-lg leading-relaxed">{paragraph4}</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <div className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center">
-                {/* <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg> */}
                 <Facebook />
                 <Link
                   href="https://www.facebook.com/vietnamstudentmarathon"
@@ -115,7 +104,6 @@ export default function SportsCommunityStory() {
               </div>
             </div>
           </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -124,7 +112,7 @@ export default function SportsCommunityStory() {
           >
             <div className="aspect-square rounded-2xl overflow-hidden border-4 border-blue-400/20 shadow-xl">
               <img
-                src="img/image1.jpg"
+                src={image}
                 alt="Running community"
                 className="w-full h-full object-cover"
               />
@@ -135,9 +123,11 @@ export default function SportsCommunityStory() {
               transition={{ duration: 0.5 }}
             >
               <div className="text-center">
-                <div className="sports-text text-3xl font-bold">5000+</div>
+                <div className="sports-text text-3xl font-bold">
+                  {statsValue}
+                </div>
                 <div className="body-text text-sm uppercase tracking-wider">
-                  Members
+                  {statsLabel}
                 </div>
               </div>
             </motion.div>
@@ -164,7 +154,6 @@ export default function SportsCommunityStory() {
           </motion.div>
         </motion.div>
       </div>
-
       <style jsx>{`
         :root {
           --sports-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);

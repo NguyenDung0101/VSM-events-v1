@@ -11,7 +11,14 @@ interface Member {
   avatar: string;
 }
 
-const members: Member[] = [
+interface TeamSectionProps {
+  members?: Member[];
+  title?: string;
+  description?: string;
+  customClasses?: string;
+}
+
+const DEFAULT_MEMBERS: Member[] = [
   {
     id: "1",
     name: "42KM – Marathon",
@@ -38,12 +45,17 @@ const members: Member[] = [
   },
 ];
 
-export function TeamSection() {
+export function TeamSection({
+  members = DEFAULT_MEMBERS,
+  title = "CỰ LY",
+  description = "Lựa chọn hành trình phù hợp với bạn – mỗi bước chạy là một thử thách để vượt lên chính mình!",
+  customClasses = "",
+}: TeamSectionProps = {}) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-20 bg-muted/20">
+    <section ref={ref} className={`py-20 bg-muted/20 ${customClasses}`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -52,14 +64,12 @@ export function TeamSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            CỰ LY <span className="gradient-text">ĐĂNG KÝ</span>
+            {title} <span className="gradient-text">ĐĂNG KÝ</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Lựa chọn hành trình phù hợp với bạn – mỗi bước chạy là một thử thách
-            để vượt lên chính mình!
+            {description}
           </p>
         </motion.div>
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {members.map((m, idx) => (
             <motion.div
