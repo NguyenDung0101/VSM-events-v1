@@ -192,7 +192,13 @@ export default function HomepageManagerPage() {
         .join("\n");
 
       const sectionComponents = enabledSections
-        .map((section) => `        <${section.component} />`)
+        .map((section) => {
+          const config =
+            section.config && Object.keys(section.config).length > 0
+              ? ` {...${JSON.stringify(section.config)}}`
+              : "";
+          return `        <${section.component}${config} />`;
+        })
         .join("\n");
 
       const fileContent = `import { Navbar } from "@/components/layout/navbar"

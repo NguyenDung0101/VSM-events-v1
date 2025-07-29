@@ -97,7 +97,7 @@ export function HomepagePreview({ sections }: HomepagePreviewProps) {
 
                 {/* Render the component */}
                 <div className={section.enabled ? "" : "pointer-events-none"}>
-                  <Component {...section.config} />
+                  <Component {...(section.config || {})} />
                 </div>
 
                 {/* Section border */}

@@ -83,12 +83,17 @@ const SECTION_TEMPLATES = {
     },
   },
   AboutSection: {
-    title: { type: "text", label: "Section Title", default: "Về VSM" },
+    title: {
+      type: "text",
+      label: "Tiêu đề giới thiệu",
+      default: "Giới thiệu về",
+    },
+    title1: { type: "text", label: "Tiêu đề màu", default: "VSM" },
     description: {
       type: "textarea",
       label: "Description",
       default:
-        "Vietnam Student Marathon (VSM) là tổ chức phi lợi nhuận hàng đầu trong việc phát triển phong trào chạy bộ trong cộng đồng sinh viên Việt Nam.",
+        "VSM không chỉ là một giải chạy thường niên dành cho học sinh, sinh viên, mà còn là sân chơi của những bạn trẻ đam mê chạy bộ từ các trường đại học như: ĐH Kinh tế TP.HCM, UEF, ĐH Sư phạm, ĐH Văn Lang,… Đây là nơi bạn không chỉ thử sức qua từng cự ly chạy – mỗi cự ly là một thử thách, một cơ hội để bứt phá giới hạn bản thân – mà còn được rèn luyện ý chí, nâng cao sức khỏe và kết nối cộng đồng.",
     },
     backgroundColor: {
       type: "text",
@@ -97,7 +102,8 @@ const SECTION_TEMPLATES = {
     },
   },
   EventsSection: {
-    title: { type: "text", label: "Section Title", default: "Sự kiện sắp tới" },
+    title: { type: "text", label: "Tiêu đề", default: "Sự kiện" },
+    title1: { type: "text", label: "Tiêu đề màu", default: "sắp tới" },
     description: {
       type: "textarea",
       label: "Description",
@@ -118,7 +124,12 @@ const SECTION_TEMPLATES = {
   NewsSection: {
     title: {
       type: "text",
-      label: "Section Title",
+      label: "Tiêu đề",
+      default: "Tin tức mới nhất",
+    },
+    title1: {
+      type: "text",
+      label: "Tiêu đề màu",
       default: "Tin tức mới nhất",
     },
     description: {
