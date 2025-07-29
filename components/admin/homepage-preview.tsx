@@ -7,6 +7,10 @@ import { NewsSection } from "@/components/home/news-section";
 import { TeamSection } from "@/components/home/team-section";
 import { GallerySection } from "@/components/home/gallery-section";
 import { CTASection } from "@/components/home/cta-section";
+import AboutFeatures from "@/components/home/about-features";
+import { CountdownTimer } from "@/components/home/countdown-timer";
+import SportsCommunityStory from "@/components/home/SportsCommunityStory";
+import Stats from "@/components/common/stats";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Eye, EyeOff } from "lucide-react";
@@ -26,6 +30,10 @@ interface HomepagePreviewProps {
 const COMPONENT_MAP = {
   HeroSection,
   AboutSection,
+  AboutFeatures,
+  CountdownTimer,
+  SportsCommunityStory,
+  Stats,
   EventsSection,
   NewsSection,
   TeamSection,
@@ -72,6 +80,27 @@ export function HomepagePreview({ sections }: HomepagePreviewProps) {
               );
             }
 
+            let props = section.config || {};
+            // Special handling for required props
+            if (section.component === "CountdownTimer") {
+              const eventDate =
+                section.config && section.config.eventDate
+                  ? section.config.eventDate
+                  : "2025-12-28T04:30:00";
+              props = { eventDate };
+              if (section.config && section.config.customClasses) {
+                props.className = section.config.customClasses;
+              }
+            } else if (
+              ["AboutFeatures", "SportsCommunityStory", "Stats"].includes(
+                section.component
+              )
+            ) {
+              props =
+                section.config && section.config.customClasses
+                  ? { className: section.config.customClasses }
+                  : {};
+            }
             return (
               <div key={section.id} className="relative group">
                 {/* Section overlay for disabled sections */}
@@ -87,19 +116,23 @@ export function HomepagePreview({ sections }: HomepagePreviewProps) {
                     </Card>
                   </div>
                 )}
-
                 {/* Section label */}
                 <div className="absolute top-2 left-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
                   <Badge variant="secondary" className="text-xs">
                     {section.name}
                   </Badge>
                 </div>
-
                 {/* Render the component */}
                 <div className={section.enabled ? "" : "pointer-events-none"}>
-                  <Component {...(section.config || {})} />
+                  {section.component === "CountdownTimer" ? (
+                    <CountdownTimer
+                      eventDate={props.eventDate || "2025-12-28T04:30:00"}
+                      {...props}
+                    />
+                  ) : (
+                    <Component {...props} />
+                  )}
                 </div>
-
                 {/* Section border */}
                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary/20 transition-colors pointer-events-none" />
               </div>

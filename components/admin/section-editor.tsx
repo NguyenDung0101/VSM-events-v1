@@ -202,6 +202,40 @@ const SECTION_TEMPLATES = {
       default: "bg-gradient-to-r from-primary/20 to-purple-500/20",
     },
   },
+  AboutFeatures: {
+    // No configurable props in current implementation, but allow customClasses for future styling
+    customClasses: {
+      type: "text",
+      label: "Custom CSS Classes",
+      default: "",
+    },
+  },
+  CountdownTimer: {
+    eventDate: {
+      type: "text",
+      label: "Ngày giờ sự kiện (ISO)",
+      default: "2025-12-28T04:30:00",
+    },
+    customClasses: {
+      type: "text",
+      label: "Custom CSS Classes",
+      default: "",
+    },
+  },
+  SportsCommunityStory: {
+    customClasses: {
+      type: "text",
+      label: "Custom CSS Classes",
+      default: "",
+    },
+  },
+  Stats: {
+    customClasses: {
+      type: "text",
+      label: "Custom CSS Classes",
+      default: "",
+    },
+  },
 };
 
 export function SectionEditor({

@@ -32,7 +32,19 @@ interface SectionConfig {
 
 const AVAILABLE_SECTIONS = [
   { id: "hero", name: "Phần đầu trang", component: "HeroSection" },
+  { id: "countdown", name: "Đếm ngược sự kiện", component: "CountdownTimer" },
   { id: "about", name: "Phần giới thiệu", component: "AboutSection" },
+  {
+    id: "aboutfeatures",
+    name: "Tính năng nổi bật",
+    component: "AboutFeatures",
+  },
+  { id: "stats", name: "Thống kê VSM", component: "Stats" },
+  {
+    id: "story",
+    name: "Câu chuyện cộng đồng",
+    component: "SportsCommunityStory",
+  },
   {
     id: "events",
     name: "Hiển thị các sự kiện sắp tới",
@@ -57,9 +69,37 @@ const DEFAULT_SECTIONS: SectionConfig[] = [
     config: {},
   },
   {
+    id: "countdown",
+    name: "Đếm ngược sự kiện",
+    component: "CountdownTimer",
+    enabled: true,
+    config: { eventDate: "2025-12-28T04:30:00" },
+  },
+  {
     id: "about",
     name: "Phần giới thiệu",
     component: "AboutSection",
+    enabled: true,
+    config: {},
+  },
+  {
+    id: "aboutfeatures",
+    name: "Tính năng nổi bật",
+    component: "AboutFeatures",
+    enabled: true,
+    config: {},
+  },
+  {
+    id: "stats",
+    name: "Thống kê VSM",
+    component: "Stats",
+    enabled: true,
+    config: {},
+  },
+  {
+    id: "story",
+    name: "Câu chuyện cộng đồng",
+    component: "SportsCommunityStory",
     enabled: true,
     config: {},
   },
