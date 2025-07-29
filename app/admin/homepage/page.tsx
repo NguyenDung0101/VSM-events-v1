@@ -173,7 +173,7 @@ export default function HomepageManagerPage() {
     );
     setHasChanges(true);
     setEditingSection(null);
-    toast.success("Đã cập nhật phần");
+    toast.success("Đã cập nhật nội dung thành công");
   };
 
   const saveToFile = async () => {

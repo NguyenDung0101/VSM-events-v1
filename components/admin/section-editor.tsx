@@ -38,28 +38,43 @@ const SECTION_TEMPLATES = {
   HeroSection: {
     title: {
       type: "text",
-      label: "Main Title",
-      default: "Vietnam Student Marathon",
+      label: "Tiêu đề 1",
+      default: "CHUNG KẾT",
     },
     subtitle: {
       type: "text",
-      label: "Subtitle",
-      default: "Chạy chung kết Việt tương lai 2025",
+      label: "Tiêu đề 2",
+      default: "VIETNAM STUDENT MARATHON 2025",
+    },
+    subtitle1: {
+      type: "text",
+      label: "Tiêu đề 3",
+      default: "VIETNAM STUDENT MARATHON 2025",
     },
     backgroundImage: {
       type: "text",
       label: "Background Image URL",
       default: "/img/image1.jpg",
     },
+    date: {
+      type: "text",
+      label: "Ngày thi đấu",
+      default: "28/12/2025",
+    },
+    location: {
+      type: "text",
+      label: "ĐỊA ĐIỂM",
+      default: "Khu đô thị Sala, TP. Thủ Đức, TP.HCM",
+    },
+    logo: {
+      type: "text",
+      label: "Đơn vị tổ chức",
+      default: "/img/logo-vsm.png",
+    },
     primaryButtonText: {
       type: "text",
-      label: "Primary Button Text",
+      label: "Tên nút chính",
       default: "Tham gia sự kiện",
-    },
-    secondaryButtonText: {
-      type: "text",
-      label: "Secondary Button Text",
-      default: "Xem video",
     },
     showAnimations: {
       type: "boolean",
@@ -309,7 +324,7 @@ export function SectionEditor({
                     ([key, field]) =>
                       field.type === "text" ||
                       field.type === "textarea" ||
-                      field.type === "boolean",
+                      field.type === "boolean"
                   )
                   .map(([key, field]) => renderField(key, field))}
               </CardContent>
@@ -327,7 +342,7 @@ export function SectionEditor({
                     ([key, field]) =>
                       key.includes("background") ||
                       key.includes("color") ||
-                      field.type === "number",
+                      field.type === "number"
                   )
                   .map(([key, field]) => renderField(key, field))}
 
@@ -361,7 +376,7 @@ export function SectionEditor({
                     ([key, field]) =>
                       key.includes("image") ||
                       key.includes("Image") ||
-                      key.includes("media"),
+                      key.includes("media")
                   )
                   .map(([key, field]) => renderField(key, field))}
 
@@ -398,7 +413,7 @@ export function SectionEditor({
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
-                      ),
+                      )
                     )}
                     <Button
                       size="sm"
