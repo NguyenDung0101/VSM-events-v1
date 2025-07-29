@@ -203,7 +203,36 @@ const SECTION_TEMPLATES = {
     },
   },
   AboutFeatures: {
-    // No configurable props in current implementation, but allow customClasses for future styling
+    features: {
+      type: "array",
+      label: "Tính năng nổi bật",
+      default: [
+        {
+          icon: "Target",
+          title: "Mục tiêu rõ ràng",
+          description:
+            "Xây dựng cộng đồng chạy bộ sinh viên mạnh mẽ và bền vững tại Việt Nam.",
+        },
+        {
+          icon: "Users",
+          title: "Cộng đồng đoàn kết",
+          description:
+            "Kết nối hàng nghìn sinh viên có cùng đam mê chạy bộ trên khắp cả nước.",
+        },
+        {
+          icon: "Trophy",
+          title: "Thành tựu xuất sắc",
+          description:
+            "Tổ chức thành công nhiều giải chạy lớn với sự tham gia của hàng nghìn vận động viên.",
+        },
+        {
+          icon: "Heart",
+          title: "Tinh thần thể thao",
+          description:
+            "Lan tỏa tinh thần thể thao, sức khỏe và lối sống tích cực trong giới trẻ.",
+        },
+      ],
+    },
     customClasses: {
       type: "text",
       label: "Custom CSS Classes",
@@ -223,6 +252,55 @@ const SECTION_TEMPLATES = {
     },
   },
   SportsCommunityStory: {
+    subtitle: {
+      type: "text",
+      label: "Tiêu đề phụ",
+      default: "Hành Trình của CHÚNG TỐI",
+    },
+    title: {
+      type: "text",
+      label: "Tiêu đề chính",
+      default: "CÂU CHUYỆN VSM",
+    },
+    paragraph1: {
+      type: "textarea",
+      label: "Đoạn văn 1",
+      default:
+        "🏃‍♂️Được thành lập từ năm 2023, Vietnam Student Marathon (VSM) ra đời với khát vọng tạo nên một môi trường nơi học sinh, sinh viên có thể rèn luyện ý chí, vượt qua giới hạn bản thân thông qua chạy bộ – một hành trình đơn giản nhưng đầy thử thách và cảm hứng.",
+    },
+    paragraph2: {
+      type: "textarea",
+      label: "Đoạn văn 2",
+      default:
+        "🔥 Câu chuyện ý chí của tuổi trẻ Việt Nam bắt đầu rực cháy qua từng bước chạy và nhịp tim của hàng trăm sinh viên tham gia VSM. Từ những giải chạy đầu tiên với quy mô nhỏ, VSM đã phát triển thành một cộng đồng lớn mạnh, nơi quy tụ những người trẻ cùng niềm đam mê, cùng khát vọng bứt phá chính mình.",
+    },
+    paragraph3: {
+      type: "textarea",
+      label: "Đoạn văn 3",
+      default:
+        "🏃 VSM không chỉ đơn thuần là một sự kiện thể thao – mà còn là một hành trình trưởng thành. Từng bước chạy là một tuyên ngôn mạnh mẽ, là cách mà chúng ta – một thế hệ trẻ #GenZ – chinh phục những khối kiến thức, vượt qua thách thức cuộc sống bằng trí tuệ, kỷ luật và lòng kiên định.",
+    },
+    paragraph4: {
+      type: "textarea",
+      label: "Đoạn văn 4",
+      default:
+        "Chúng tôi tự hào khi VSM đã trở thành sân chơi thường niên uy tín, lan tỏa tinh thần thể thao và lối sống tích cực trong giới trẻ. Trong tương lai, VSM tiếp tục mở rộng quy mô, truyền cảm hứng đến nhiều sinh viên hơn nữa, và cùng nhau xây dựng một cộng đồng mạnh mẽ, văn minh và đầy khát vọng.",
+    },
+    image: {
+      type: "text",
+      label: "Hình ảnh",
+      default: "img/image1.jpg",
+    },
+    statsValue: {
+      type: "text",
+      label: "Số liệu thống kê",
+      default: "5000+",
+    },
+    statsLabel: {
+      type: "text",
+      label: "Nhãn thống kê",
+      default: "Members",
+    },
     customClasses: {
       type: "text",
       label: "Custom CSS Classes",
@@ -230,6 +308,32 @@ const SECTION_TEMPLATES = {
     },
   },
   Stats: {
+    stats: {
+      type: "array",
+      label: "Thống kê",
+      default: [
+        {
+          label: "Sinh viên tham gia qua các mùa",
+          value: "1,000+",
+          icon: "Users",
+        },
+        {
+          label: "Trường đại học – cao đẳng đồng hành",
+          value: "50+",
+          icon: "Calendar",
+        },
+        {
+          label: "Mùa giải đã tổ chức thành công liên tiếp từ năm 2023",
+          value: "4",
+          icon: "MapPin",
+        },
+        {
+          label: "Cộng đồng chạy bộ sinh viên lớn nhất tại Việt Nam",
+          value: "1",
+          icon: "Award",
+        },
+      ],
+    },
     customClasses: {
       type: "text",
       label: "Custom CSS Classes",
@@ -273,6 +377,29 @@ export function SectionEditor({
     const value = config[key] ?? field.default;
 
     switch (field.type) {
+      case "datetime-local":
+        return (
+          <div key={key} className="space-y-2">
+            <Label htmlFor={key}>{field.label}</Label>
+            <Input
+              id={key}
+              type="datetime-local"
+              value={value ? value.substring(0, 16) : ""}
+              onChange={(e) => {
+                updateConfig(key, e.target.value);
+              }}
+              placeholder={field.default}
+            />
+            {key === "eventDate" && value && (
+              <div className="text-xs text-muted-foreground mt-1">
+                <span>
+                  ISO:{" "}
+                  {new Date(value).toISOString().slice(0, 19).replace("T", " ")}
+                </span>
+              </div>
+            )}
+          </div>
+        );
       case "text":
         return (
           <div key={key} className="space-y-2">
@@ -311,7 +438,6 @@ export function SectionEditor({
             />
           </div>
         );
-
       case "number":
         return (
           <div key={key} className="space-y-2">
@@ -324,6 +450,29 @@ export function SectionEditor({
               min={field.min}
               max={field.max}
             />
+          </div>
+        );
+      case "array":
+        return (
+          <div key={key} className="space-y-2">
+            <Label htmlFor={key}>{field.label}</Label>
+            <Textarea
+              id={key}
+              value={JSON.stringify(value || field.default, null, 2)}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value);
+                  updateConfig(key, parsed);
+                } catch (error) {
+                  // Keep the invalid JSON in the textarea for user to fix
+                }
+              }}
+              placeholder="Enter JSON array"
+              rows={8}
+            />
+            <p className="text-xs text-muted-foreground">
+              Edit the JSON array above. Make sure it's valid JSON format.
+            </p>
           </div>
         );
 

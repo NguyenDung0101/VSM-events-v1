@@ -83,13 +83,6 @@ const DEFAULT_SECTIONS: SectionConfig[] = [
     config: {},
   },
   {
-    id: "aboutfeatures",
-    name: "Tính năng nổi bật",
-    component: "AboutFeatures",
-    enabled: true,
-    config: {},
-  },
-  {
     id: "stats",
     name: "Thống kê VSM",
     component: "Stats",
