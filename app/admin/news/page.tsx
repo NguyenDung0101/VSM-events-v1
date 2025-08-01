@@ -46,20 +46,10 @@ import { useToast } from "@/hooks/use-toast";
 import { apiClient } from "@/lib/api";
 import { useAuth } from "@/contexts/auth-context";
 
-const postSchema = z.object({
-  title: z.string().min(1, "Tiêu đề không được để trống"),
-  excerpt: z.string().min(1, "Mô tả ngắn không được để trống"),
-  content: z.string().min(1, "Nội dung không được để trống"),
-  category: z.enum(["training", "nutrition", "events", "tips"]),
-  featured: z.boolean().default(false),
-});
-
-type PostForm = z.infer<typeof postSchema>;
-
 interface Author {
   id: string;
   name: string;
-  avatar?: string; // Optional nếu API có thể không trả về
+  avatar?: string;
 }
 
 interface Post {
@@ -68,18 +58,31 @@ interface Post {
   excerpt: string;
   content: string;
   cover: string;
-  author: Author; // Cập nhật thành object
+  author: Author;
   date: string;
-  category: "TRAINING" | "NUTRITION" | "EVENTS" | "TIPS";
+  category: "training" | "nutrition" | "events" | "tips";
   views: number;
   featured: boolean;
   status: "published" | "draft";
   likes: number;
   commentsCount: number;
-  tags: string; // Chuỗi JSON hoặc chuỗi phân tách bằng dấu phẩy
+  tags: string;
 }
 
-export default function AdminPostsPage() {
+const newsSchema = z.object({
+  title: z.string().min(1, "Tiêu đề không được để trống"),
+  excerpt: z.string().min(1, "Mô tả ngắn không được để trống"),
+  content: z.string().min(1, "Nội dung không được để trống"),
+  category: z.enum(["training", "nutrition", "events", "tips"]),
+  featured: z.boolean(),
+  cover: z.string().optional(),
+  tags: z.string().optional(),
+  publishedAt: z.string().optional(),
+});
+
+type NewsForm = z.infer<typeof newsSchema>;
+
+export default function AdminNewsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -88,14 +91,17 @@ export default function AdminPostsPage() {
   const { toast } = useToast();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const form = useForm<PostForm>({
-    resolver: zodResolver(postSchema),
+  const form = useForm<NewsForm>({
+    resolver: zodResolver(newsSchema),
     defaultValues: {
       title: "",
       excerpt: "",
       content: "",
       category: "training",
       featured: false,
+      cover: "",
+      tags: "",
+      publishedAt: new Date().toISOString().split("T")[0],
     },
   });
 
@@ -121,7 +127,7 @@ export default function AdminPostsPage() {
       }
     };
     fetchPosts();
-  }, []);
+  }, [toast]);
 
   useEffect(() => {
     const filtered = posts.filter(
@@ -133,7 +139,7 @@ export default function AdminPostsPage() {
   }, [posts, searchTerm]);
 
   const getCategoryText = (category: string) => {
-    switch (category) {
+    switch (category.toLowerCase()) {
       case "training":
         return "Huấn luyện";
       case "nutrition":
@@ -148,7 +154,7 @@ export default function AdminPostsPage() {
   };
 
   const getCategoryColor = (category: string) => {
-    switch (category) {
+    switch (category.toLowerCase()) {
       case "training":
         return "bg-blue-500";
       case "nutrition":
@@ -164,13 +170,13 @@ export default function AdminPostsPage() {
 
   const { user } = useAuth();
 
-  const onSubmit = async (data: PostForm) => {
+  const onSubmit = async (data: NewsForm) => {
     try {
       if (editingPost) {
         console.log("Attempting to edit post with ID:", editingPost.id);
         const updatePayload = {
           ...data,
-          category: data.category.toUpperCase(), // Đảm bảo enum uppercase
+          category: data.category.toLowerCase(),
         };
         console.log(
           "Full update payload:",
@@ -205,9 +211,9 @@ export default function AdminPostsPage() {
       } else {
         const postData = {
           ...data,
-          cover: "/placeholder.svg?height=200&width=300",
-          status: "PUBLISHED",
-          category: data.category.toUpperCase(), // Chuyển thành uppercase
+          cover: data.cover || "/placeholder.svg?height=200&width=300",
+          status: "published",
+          category: data.category.toLowerCase(),
         };
         console.log("Sending data to createPost:", postData);
         const newPost = await apiClient.createPost(postData);
@@ -224,7 +230,7 @@ export default function AdminPostsPage() {
             name: newPost.author?.name || "Unknown",
             id: newPost.author?.id || "",
             avatar: newPost.author?.avatar || "",
-          }, // Cập nhật author
+          },
           date:
             newPost.publishedAt ||
             newPost.date ||
@@ -245,13 +251,7 @@ export default function AdminPostsPage() {
       setIsDialogOpen(false);
       setEditingPost(null);
       form.reset();
-      console.log("Category value:", data.category);
-      const postData = {
-        ...data,
-        cover: "/placeholder.svg?height=200&width=300",
-        status: "PUBLISHED",
-      };
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting post:", error);
       toast({
         title: "Có lỗi xảy ra",
@@ -267,8 +267,15 @@ export default function AdminPostsPage() {
       title: post.title,
       excerpt: post.excerpt,
       content: post.content,
-      category: post.category,
+      category: post.category.toLowerCase() as
+        | "training"
+        | "nutrition"
+        | "events"
+        | "tips",
       featured: post.featured,
+      cover: post.cover || "",
+      tags: post.tags || "",
+      publishedAt: post.date || new Date().toISOString().split("T")[0],
     });
     setIsDialogOpen(true);
   };
@@ -293,7 +300,16 @@ export default function AdminPostsPage() {
 
   const handleNewPost = () => {
     setEditingPost(null);
-    form.reset();
+    form.reset({
+      title: "",
+      excerpt: "",
+      content: "",
+      category: "training",
+      featured: false,
+      cover: "",
+      tags: "",
+      publishedAt: new Date().toISOString().split("T")[0],
+    });
     setIsDialogOpen(true);
   };
 
@@ -317,7 +333,7 @@ export default function AdminPostsPage() {
           >
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h1 className="text-3xl font-bold">Quản lý bài viết</h1>
+                <h1 className="text-3xl font-bold">Quản lý tin tức</h1>
                 <p className="text-muted-foreground">
                   Tạo và quản lý các bài viết trên website
                 </p>
@@ -449,7 +465,6 @@ export default function AdminPostsPage() {
                         />
                       </div>
 
-                      {/* New Field: Cover */}
                       <FormField
                         control={form.control}
                         name="cover"
@@ -467,7 +482,6 @@ export default function AdminPostsPage() {
                         )}
                       />
 
-                      {/* New Field: Tags */}
                       <FormField
                         control={form.control}
                         name="tags"
@@ -478,13 +492,6 @@ export default function AdminPostsPage() {
                               <Input
                                 placeholder="Nhập các thẻ (ví dụ: tag1, tag2, tag3)"
                                 {...field}
-                                onChange={(e) =>
-                                  field.onChange(
-                                    e.target.value
-                                      .split(",")
-                                      .map((tag) => tag.trim())
-                                  )
-                                }
                               />
                             </FormControl>
                             <FormMessage />
@@ -492,7 +499,6 @@ export default function AdminPostsPage() {
                         )}
                       />
 
-                      {/* New Field: PublishedAt */}
                       <FormField
                         control={form.control}
                         name="publishedAt"
@@ -500,18 +506,7 @@ export default function AdminPostsPage() {
                           <FormItem>
                             <FormLabel>Ngày xuất bản</FormLabel>
                             <FormControl>
-                              <Input
-                                type="date"
-                                {...field}
-                                value={
-                                  field.value
-                                    ? new Date(field.value)
-                                        .toISOString()
-                                        .split("T")[0]
-                                    : ""
-                                }
-                                onChange={(e) => field.onChange(e.target.value)}
-                              />
+                              <Input type="date" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -643,8 +638,7 @@ export default function AdminPostsPage() {
                                 ))}
                             </div>
                           </TableCell>
-                          <TableCell>{post.author.name || "Unknown"}</TableCell>{" "}
-                          {/* Chỉ lấy name */}
+                          <TableCell>{post.author.name || "Unknown"}</TableCell>
                           <TableCell>
                             {new Date(post.date).toLocaleDateString("vi-VN")}
                           </TableCell>

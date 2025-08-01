@@ -26,7 +26,7 @@ const menuItems = [
   { href: "/admin", label: "Thống kê", icon: LayoutDashboard },
   { href: "/admin/homepage", label: "Quản lý trang chủ", icon: Layout },
   { href: "/admin/events", label: "Quản lý sự kiện", icon: Calendar },
-  { href: "/admin/posts", label: "Quản lý bài viết", icon: FileText },
+  { href: "/admin/news", label: "Quản lý bài viết", icon: FileText },
   { href: "/admin/products", label: "Quản lý sản phẩm", icon: ShoppingBag },
   { href: "/admin/users", label: "Quản lý người dùng", icon: Users },
   { href: "/admin/uploads", label: "Quản lý thư viện", icon: Upload },

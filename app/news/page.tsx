@@ -18,17 +18,26 @@ import {
 import { Search, Calendar, User, Eye, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+interface Author {
+  id: string;
+  name: string;
+  avatar?: string;
+}
+
 interface Post {
   id: string;
   title: string;
   excerpt: string;
   content: string;
   cover: string;
-  author: string;
+  author: Author;
   date: string;
   category: "training" | "nutrition" | "events" | "tips";
   views: number;
   featured: boolean;
+  likes?: number;
+  commentsCount?: number;
+  tags?: string;
 }
 
 export default function NewsPage() {
@@ -47,11 +56,18 @@ export default function NewsPage() {
           "5 điều bạn không thể bỏ qua trước khi bắt đầu hành trình 42 km đầu tiên của mình.",
         content: "Nội dung chi tiết về cách chuẩn bị marathon...",
         cover: "/placeholder.svg?height=400&width=600",
-        author: "Nguyễn Văn A",
+        author: {
+          id: "1",
+          name: "Nguyễn Văn A",
+          avatar: "/placeholder-user.jpg",
+        },
         date: "2024-01-10",
         category: "training",
         views: 1250,
         featured: true,
+        likes: 45,
+        commentsCount: 12,
+        tags: "marathon,running,beginners",
       },
       {
         id: "2",
@@ -60,11 +76,18 @@ export default function NewsPage() {
           "Chuyên gia VSM chia sẻ các tip giúp bạn tránh chấn thương và duy trì hiệu suất.",
         content: "Nội dung chi tiết về cách giữ phong độ...",
         cover: "/placeholder.svg?height=400&width=600",
-        author: "Trần Thị B",
+        author: {
+          id: "2",
+          name: "Trần Thị B",
+          avatar: "/placeholder-user.jpg",
+        },
         date: "2024-01-08",
         category: "tips",
         views: 980,
         featured: false,
+        likes: 28,
+        commentsCount: 8,
+        tags: "endurance,training,tips",
       },
       {
         id: "3",
@@ -73,11 +96,18 @@ export default function NewsPage() {
           "Ăn gì để tối ưu hiệu suất và hồi phục nhanh chóng? Hướng dẫn chi tiết từ chuyên gia.",
         content: "Nội dung chi tiết về dinh dưỡng...",
         cover: "/placeholder.svg?height=400&width=600",
-        author: "Lê Văn C",
+        author: {
+          id: "3",
+          name: "Lê Văn C",
+          avatar: "/placeholder-user.jpg",
+        },
         date: "2024-01-05",
         category: "nutrition",
         views: 756,
         featured: true,
+        likes: 34,
+        commentsCount: 15,
+        tags: "nutrition,student,recovery",
       },
       {
         id: "4",
@@ -86,11 +116,18 @@ export default function NewsPage() {
           "Nhìn lại những khoảnh khắc đáng nhớ tại giải chạy lớn nhất năm của VSM.",
         content: "Nội dung chi tiết về sự kiện...",
         cover: "/placeholder.svg?height=400&width=600",
-        author: "Phạm Thị D",
+        author: {
+          id: "4",
+          name: "Phạm Thị D",
+          avatar: "/placeholder-user.jpg",
+        },
         date: "2024-01-03",
         category: "events",
         views: 2100,
         featured: false,
+        likes: 78,
+        commentsCount: 24,
+        tags: "event,marathon,hanoi",
       },
       {
         id: "5",
@@ -99,11 +136,18 @@ export default function NewsPage() {
           "Làm thế nào để thở hiệu quả và tăng sức bền trong quá trình chạy.",
         content: "Nội dung chi tiết về kỹ thuật thở...",
         cover: "/placeholder.svg?height=400&width=600",
-        author: "Hoàng Văn E",
+        author: {
+          id: "5",
+          name: "Hoàng Văn E",
+          avatar: "/placeholder-user.jpg",
+        },
         date: "2024-01-01",
         category: "training",
         views: 634,
         featured: false,
+        likes: 22,
+        commentsCount: 5,
+        tags: "breathing,technique,endurance",
       },
     ];
     setPosts(mockPosts);
@@ -265,8 +309,7 @@ export default function NewsPage() {
                           <div className="flex items-center space-x-4">
                             <div className="flex items-center">
                               <User className="h-4 w-4 mr-1" />
-                              {post.author.name}{" "}
-                              {/* Sửa lỗi: dùng post.author.name thay vì post.author */}
+                              {post.author.name}
                             </div>
                             <div className="flex items-center">
                               <Calendar className="h-4 w-4 mr-1" />
@@ -342,8 +385,7 @@ export default function NewsPage() {
                         <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <div className="flex items-center">
                             <User className="h-4 w-4 mr-1" />
-                            {post.author.name}{" "}
-                            {/* Sửa lỗi: dùng post.author.name thay vì post.author */}
+                            {post.author.name}
                           </div>
                           <div className="flex items-center">
                             <Eye className="h-4 w-4 mr-1" />
