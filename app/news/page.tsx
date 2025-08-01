@@ -24,7 +24,7 @@ interface Author {
   avatar?: string;
 }
 
-interface Post {
+interface News {
   id: string;
   title: string;
   excerpt: string;
@@ -41,14 +41,14 @@ interface Post {
 }
 
 export default function NewsPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<News[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<News[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
   useEffect(() => {
     // Mock data - replace with actual API call
-    const mockPosts: Post[] = [
+    const mockPosts: News[] = [
       {
         id: "1",
         title: "Hướng dẫn chuẩn bị cho marathon đầu tiên",

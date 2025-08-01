@@ -26,7 +26,7 @@ interface Author {
   avatar?: string;
 }
 
-interface Post {
+interface News {
   id: string;
   title: string;
   excerpt: string;
@@ -44,13 +44,12 @@ interface Post {
 
 export default function NewsDetailPage() {
   const params = useParams();
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<News | null>(null);
   const [isLiked, setIsLiked] = useState(false);
-  const [mockPosts, setMockPosts] = useState<Post[]>([]);
+  const [mockPosts, setMockPosts] = useState<News[]>([]);
 
   useEffect(() => {
-    // Mock data for posts
-    const mockData: Post[] = [
+    const mockData: News[] = [
       {
         id: "1",
         title: "Hướng dẫn chuẩn bị cho marathon đầu tiên",
@@ -92,6 +91,69 @@ export default function NewsDetailPage() {
         likes: 28,
         commentsCount: 8,
         tags: "endurance,training,tips",
+      },
+      {
+        id: "3",
+        title: "Chế độ dinh dưỡng cho vận động viên sinh viên",
+        excerpt:
+          "Ăn gì để tối ưu hiệu suất và hồi phục nhanh chóng? Hướng dẫn chi tiết từ chuyên gia.",
+        content:
+          "<p>Là sinh viên vận động viên, bạn cần một chế độ dinh dưỡng đặc biệt để cân bằng giữa học tập và tập luyện.</p><h2>1. Ưu tiên năng lượng đủ</h2><p>Sinh viên vận động viên cần lượng calories cao hơn trung bình để đáp ứng nhu cầu tập luyện, nhất là trong thời kỳ thi đấu hoặc tập luyện cường độ cao.</p><h2>2. Phân chia bữa ăn hợp lý</h2><p>Thay vì chỉ ăn 3 bữa lớn, hãy chia nhỏ thành 5-6 bữa mỗi ngày để duy trì năng lượng đều đặn và tăng khả năng hấp thu dưỡng chất.</p><h2>3. Protein cho phục hồi</h2><p>Đảm bảo bổ sung đủ protein (1.2-2g/kg cân nặng) từ thịt nạc, cá, trứng, đậu và các sản phẩm từ sữa để hỗ trợ phục hồi và phát triển cơ bắp.</p><h2>4. Carbs thông minh</h2><p>Lựa chọn carbs phức hợp như gạo lứt, yến mạch, khoai lang để cung cấp năng lượng bền vững.</p>",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: {
+          id: "3",
+          name: "Lê Văn C",
+          avatar: "/placeholder-user.jpg",
+        },
+        date: "2024-01-05",
+        category: "nutrition",
+        views: 756,
+        featured: true,
+        likes: 34,
+        commentsCount: 15,
+        tags: "nutrition,student,recovery",
+      },
+      {
+        id: "4",
+        title: "Recap VSM Marathon Hà Nội 2023",
+        excerpt:
+          "Nhìn lại những khoảnh khắc đáng nhớ tại giải chạy lớn nhất năm của VSM.",
+        content:
+          "<p>VSM Marathon Hà Nội 2023 đã kết thúc với nhiều cảm xúc và thành công vang dội. Cùng nhìn lại những điểm nhấn đáng nhớ của sự kiện:</p><h2>1. Con số kỷ lục</h2><p>Với hơn 5,000 runner tham gia, VSM Marathon 2023 đã trở thành giải chạy sinh viên lớn nhất từ trước đến nay tại Việt Nam.</p><h2>2. Cung đường đẹp</h2><p>Cung đường chạy quanh Hồ Tây trong buổi sáng sớm đã mang đến trải nghiệm tuyệt vời cho các runner.</p><h2>3. Kỷ lục mới</h2><p>Nguyễn Văn Hùng (ĐH Bách Khoa) đã phá kỷ lục cự ly 21km với thời gian 1:12:45, tốt hơn kỷ lục cũ gần 2 phút.</p>",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: {
+          id: "4",
+          name: "Phạm Thị D",
+          avatar: "/placeholder-user.jpg",
+        },
+        date: "2024-01-03",
+        category: "events",
+        views: 2100,
+        featured: false,
+        likes: 78,
+        commentsCount: 24,
+        tags: "event,marathon,hanoi",
+      },
+      {
+        id: "5",
+        title: "Kỹ thuật thở đúng cách khi chạy bộ",
+        excerpt:
+          "Làm thế nào để thở hiệu quả và tăng sức bền trong quá trình chạy.",
+        content:
+          "<p>Thở đúng cách khi chạy bộ là kỹ năng quan trọng nhưng thường bị bỏ qua. Hãy cùng tìm hiểu cách tối ưu hóa nhịp thở khi chạy:</p><h2>1. Thở bằng mũi và miệng</h2><p>Khi chạy với cường độ trung bình đến cao, hãy kết hợp thở bằng cả mũi và miệng.</p><h2>2. Nhịp thở theo bước chân</h2><p>Một kỹ thuật phổ biến là nhịp thở 2:2 (hít vào trong 2 bước, thở ra trong 2 bước) cho cường độ nhẹ đến trung bình.</p><h2>3. Thở sâu bằng cơ hoành</h2><p>Thay vì thở nông bằng lồng ngực, hãy tập trung thở sâu bằng cơ hoành.</p>",
+        cover: "/placeholder.svg?height=400&width=600",
+        author: {
+          id: "5",
+          name: "Hoàng Văn E",
+          avatar: "/placeholder-user.jpg",
+        },
+        date: "2024-01-01",
+        category: "training",
+        views: 634,
+        featured: false,
+        likes: 22,
+        commentsCount: 5,
+        tags: "breathing,technique,endurance",
       },
     ];
 
