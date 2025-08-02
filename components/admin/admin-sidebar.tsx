@@ -30,10 +30,10 @@ const menuItems = [
   { href: "/admin/products", label: "Quản lý sản phẩm", icon: ShoppingBag },
   { href: "/admin/users", label: "Quản lý người dùng", icon: Users },
   { href: "/admin/uploads", label: "Quản lý thư viện", icon: Upload },
-  { href: "/admin/contacts", label: "Quản lý thư liên hệ", icon: Upload },
-  { href: "/admin/messages", label: "Quản lý tin nhắn", icon: MessageCircle },
+  // { href: "/admin/contacts", label: "Quản lý thư liên hệ", icon: Upload },
+  // { href: "/admin/messages", label: "Quản lý tin nhắn", icon: MessageCircle },
   { href: "/", label: "Về trang chủ", icon: House },
-  { href: "/admin/settings", label: "Cài đặt", icon: Settings },
+  // { href: "/admin/settings", label: "Cài đặt", icon: Settings },
 ];
 
 interface AdminSidebarProps {
